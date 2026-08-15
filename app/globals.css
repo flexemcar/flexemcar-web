@@ -1,26 +1,59 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-orange: #f5821f;
+  --color-ink: #1c1c22;
+
+  --color-warm-50: #faf5ee;
+  --color-warm-100: #f4f0ea;
+  --color-warm-200: #eee6dc;
+
+  --color-dark-900: #16140f;
+  --color-dark-950: #0d0c0a;
+  --color-dark-1000: #0b0b0d;
+
+  --color-whatsapp: #25d366;
+
+  --background: var(--color-warm-50);
+  --foreground: var(--color-ink);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-brand-orange: var(--color-orange);
+  --color-brand-ink: var(--color-ink);
+
+  --color-warm-50: var(--color-warm-50);
+  --color-warm-100: var(--color-warm-100);
+  --color-warm-200: var(--color-warm-200);
+
+  --color-dark-900: var(--color-dark-900);
+  --color-dark-950: var(--color-dark-950);
+  --color-dark-1000: var(--color-dark-1000);
+
+  --color-whatsapp: var(--color-whatsapp);
+
+  --font-heading: var(--font-barlow-condensed);
+  --font-sans: var(--font-barlow);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 32s linear infinite;
 }
