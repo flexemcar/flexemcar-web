@@ -11,7 +11,7 @@ function Track() {
       {words.map((word) => (
         <span
           key={word}
-          className="flex items-center gap-2 font-heading uppercase font-bold text-sm sm:text-base tracking-wide text-brand-ink"
+          className="flex items-center gap-2 font-heading uppercase font-bold text-base sm:text-lg tracking-wide text-brand-ink"
         >
           <span aria-hidden="true">•</span>
           {word}
@@ -23,8 +23,12 @@ function Track() {
 
 export default function Marquee() {
   return (
-    <div className="bg-brand-orange overflow-hidden py-3">
+    <div className="bg-brand-orange overflow-hidden py-2.5">
       <div className="flex w-max animate-marquee">
+        <Track />
+        <Track />
+        <Track />
+        <Track />
         <Track />
         <Track />
       </div>
