@@ -35,16 +35,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-dark-1000/40" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-6 pb-16 sm:pt-8 sm:pb-24">
-        <div className="flex justify-end mb-8 sm:mb-12">
-          <a
-            href={`mailto:${links.email}`}
-            className="text-xs sm:text-sm text-warm-100/80 hover:text-brand-orange transition-colors"
-          >
-            {links.email}
-          </a>
-        </div>
-
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-16 pb-16 sm:pt-24 sm:pb-24">
         <h1 className="font-heading uppercase font-extrabold text-[13vw] leading-[0.95] sm:text-6xl md:text-7xl tracking-tight max-w-3xl">
           <span className="text-warm-50">Las mejores furgonetas</span>{" "}
           <span className="text-brand-orange">al mejor precio</span>
@@ -75,14 +66,39 @@ export default function Hero() {
           href={links.googleReviews}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-10 inline-flex items-center gap-2 rounded-full bg-warm-50/10 px-4 py-2 text-warm-50 hover:bg-warm-50/20 transition"
+          className="mt-10 inline-flex items-center gap-3 rounded-2xl bg-warm-50 pl-4 pr-5 py-3 shadow-lg hover:brightness-95 transition"
         >
-          <span className="flex text-brand-orange" aria-hidden="true">
-            {"★★★★★"}
-          </span>
-          <span className="text-sm font-semibold">
-            4,8 valoraciones de clientes en Google
-          </span>
+          <svg viewBox="0 0 48 48" className="size-7 shrink-0" aria-hidden="true">
+            <path
+              fill="#4285F4"
+              d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"
+            />
+            <path
+              fill="#34A853"
+              d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"
+            />
+            <path
+              fill="#EA4335"
+              d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"
+            />
+          </svg>
+          <div className="text-left">
+            <div className="flex items-center gap-1.5">
+              <span className="font-heading font-extrabold text-lg text-brand-ink">
+                4,8
+              </span>
+              <span className="flex text-amber-400 text-sm" aria-hidden="true">
+                {"★★★★★"}
+              </span>
+            </div>
+            <p className="text-xs text-brand-ink/60">
+              Valoraciones de clientes en Google
+            </p>
+          </div>
         </a>
       </div>
     </section>
