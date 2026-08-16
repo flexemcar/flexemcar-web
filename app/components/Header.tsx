@@ -10,13 +10,13 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50">
-      <div className="bg-dark-1000 text-warm-50 text-xs sm:text-sm">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-2 flex items-center justify-between gap-4">
+      <div className="bg-brand-orange text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 flex items-center gap-4 sm:gap-8">
           <a
             href={links.mapsLocation}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 hover:text-brand-orange transition-colors"
+            className="shrink-0 flex items-center gap-1.5 rounded-full bg-dark-1000 px-4 py-2 text-xs sm:text-sm font-bold uppercase tracking-wide hover:bg-dark-950 transition-colors"
           >
             <svg
               aria-hidden="true"
@@ -28,31 +28,31 @@ export default function Header() {
             </svg>
             ¿Dónde estamos?
           </a>
-          <p className="hidden sm:block font-semibold tracking-wide uppercase text-[11px] text-warm-100/80">
+          <p className="hidden sm:block flex-1 text-center font-extrabold tracking-wide uppercase text-xs sm:text-sm">
             Nº1 en transparencia · Portal líder en compraventa de furgonetas
           </p>
         </div>
       </div>
 
       <div className="bg-warm-50/95 backdrop-blur border-b border-warm-200">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-5 sm:py-6 flex items-center justify-between gap-4">
           <Link href="/" className="shrink-0">
             <Image
               src="/brand/logo-flexemcar.png"
               alt="Flexemcar"
-              width={160}
-              height={44}
+              width={200}
+              height={55}
               priority
-              className="h-8 sm:h-9 w-auto"
+              className="h-11 sm:h-14 w-auto"
             />
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-9">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="font-semibold text-sm text-brand-ink hover:text-brand-orange transition-colors"
+                className="font-semibold text-base text-brand-ink hover:text-brand-orange transition-colors"
               >
                 {item.label}
               </a>
