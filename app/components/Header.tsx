@@ -9,7 +9,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50">
+    <>
       <div className="bg-brand-orange text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 flex items-center gap-4 sm:gap-8">
           <a
@@ -34,25 +34,25 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="bg-warm-50/95 backdrop-blur border-b border-warm-200">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-5 sm:py-6 flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-50 bg-warm-50/95 backdrop-blur border-b border-warm-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           <Link href="/" className="shrink-0">
             <Image
               src="/brand/logo-flexemcar.png"
               alt="Flexemcar"
-              width={200}
-              height={55}
+              width={160}
+              height={44}
               priority
-              className="h-11 sm:h-14 w-auto"
+              className="h-8 sm:h-9 w-auto"
             />
           </Link>
 
-          <nav className="hidden md:flex items-center gap-9">
+          <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="font-semibold text-base text-brand-ink hover:text-brand-orange transition-colors"
+                className="font-semibold text-sm text-brand-ink hover:text-brand-orange transition-colors"
               >
                 {item.label}
               </a>
@@ -98,7 +98,7 @@ export default function Header() {
             ))}
           </nav>
         )}
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
