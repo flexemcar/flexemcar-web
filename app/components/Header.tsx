@@ -16,12 +16,12 @@ export default function Header() {
             href={links.mapsLocation}
             target="_blank"
             rel="noopener noreferrer"
-            className="shrink-0 flex items-center gap-1.5 rounded-full bg-dark-1000 px-3.5 py-1.5 text-[11px] sm:text-xs font-bold uppercase tracking-wide hover:bg-dark-950 transition-colors"
+            className="group shrink-0 flex items-center gap-1.5 rounded-full bg-dark-1000 px-3.5 py-1.5 text-[11px] sm:text-xs font-bold uppercase tracking-wide shadow-sm transition-all duration-300 hover:bg-dark-950 hover:scale-105 hover:shadow-md"
           >
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
-              className="size-3 shrink-0"
+              className="size-3 shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5"
               fill="currentColor"
             >
               <path d="M12 2C7.6 2 4 5.6 4 10c0 5.4 7 11.5 7.3 11.7a1 1 0 0 0 1.4 0C13 21.5 20 15.4 20 10c0-4.4-3.6-8-8-8Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
