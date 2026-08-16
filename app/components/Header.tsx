@@ -11,24 +11,24 @@ export default function Header() {
   return (
     <>
       <div className="bg-brand-orange text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 flex items-center gap-4 sm:gap-8">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-1.5 flex items-center">
           <a
             href={links.mapsLocation}
             target="_blank"
             rel="noopener noreferrer"
-            className="shrink-0 flex items-center gap-1.5 rounded-full bg-dark-1000 px-4 py-2 text-xs sm:text-sm font-bold uppercase tracking-wide hover:bg-dark-950 transition-colors"
+            className="shrink-0 flex items-center gap-1.5 rounded-full bg-dark-1000 px-3.5 py-1.5 text-[11px] sm:text-xs font-bold uppercase tracking-wide hover:bg-dark-950 transition-colors"
           >
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
-              className="size-3.5 shrink-0"
+              className="size-3 shrink-0"
               fill="currentColor"
             >
               <path d="M12 2C7.6 2 4 5.6 4 10c0 5.4 7 11.5 7.3 11.7a1 1 0 0 0 1.4 0C13 21.5 20 15.4 20 10c0-4.4-3.6-8-8-8Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
             </svg>
             ¿Dónde estamos?
           </a>
-          <p className="hidden sm:block flex-1 text-center font-extrabold tracking-wide uppercase text-xs sm:text-sm">
+          <p className="hidden sm:flex absolute inset-0 items-center justify-center pointer-events-none font-extrabold tracking-wide uppercase text-[11px] sm:text-xs">
             Nº1 en transparencia · Portal líder en compraventa de furgonetas
           </p>
         </div>
