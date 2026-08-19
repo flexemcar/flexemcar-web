@@ -17,7 +17,7 @@ export default function ScrollToTop() {
       type="button"
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Volver arriba"
-      className={`fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-40 flex items-center justify-center size-11 sm:size-12 rounded-full bg-brand-orange text-white shadow-lg transition-all duration-500 hover:brightness-110 ${
+      className={`flex items-center justify-center size-11 sm:size-12 rounded-full bg-brand-orange text-white shadow-lg transition-all duration-500 hover:brightness-110 ${
         visible
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-3 pointer-events-none"

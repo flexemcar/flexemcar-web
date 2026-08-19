@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Barlow, Barlow_Condensed } from "next/font/google";
-import ScrollToTop from "@/app/components/ScrollToTop";
+import FloatingButtons from "@/app/components/FloatingButtons";
 import "./globals.css";
 
 const barlow = Barlow({
@@ -29,7 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         {children}
-        <ScrollToTop />
+        <FloatingButtons />
       </body>
     </html>
   );
