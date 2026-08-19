@@ -50,7 +50,7 @@ export default function Hero() {
         <div className="mt-8 flex flex-wrap items-center gap-4">
           <a
             href="#stock"
-            className="rounded-full bg-brand-orange px-8 py-[15px] font-bold text-[17px] text-white hover:brightness-110 transition"
+            className="rounded-full bg-brand-orange px-8 py-[15px] font-bold text-[17px] text-white shadow-[0_0_20px_rgba(245,130,31,0.4)] transition-all duration-300 hover:-translate-y-1 hover:brightness-110 hover:shadow-[0_0_30px_rgba(245,130,31,0.6)]"
           >
             Ver stock disponible
           </a>
