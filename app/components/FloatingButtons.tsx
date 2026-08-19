@@ -29,7 +29,7 @@ export default function FloatingButtons() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="WhatsApp"
-        className="flex items-center justify-center size-11 sm:size-12 rounded-full bg-whatsapp text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:brightness-110"
+        className="flex items-center justify-center size-11 sm:size-12 rounded-full bg-whatsapp text-white shadow-lg transition-transform duration-300 hover:scale-110"
       >
         <WhatsAppIcon />
       </a>
@@ -39,7 +39,7 @@ export default function FloatingButtons() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="TikTok"
-        className="flex items-center justify-center size-11 sm:size-12 rounded-full bg-brand-ink text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:brightness-110"
+        className="flex items-center justify-center size-11 sm:size-12 rounded-full bg-brand-ink text-white shadow-lg transition-transform duration-300 hover:scale-110"
       >
         <TikTokIcon />
       </a>
