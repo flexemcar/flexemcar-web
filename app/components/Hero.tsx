@@ -37,8 +37,8 @@ export default function Hero() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-16 pb-16 sm:pt-24 sm:pb-24">
         <h1 className="font-heading uppercase font-extrabold text-[13vw] leading-[0.95] sm:text-6xl md:text-7xl tracking-tight max-w-3xl">
-          <span className="text-warm-50">Las mejores furgonetas</span>{" "}
-          <span className="text-brand-orange">al mejor precio</span>
+          <span className="block text-warm-50">Las mejores furgonetas</span>
+          <span className="block text-brand-orange">Al mejor precio</span>
         </h1>
 
         <p className="mt-6 max-w-lg text-warm-100/90 text-base sm:text-lg">

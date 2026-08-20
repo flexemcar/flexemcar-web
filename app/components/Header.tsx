@@ -11,7 +11,7 @@ export default function Header() {
   return (
     <>
       <div className="bg-brand-orange text-white">
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-1.5 flex items-center">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-1.5 flex items-center gap-3">
           <div className="group relative shrink-0">
             <span className="absolute right-full top-1/2 -translate-y-1/2 mr-1 flex flex-col gap-[3px] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
               <span className="h-0.5 w-3 rounded-full bg-dark-1000/70 opacity-0 group-hover:animate-[speedline_0.6s_ease-out_infinite]" />
@@ -35,7 +35,7 @@ export default function Header() {
               ¿Dónde estamos?
             </a>
           </div>
-          <p className="hidden sm:flex absolute inset-0 items-center justify-center pointer-events-none font-extrabold tracking-wide uppercase text-[11px] sm:text-xs">
+          <p className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-left font-extrabold tracking-wide uppercase text-[10px] sm:text-xs sm:absolute sm:inset-0 sm:flex sm:items-center sm:justify-center sm:overflow-visible sm:whitespace-nowrap sm:pointer-events-none">
             Nº1 en transparencia · Portal líder en compraventa de furgonetas
           </p>
         </div>

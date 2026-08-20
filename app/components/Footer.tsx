@@ -29,13 +29,15 @@ export default function Footer() {
     <footer className="bg-dark-1000 text-warm-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-16 grid grid-cols-1 sm:grid-cols-3 gap-10">
         <div>
-          <Image
-            src="/brand/logo-flexemcar.png"
-            alt="Flexemcar"
-            width={160}
-            height={44}
-            className="h-8 w-auto"
-          />
+          <div className="inline-flex items-center rounded-2xl bg-brand-orange px-5 py-3">
+            <Image
+              src="/brand/logo-flexemcar.png"
+              alt="Flexemcar"
+              width={160}
+              height={44}
+              className="h-8 w-auto brightness-0 invert"
+            />
+          </div>
           <p className="mt-4 text-sm text-warm-50/70 max-w-xs">
             Flexemcar es tu portal para comprar y vender furgonetas de
             ocasión al mejor precio. Amplia selección de furgonetas y
