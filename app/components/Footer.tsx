@@ -40,10 +40,10 @@ export default function Footer() {
         <div>
           <div className="inline-flex items-center rounded-2xl bg-brand-orange px-6 py-4">
             <Image
-              src="/brand/flexem-clean.png"
+              src="/brand/flexemcar-logo-full-clean.png"
               alt="Flexemcar"
-              width={753}
-              height={210}
+              width={1399}
+              height={279}
               className="h-12 w-auto"
             />
           </div>
