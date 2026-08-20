@@ -1,9 +1,9 @@
 import { totalStock } from "@/app/data/vehicles";
+import Counter from "@/app/components/Counter";
 
 const stats = [
-  { value: "+500", label: "Furgonetas entregadas" },
-  { value: String(totalStock), label: "Vehículos en stock" },
-  { value: "4,8★", label: "Valoración en Google" },
+  { target: 500, prefix: "+", label: "Furgonetas entregadas" },
+  { target: totalStock, prefix: "", label: "Vehículos en stock" },
 ];
 
 export default function StatsSection() {
@@ -14,13 +14,21 @@ export default function StatsSection() {
         {stats.map((stat) => (
           <div key={stat.label}>
             <p className="font-heading font-extrabold text-4xl sm:text-5xl text-brand-orange">
-              {stat.value}
+              <Counter target={stat.target} prefix={stat.prefix} />
             </p>
             <p className="mt-2 text-sm font-semibold uppercase tracking-wide text-warm-50/80">
               {stat.label}
             </p>
           </div>
         ))}
+        <div>
+          <p className="font-heading font-extrabold text-4xl sm:text-5xl text-brand-orange">
+            4,8★
+          </p>
+          <p className="mt-2 text-sm font-semibold uppercase tracking-wide text-warm-50/80">
+            Valoración en Google
+          </p>
+        </div>
       </div>
     </section>
   );
