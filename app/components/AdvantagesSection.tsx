@@ -1,3 +1,5 @@
+import Reveal from "@/app/components/Reveal";
+
 const advantages = [
   {
     title: "Financiación a medida",
@@ -25,12 +27,14 @@ export default function AdvantagesSection() {
   return (
     <section className="bg-warm-100 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 text-center">
-        <p className="text-xs font-bold uppercase tracking-widest text-brand-orange">
-          Por qué Flexemcar
-        </p>
-        <h2 className="mt-2 font-heading uppercase font-extrabold text-3xl sm:text-4xl text-brand-ink">
-          Ventajas de comprar con nosotros
-        </h2>
+        <Reveal>
+          <p className="text-xs font-bold uppercase tracking-widest text-brand-orange">
+            Por qué Flexemcar
+          </p>
+          <h2 className="mt-2 font-heading uppercase font-extrabold text-3xl sm:text-4xl text-brand-ink">
+            Ventajas de comprar con nosotros
+          </h2>
+        </Reveal>
 
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {advantages.map((item) => (

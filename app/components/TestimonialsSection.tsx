@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { testimonials } from "@/app/data/testimonials";
 import { links } from "@/app/lib/links";
+import Reveal from "@/app/components/Reveal";
 
 export default function TestimonialsSection() {
   const [active, setActive] = useState(0);
@@ -11,12 +12,14 @@ export default function TestimonialsSection() {
   return (
     <section id="opiniones" className="bg-dark-950 py-16 sm:py-24">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 text-center">
-        <p className="text-xs font-bold uppercase tracking-widest text-brand-orange">
-          Tu opinión, lo único que nos falta
-        </p>
-        <h2 className="mt-2 font-heading uppercase font-extrabold text-3xl sm:text-4xl text-warm-50">
-          Opiniones reales
-        </h2>
+        <Reveal>
+          <p className="text-xs font-bold uppercase tracking-widest text-brand-orange">
+            Tu opinión, lo único que nos falta
+          </p>
+          <h2 className="mt-2 font-heading uppercase font-extrabold text-3xl sm:text-4xl text-warm-50">
+            Opiniones reales
+          </h2>
+        </Reveal>
 
         <a
           href={links.googleReviews}

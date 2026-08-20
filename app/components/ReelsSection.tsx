@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { reels } from "@/app/data/reels";
+import Reveal from "@/app/components/Reveal";
 
 const CARD_WIDTH = 220;
 const CARD_GAP = 16;
@@ -43,9 +44,11 @@ export default function ReelsSection() {
   return (
     <section id="dia-a-dia" className="bg-dark-950 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <h2 className="font-heading uppercase font-extrabold text-3xl sm:text-4xl text-warm-50 text-center">
-          Nuestro día a día a tu lado
-        </h2>
+        <Reveal>
+          <h2 className="font-heading uppercase font-extrabold text-3xl sm:text-4xl text-warm-50 text-center">
+            Nuestro día a día a tu lado
+          </h2>
+        </Reveal>
 
         <div className="mt-10 relative">
           <div

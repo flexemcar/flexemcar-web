@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { totalStock, vehicles } from "@/app/data/vehicles";
+import Reveal from "@/app/components/Reveal";
 
 const priceOptions = [
   { label: "Todos", value: "" },
@@ -29,17 +30,19 @@ export default function StockSection() {
   return (
     <section id="stock" className="bg-warm-50 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <p className="text-xs font-bold uppercase tracking-widest text-brand-orange">
-          Stock disponible
-        </p>
-        <h2 className="mt-2 font-heading uppercase font-extrabold text-3xl sm:text-4xl text-brand-ink">
-          Nuestras furgonetas de ocasión
-        </h2>
-        <p className="mt-2 text-brand-ink/70">
-          Todas revisadas y con historial verificado. Filtra por precio y
-          encuentra la tuya —{" "}
-          <span className="font-semibold">{totalStock} vehículos en stock</span>.
-        </p>
+        <Reveal>
+          <p className="text-xs font-bold uppercase tracking-widest text-brand-orange">
+            Stock disponible
+          </p>
+          <h2 className="mt-2 font-heading uppercase font-extrabold text-3xl sm:text-4xl text-brand-ink">
+            Nuestras furgonetas de ocasión
+          </h2>
+          <p className="mt-2 text-brand-ink/70">
+            Todas revisadas y con historial verificado. Filtra por precio y
+            encuentra la tuya —{" "}
+            <span className="font-semibold">{totalStock} vehículos en stock</span>.
+          </p>
+        </Reveal>
 
         <div className="mt-8 flex flex-wrap items-center gap-3 rounded-full bg-white border border-warm-200 p-2">
           <select

@@ -1,3 +1,5 @@
+import Reveal from "@/app/components/Reveal";
+
 type CtaBannerProps = {
   id?: string;
   eyebrow?: string;
@@ -31,14 +33,16 @@ export default function CtaBanner({
             rounded ? "rounded-3xl" : ""
           }`}
         >
-          {eyebrow && (
-            <p className="text-xs font-bold uppercase tracking-widest text-white/80">
-              {eyebrow}
-            </p>
-          )}
-          <h2 className="mt-2 font-heading uppercase font-extrabold text-3xl sm:text-5xl text-white">
-            {title}
-          </h2>
+          <Reveal>
+            {eyebrow && (
+              <p className="text-xs font-bold uppercase tracking-widest text-white/80">
+                {eyebrow}
+              </p>
+            )}
+            <h2 className="mt-2 font-heading uppercase font-extrabold text-3xl sm:text-5xl text-white">
+              {title}
+            </h2>
+          </Reveal>
           {subtitle && (
             <p className="mt-4 max-w-xl mx-auto text-white/90">{subtitle}</p>
           )}
