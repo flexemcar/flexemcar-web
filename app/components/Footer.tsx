@@ -39,16 +39,13 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-16 grid grid-cols-1 sm:grid-cols-3 gap-10">
         <div>
           <div className="inline-flex items-center rounded-2xl bg-brand-orange px-6 py-4">
-            <div className="relative h-12 overflow-hidden" style={{ width: 170 }}>
-              <Image
-                src="/brand/logo-flexemcar-blanco.png"
-                alt="Flexemcar"
-                width={1400}
-                height={287}
-                className="mix-blend-multiply absolute"
-                style={{ width: 315, height: 65, top: -16, left: 0 }}
-              />
-            </div>
+            <Image
+              src="/brand/flexem-clean.png"
+              alt="Flexemcar"
+              width={753}
+              height={210}
+              className="h-12 w-auto"
+            />
           </div>
           <p className="mt-4 text-sm text-warm-50/70 max-w-xs">
             Flexemcar es tu portal para comprar y vender furgonetas de
