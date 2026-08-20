@@ -35,9 +35,24 @@ export default function Header() {
               ¿Dónde estamos?
             </a>
           </div>
-          <p className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-left font-extrabold tracking-wide uppercase text-[10px] sm:text-xs sm:absolute sm:inset-0 sm:flex sm:items-center sm:justify-center sm:overflow-visible sm:whitespace-nowrap sm:pointer-events-none">
-            Nº1 en transparencia · Portal líder en compraventa de furgonetas
-          </p>
+          <div className="min-w-0 flex-1 overflow-hidden sm:absolute sm:inset-0 sm:flex sm:items-center sm:justify-center sm:pointer-events-none">
+            <div className="sm:hidden overflow-hidden">
+              <div className="flex w-max animate-banner-marquee">
+                <span className="shrink-0 pr-12 font-extrabold tracking-wide uppercase text-[10px] whitespace-nowrap">
+                  Nº1 en transparencia · Portal líder en compraventa de furgonetas
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="shrink-0 pr-12 font-extrabold tracking-wide uppercase text-[10px] whitespace-nowrap"
+                >
+                  Nº1 en transparencia · Portal líder en compraventa de furgonetas
+                </span>
+              </div>
+            </div>
+            <p className="hidden sm:block font-extrabold tracking-wide uppercase text-xs whitespace-nowrap">
+              Nº1 en transparencia · Portal líder en compraventa de furgonetas
+            </p>
+          </div>
         </div>
       </div>
 
