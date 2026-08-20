@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { links, navItems } from "@/app/lib/links";
 
 const footerNavItems = navItems.filter((item) => item.label !== "Opiniones");
@@ -38,18 +39,16 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-16 grid grid-cols-1 sm:grid-cols-3 gap-10">
         <div>
           <div className="inline-flex items-center rounded-2xl bg-brand-orange px-6 py-4">
-            <div
-              role="img"
-              aria-label="Flexemcar"
-              className="h-12 mix-blend-multiply"
-              style={{
-                width: 170,
-                backgroundImage: "url(/brand/logo-flexemcar-blanco.png)",
-                backgroundSize: "315.5px 64.7px",
-                backgroundPosition: "0px -16.5px",
-                backgroundRepeat: "no-repeat",
-              }}
-            />
+            <div className="relative h-12 overflow-hidden" style={{ width: 170 }}>
+              <Image
+                src="/brand/logo-flexemcar-blanco.png"
+                alt="Flexemcar"
+                width={1400}
+                height={287}
+                className="mix-blend-multiply absolute"
+                style={{ width: 315, height: 65, top: -16, left: 0 }}
+              />
+            </div>
           </div>
           <p className="mt-4 text-sm text-warm-50/70 max-w-xs">
             Flexemcar es tu portal para comprar y vender furgonetas de
