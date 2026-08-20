@@ -38,13 +38,13 @@ export default function Footer() {
     <footer className="bg-dark-1000 text-warm-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-16 grid grid-cols-1 sm:grid-cols-3 gap-10">
         <div>
-          <div className="inline-flex items-center rounded-2xl bg-brand-orange px-5 py-3">
+          <div className="inline-flex items-center rounded-2xl bg-brand-orange px-6 py-4">
             <Image
-              src="/brand/logo-flexemcar.png"
+              src="/brand/logo-flexemcar-blanco.png"
               alt="Flexemcar"
-              width={160}
-              height={44}
-              className="h-8 w-auto brightness-0 invert"
+              width={280}
+              height={57}
+              className="h-12 w-auto mix-blend-multiply"
             />
           </div>
           <p className="mt-4 text-sm text-warm-50/70 max-w-xs">
