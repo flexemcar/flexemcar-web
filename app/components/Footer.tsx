@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { links, navItems } from "@/app/lib/links";
 
 const footerNavItems = navItems.filter((item) => item.label !== "Opiniones");
@@ -39,12 +38,17 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-16 grid grid-cols-1 sm:grid-cols-3 gap-10">
         <div>
           <div className="inline-flex items-center rounded-2xl bg-brand-orange px-6 py-4">
-            <Image
-              src="/brand/logo-flexemcar-blanco.png"
-              alt="Flexemcar"
-              width={280}
-              height={57}
-              className="h-12 w-auto mix-blend-multiply"
+            <div
+              role="img"
+              aria-label="Flexemcar"
+              className="h-12 mix-blend-multiply"
+              style={{
+                width: 170,
+                backgroundImage: "url(/brand/logo-flexemcar-blanco.png)",
+                backgroundSize: "315.5px 64.7px",
+                backgroundPosition: "0px -16.5px",
+                backgroundRepeat: "no-repeat",
+              }}
             />
           </div>
           <p className="mt-4 text-sm text-warm-50/70 max-w-xs">
