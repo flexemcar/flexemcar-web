@@ -3,6 +3,7 @@ import Hero from "@/app/components/Hero";
 import Marquee from "@/app/components/Marquee";
 import ReelsSection from "@/app/components/ReelsSection";
 import StockSection from "@/app/components/StockSection";
+import UpcomingDeliveriesSection from "@/app/components/UpcomingDeliveriesSection";
 import StatsSection from "@/app/components/StatsSection";
 import AdvantagesSection from "@/app/components/AdvantagesSection";
 import CtaBanner from "@/app/components/CtaBanner";
@@ -19,6 +20,7 @@ export default function Home() {
         <Marquee />
         <ReelsSection />
         <StockSection />
+        <UpcomingDeliveriesSection />
         <StatsSection />
         <AdvantagesSection />
         <CtaBanner
