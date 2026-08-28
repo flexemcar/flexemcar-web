@@ -10,15 +10,18 @@ import CtaBanner from "@/app/components/CtaBanner";
 import TestimonialsSection from "@/app/components/TestimonialsSection";
 import MapSection from "@/app/components/MapSection";
 import Footer from "@/app/components/Footer";
+import { getReels } from "@/app/lib/getReels";
 
-export default function Home() {
+export default async function Home() {
+  const reels = await getReels();
+
   return (
     <div className="flex flex-col flex-1">
       <Header />
       <main className="flex-1">
         <Hero />
         <Marquee />
-        <ReelsSection />
+        <ReelsSection reels={reels} />
         <StockSection />
         <UpcomingDeliveriesSection />
         <StatsSection />
