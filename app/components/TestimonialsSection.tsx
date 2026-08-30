@@ -43,49 +43,50 @@ export default function TestimonialsSection() {
           </span>
         </a>
 
-        <div className="mt-10 relative">
-          <div className="rounded-2xl bg-warm-50/5 border border-warm-50/10 px-6 sm:px-10 py-10">
-            <p className="text-lg text-warm-50/90 italic">"{current.quote}"</p>
-            <p className="mt-6 font-heading uppercase font-extrabold text-warm-50">
-              {current.name}
-            </p>
-            <p className="text-sm text-warm-50/60">{current.city}</p>
-          </div>
+        <div className="mt-10 rounded-2xl bg-warm-50/5 border border-warm-50/10 px-6 sm:px-10 py-10">
+          <p className="text-lg text-warm-50/90 italic">"{current.quote}"</p>
+          <p className="mt-6 font-heading uppercase font-extrabold text-warm-50">
+            {current.name}
+          </p>
+          <p className="text-sm text-warm-50/60">{current.city}</p>
+        </div>
 
+        <div className="mt-6 flex items-center justify-center gap-6">
           <button
             type="button"
             onClick={() => goTo(active - 1)}
             aria-label="Opinión anterior"
-            className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 items-center justify-center size-11 rounded-full bg-warm-50 text-brand-ink shadow-lg hover:bg-brand-orange hover:text-white transition"
+            className="flex items-center justify-center size-12 rounded-full bg-brand-orange text-white shadow-lg hover:brightness-110 transition"
           >
             <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
               <path d="M15 6l-6 6 6 6" />
             </svg>
           </button>
+
+          <div className="flex items-center gap-2">
+            {testimonials.map((t, i) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => setActive(i)}
+                aria-label={`Ver opinión de ${t.name}`}
+                className={`size-2 rounded-full transition-colors ${
+                  i === active ? "bg-brand-orange" : "bg-warm-50/30"
+                }`}
+              />
+            ))}
+          </div>
+
           <button
             type="button"
             onClick={() => goTo(active + 1)}
             aria-label="Opinión siguiente"
-            className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 items-center justify-center size-11 rounded-full bg-warm-50 text-brand-ink shadow-lg hover:bg-brand-orange hover:text-white transition"
+            className="flex items-center justify-center size-12 rounded-full bg-brand-orange text-white shadow-lg hover:brightness-110 transition"
           >
             <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
               <path d="M9 6l6 6-6 6" />
             </svg>
           </button>
-        </div>
-
-        <div className="mt-6 flex justify-center gap-2">
-          {testimonials.map((t, i) => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => setActive(i)}
-              aria-label={`Ver opinión de ${t.name}`}
-              className={`size-2 rounded-full transition-colors ${
-                i === active ? "bg-brand-orange" : "bg-warm-50/30"
-              }`}
-            />
-          ))}
         </div>
       </div>
     </section>
