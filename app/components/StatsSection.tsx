@@ -1,12 +1,13 @@
-import { totalStock } from "@/app/data/vehicles";
+import { getVehicleCount } from "@/app/lib/getVehicles";
 import Counter from "@/app/components/Counter";
 
-const stats = [
-  { target: 500, prefix: "+", label: "Furgonetas entregadas" },
-  { target: totalStock, prefix: "", label: "Vehículos en stock" },
-];
+export default async function StatsSection() {
+  const totalStock = await getVehicleCount();
+  const stats = [
+    { target: 500, prefix: "+", label: "Furgonetas entregadas" },
+    { target: totalStock, prefix: "", label: "Vehículos en stock" },
+  ];
 
-export default function StatsSection() {
   return (
     <section className="relative overflow-hidden bg-dark-950 py-16">
       <div className="absolute inset-0 bg-gradient-to-br from-dark-1000 via-dark-950 to-brand-ink/60" />

@@ -8,7 +8,7 @@ export type UpcomingDelivery = {
 
 // Furgonetas en camino, aún sin ficha completa: generan expectación antes de
 // llegar al stock. Sustituir por las entregas reales cuando se conecte el
-// inventario (ver app/data/vehicles.ts).
+// inventario (ver app/lib/getVehicles.ts).
 export const upcomingDeliveries: UpcomingDelivery[] = [
   {
     id: "u1",
