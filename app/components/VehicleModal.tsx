@@ -80,7 +80,7 @@ export default function VehicleModal({
           ×
         </button>
 
-        <div className="grid sm:grid-cols-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2">
           <div className="flex flex-col bg-warm-100">
             <div className="relative aspect-[4/3] min-h-[240px] shrink-0 bg-gradient-to-br from-warm-200 to-brand-ink/20 sm:aspect-auto sm:min-h-0 sm:flex-1">
               {vehicle.photos[activePhoto] && (
