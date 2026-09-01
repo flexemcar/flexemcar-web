@@ -56,6 +56,8 @@ export const equipmentOptions = [
   "Volante multifunción",
   "Limitador de velocidad",
   "Ventanas laterales abatibles",
+  "Modos de conducción",
+  "Baca de carga",
 ];
 
 // Precio a mostrar: el financiado si existe, si no el al contado (algunos
