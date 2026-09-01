@@ -9,12 +9,17 @@ type VehicleRow = {
   km: number;
   fuel: string;
   transmission: string;
-  price: number;
+  price: number | null;
   cash_price: number | null;
   warranty_months: number;
   equipment: string[] | null;
   status: VehicleStatus;
   description: string | null;
+  engine: string | null;
+  power_cv: number | null;
+  body_config: string | null;
+  seats: number | null;
+  eco_label: string | null;
   vehicle_photos: { id: string; storage_path: string; position: number }[];
 };
 
@@ -30,12 +35,17 @@ function mapVehicleRow(
     km: row.km,
     fuel: row.fuel,
     transmission: row.transmission,
-    price: Number(row.price),
+    price: row.price !== null ? Number(row.price) : null,
     cashPrice: row.cash_price !== null ? Number(row.cash_price) : null,
     warrantyMonths: row.warranty_months,
     equipment: row.equipment ?? [],
     status: row.status,
     description: row.description,
+    engine: row.engine,
+    powerCv: row.power_cv,
+    bodyConfig: row.body_config,
+    seats: row.seats,
+    ecoLabel: row.eco_label,
     photos: mapPhotos(row.vehicle_photos, getPublicUrl),
   };
 }

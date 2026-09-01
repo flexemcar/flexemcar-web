@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import type { Vehicle } from "@/app/lib/vehicles";
+import { getDisplayPrice, type Vehicle } from "@/app/lib/vehicles";
 import VehicleModal from "@/app/components/VehicleModal";
 
 const priceOptions = [
@@ -26,7 +26,7 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
 
   const filtered = useMemo(() => {
     if (!maxPrice) return vehicles;
-    return vehicles.filter((v) => v.price <= Number(maxPrice));
+    return vehicles.filter((v) => getDisplayPrice(v).amount <= Number(maxPrice));
   }, [vehicles, maxPrice]);
 
   return (
@@ -93,7 +93,7 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
                 </p>
                 <div className="mt-3 flex items-center justify-between">
                   <span className="font-heading font-extrabold text-xl text-brand-orange">
-                    {formatPrice(v.price)}
+                    {formatPrice(getDisplayPrice(v).amount)}
                   </span>
                   <button
                     type="button"

@@ -18,7 +18,15 @@ async function requireAdmin() {
 }
 
 function readVehicleFields(formData: FormData) {
+  const priceRaw = String(formData.get("price") ?? "").trim();
   const cashPriceRaw = String(formData.get("cash_price") ?? "").trim();
+  if (!priceRaw && !cashPriceRaw) {
+    throw new Error("Indica al menos un precio (financiado o al contado).");
+  }
+
+  const powerCvRaw = String(formData.get("power_cv") ?? "").trim();
+  const seatsRaw = String(formData.get("seats") ?? "").trim();
+
   return {
     brand: String(formData.get("brand") ?? "").trim(),
     model: String(formData.get("model") ?? "").trim(),
@@ -26,12 +34,17 @@ function readVehicleFields(formData: FormData) {
     km: Number(formData.get("km")),
     fuel: String(formData.get("fuel") ?? "").trim(),
     transmission: String(formData.get("transmission") ?? "").trim(),
-    price: Number(formData.get("price")),
+    price: priceRaw ? Number(priceRaw) : null,
     cash_price: cashPriceRaw ? Number(cashPriceRaw) : null,
     warranty_months: Number(formData.get("warranty_months") ?? 12),
     equipment: formData.getAll("equipment").map(String),
     status: String(formData.get("status") ?? "available") as VehicleStatus,
     description: (formData.get("description") as string | null)?.trim() || null,
+    engine: (formData.get("engine") as string | null)?.trim() || null,
+    power_cv: powerCvRaw ? Number(powerCvRaw) : null,
+    body_config: (formData.get("body_config") as string | null)?.trim() || null,
+    seats: seatsRaw ? Number(seatsRaw) : null,
+    eco_label: (formData.get("eco_label") as string | null)?.trim() || null,
   };
 }
 

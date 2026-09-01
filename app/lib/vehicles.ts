@@ -15,18 +15,25 @@ export type Vehicle = {
   km: number;
   fuel: string;
   transmission: string;
-  price: number;
+  price: number | null;
   cashPrice: number | null;
   warrantyMonths: number;
   equipment: string[];
   status: VehicleStatus;
   description: string | null;
+  engine: string | null;
+  powerCv: number | null;
+  bodyConfig: string | null;
+  seats: number | null;
+  ecoLabel: string | null;
   photos: VehiclePhoto[];
 };
 
 export const fuelOptions = ["Diésel", "Gasolina", "Híbrido", "Eléctrico"];
 
 export const transmissionOptions = ["Manual", "Automático"];
+
+export const ecoLabelOptions = ["", "0", "ECO", "C", "B"];
 
 export const equipmentOptions = [
   "Aire acondicionado",
@@ -45,7 +52,21 @@ export const equipmentOptions = [
   "Techo solar",
   "Control de crucero",
   "Asientos calefactables",
+  "Volante multifunción",
+  "Limitador de velocidad",
 ];
+
+// Precio a mostrar: el financiado si existe, si no el al contado (algunos
+// anuncios de la empresa solo traen un precio, sin distinguir).
+export function getDisplayPrice(vehicle: Pick<Vehicle, "price" | "cashPrice">): {
+  amount: number;
+  label: string;
+} {
+  if (vehicle.price !== null) {
+    return { amount: vehicle.price, label: "Precio financiado" };
+  }
+  return { amount: vehicle.cashPrice ?? 0, label: "Precio al contado" };
+}
 
 export const statusLabels: Record<VehicleStatus, string> = {
   available: "Disponible",

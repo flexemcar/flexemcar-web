@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getVehicles } from "@/app/lib/getVehicles";
-import { statusLabels } from "@/app/lib/vehicles";
+import { getDisplayPrice, statusLabels } from "@/app/lib/vehicles";
 import DeleteVehicleButton from "@/app/admin/DeleteVehicleButton";
 
 const statusStyles: Record<string, string> = {
@@ -56,7 +56,7 @@ export default async function AdminPage() {
                 </p>
                 <p className="text-sm text-warm-50/60">
                   {v.year} · {v.km.toLocaleString("es-ES")} km ·{" "}
-                  {v.price.toLocaleString("es-ES")} €
+                  {getDisplayPrice(v).amount.toLocaleString("es-ES")} €
                 </p>
               </div>
 

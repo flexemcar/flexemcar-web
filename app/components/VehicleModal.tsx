@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { calculateMonthlyPayment, financingConfig } from "@/app/lib/financing";
 import { links } from "@/app/lib/links";
-import { statusLabels, type Vehicle } from "@/app/lib/vehicles";
+import { getDisplayPrice, statusLabels, type Vehicle } from "@/app/lib/vehicles";
 
 function formatPrice(n: number) {
   return Math.round(n).toLocaleString("es-ES") + " €";
@@ -23,7 +23,8 @@ export default function VehicleModal({
 }) {
   const [activePhoto, setActivePhoto] = useState(0);
 
-  const basePrice = vehicle.cashPrice ?? vehicle.price;
+  const displayPrice = getDisplayPrice(vehicle);
+  const basePrice = vehicle.cashPrice ?? vehicle.price ?? 0;
   const maxEntrada = Math.max(Math.round(Math.min(basePrice, 15000) / 100) * 100, 500);
   const [entrada, setEntrada] = useState(Math.round(maxEntrada * 0.2 / 100) * 100);
   const [plazo, setPlazo] = useState(48);
@@ -49,7 +50,7 @@ export default function VehicleModal({
 
   const whatsappMessage = `Hola, me interesa la ${vehicle.brand} ${vehicle.model} (${vehicle.year}, ${formatKm(
     vehicle.km
-  )}) por ${formatPrice(vehicle.price)}.`;
+  )}) por ${formatPrice(displayPrice.amount)}.`;
   const whatsappHref = links.whatsapp
     ? `https://wa.me/${links.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`
     : "#";
@@ -142,13 +143,13 @@ export default function VehicleModal({
             <div className="mt-4 flex items-end gap-6 border-b border-warm-200 pb-4">
               <div>
                 <p className="text-xs font-semibold uppercase text-brand-ink/50">
-                  Precio financiado
+                  {displayPrice.label}
                 </p>
                 <p className="font-heading text-2xl font-extrabold text-brand-orange">
-                  {formatPrice(vehicle.price)}
+                  {formatPrice(displayPrice.amount)}
                 </p>
               </div>
-              {vehicle.cashPrice !== null && (
+              {vehicle.price !== null && vehicle.cashPrice !== null && (
                 <div>
                   <p className="text-xs font-semibold uppercase text-brand-ink/50">Al contado</p>
                   <p className="font-heading text-lg font-extrabold text-brand-ink">
@@ -236,8 +237,15 @@ export default function VehicleModal({
               ["Kilómetros", formatKm(vehicle.km)],
               ["Combustible", vehicle.fuel],
               ["Cambio", vehicle.transmission],
+              vehicle.engine ? ["Motor", vehicle.engine] : null,
+              vehicle.powerCv ? ["Potencia", `${vehicle.powerCv} CV`] : null,
+              vehicle.bodyConfig ? ["Carrocería", vehicle.bodyConfig] : null,
+              vehicle.seats ? ["Plazas", String(vehicle.seats)] : null,
+              vehicle.ecoLabel ? ["Etiqueta medioambiental", vehicle.ecoLabel] : null,
               ["Garantía", `${vehicle.warrantyMonths} meses`],
-            ].map(([label, value]) => (
+            ]
+              .filter((row): row is [string, string] => row !== null)
+              .map(([label, value]) => (
               <div
                 key={label}
                 className="flex items-center justify-between border-b border-warm-100 py-1.5 text-sm"
