@@ -64,7 +64,7 @@ export default function VehicleModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-0 sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-0 sm:p-4"
       onClick={onClose}
     >
       <div
@@ -81,8 +81,8 @@ export default function VehicleModal({
         </button>
 
         <div className="grid sm:grid-cols-2">
-          <div className="bg-warm-100">
-            <div className="relative aspect-[4/3] min-h-[240px] bg-gradient-to-br from-warm-200 to-brand-ink/20 sm:aspect-auto sm:h-full">
+          <div className="flex flex-col bg-warm-100">
+            <div className="relative aspect-[4/3] min-h-[240px] shrink-0 bg-gradient-to-br from-warm-200 to-brand-ink/20 sm:aspect-auto sm:min-h-0 sm:flex-1">
               {vehicle.photos[activePhoto] && (
                 <Image
                   src={vehicle.photos[activePhoto].url}
@@ -101,7 +101,7 @@ export default function VehicleModal({
               </span>
             </div>
             {vehicle.photos.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto p-3">
+              <div className="flex shrink-0 gap-2 overflow-x-auto p-3">
                 {vehicle.photos.map((photo, i) => (
                   <button
                     key={photo.id}
