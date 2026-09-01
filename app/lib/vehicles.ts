@@ -37,6 +37,7 @@ export const ecoLabelOptions = ["", "0", "ECO", "C", "B"];
 
 export const equipmentOptions = [
   "Aire acondicionado",
+  "Climatizador",
   "Bluetooth",
   "Cierre centralizado",
   "Dirección asistida",
@@ -54,6 +55,7 @@ export const equipmentOptions = [
   "Asientos calefactables",
   "Volante multifunción",
   "Limitador de velocidad",
+  "Ventanas laterales abatibles",
 ];
 
 // Precio a mostrar: el financiado si existe, si no el al contado (algunos
