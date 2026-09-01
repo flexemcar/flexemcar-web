@@ -16,16 +16,36 @@ export default function PhotoManager({
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
 
+  function reorderTo(next: VehiclePhoto[]) {
+    setPhotos(next);
+    startTransition(() => {
+      reorderPhotosAction(vehicleId, next.map((p) => p.id));
+    });
+  }
+
   function handleDrop(targetIndex: number) {
     if (dragIndex === null || dragIndex === targetIndex) return;
     const next = [...photos];
     const [moved] = next.splice(dragIndex, 1);
     next.splice(targetIndex, 0, moved);
-    setPhotos(next);
     setDragIndex(null);
-    startTransition(() => {
-      reorderPhotosAction(vehicleId, next.map((p) => p.id));
-    });
+    reorderTo(next);
+  }
+
+  function moveToFirst(index: number) {
+    if (index === 0) return;
+    const next = [...photos];
+    const [moved] = next.splice(index, 1);
+    next.unshift(moved);
+    reorderTo(next);
+  }
+
+  function moveBy(index: number, delta: -1 | 1) {
+    const target = index + delta;
+    if (target < 0 || target >= photos.length) return;
+    const next = [...photos];
+    [next[index], next[target]] = [next[target], next[index]];
+    reorderTo(next);
   }
 
   function handleDelete(photo: VehiclePhoto) {
@@ -59,10 +79,18 @@ export default function PhotoManager({
             className="object-cover pointer-events-none"
             sizes="200px"
           />
-          {index === 0 && (
+          {index === 0 ? (
             <span className="absolute top-1 left-1 rounded bg-brand-orange px-1.5 py-0.5 text-[10px] font-bold text-white">
               Portada
             </span>
+          ) : (
+            <button
+              type="button"
+              onClick={() => moveToFirst(index)}
+              className="absolute top-1 left-1 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-bold text-white hover:bg-brand-orange transition"
+            >
+              Hacer portada
+            </button>
           )}
           <button
             type="button"
@@ -72,6 +100,26 @@ export default function PhotoManager({
           >
             ×
           </button>
+          <div className="absolute bottom-1 left-1 right-1 flex justify-between">
+            <button
+              type="button"
+              onClick={() => moveBy(index, -1)}
+              disabled={index === 0}
+              aria-label="Mover a la izquierda"
+              className="flex items-center justify-center size-6 rounded-full bg-black/70 text-white hover:bg-brand-orange transition disabled:opacity-30 disabled:hover:bg-black/70"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              onClick={() => moveBy(index, 1)}
+              disabled={index === photos.length - 1}
+              aria-label="Mover a la derecha"
+              className="flex items-center justify-center size-6 rounded-full bg-black/70 text-white hover:bg-brand-orange transition disabled:opacity-30 disabled:hover:bg-black/70"
+            >
+              ›
+            </button>
+          </div>
         </div>
       ))}
     </div>
