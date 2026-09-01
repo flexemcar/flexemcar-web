@@ -58,7 +58,16 @@ export default function Header() {
 
       <header className="sticky top-0 z-50 bg-warm-50/95 backdrop-blur border-b border-warm-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
-          <Link href="/" className="shrink-0">
+          <Link
+            href="/"
+            className="shrink-0"
+            onClick={(e) => {
+              if (window.location.pathname === "/") {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
+          >
             <Image
               src="/brand/logo-flexemcar.png"
               alt="Flexemcar"
