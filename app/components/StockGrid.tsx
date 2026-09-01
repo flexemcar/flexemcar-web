@@ -61,15 +61,24 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
           {filtered.map((v) => (
             <div
               key={v.id}
-              className="rounded-2xl bg-white border border-warm-200 overflow-hidden"
+              role="button"
+              tabIndex={0}
+              onClick={() => setSelected(v)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setSelected(v);
+                }
+              }}
+              className="group cursor-pointer rounded-2xl bg-white border border-warm-200 overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-brand-orange/50"
             >
-              <div className="relative aspect-[4/3] bg-gradient-to-br from-warm-200 to-brand-ink/20">
+              <div className="relative aspect-[4/3] bg-gradient-to-br from-warm-200 to-brand-ink/20 overflow-hidden">
                 {v.photos[0] && (
                   <Image
                     src={v.photos[0].url}
                     alt={`${v.brand} ${v.model}`}
                     fill
-                    className="object-cover"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                     sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                   />
                 )}
@@ -95,13 +104,9 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
                   <span className="font-heading font-extrabold text-xl text-brand-orange">
                     {formatPrice(getDisplayPrice(v).amount)}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => setSelected(v)}
-                    className="text-sm font-bold text-brand-ink underline underline-offset-2 hover:text-brand-orange"
-                  >
+                  <span className="text-sm font-bold text-brand-ink underline underline-offset-2 transition-colors group-hover:text-brand-orange">
                     Ver ficha
-                  </button>
+                  </span>
                 </div>
               </div>
             </div>
