@@ -18,13 +18,18 @@ async function requireAdmin() {
 }
 
 function readVehicleFields(formData: FormData) {
+  const cashPriceRaw = String(formData.get("cash_price") ?? "").trim();
   return {
     brand: String(formData.get("brand") ?? "").trim(),
     model: String(formData.get("model") ?? "").trim(),
     year: Number(formData.get("year")),
     km: Number(formData.get("km")),
     fuel: String(formData.get("fuel") ?? "").trim(),
+    transmission: String(formData.get("transmission") ?? "").trim(),
     price: Number(formData.get("price")),
+    cash_price: cashPriceRaw ? Number(cashPriceRaw) : null,
+    warranty_months: Number(formData.get("warranty_months") ?? 12),
+    equipment: formData.getAll("equipment").map(String),
     status: String(formData.get("status") ?? "available") as VehicleStatus,
     description: (formData.get("description") as string | null)?.trim() || null,
   };

@@ -63,6 +63,13 @@ drop policy if exists "vehicle_photos_admin_write" on public.vehicle_photos;
 create policy "vehicle_photos_admin_write" on public.vehicle_photos
   for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
+-- Permisos a nivel de tabla: RLS por si solo no basta, Postgres tambien exige
+-- que el rol pueda tocar la tabla (el proyecto tiene "Automatically expose
+-- new tables" desactivado, asi que esto no se concede solo).
+grant usage on schema public to anon, authenticated;
+grant select on public.vehicles, public.vehicle_photos to anon, authenticated;
+grant insert, update, delete on public.vehicles, public.vehicle_photos to authenticated;
+
 -- Storage: bucket publico para las fotos de vehiculos.
 insert into storage.buckets (id, name, public)
 values ('vehicle-photos', 'vehicle-photos', true)

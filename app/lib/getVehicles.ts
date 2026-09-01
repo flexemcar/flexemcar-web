@@ -8,11 +8,37 @@ type VehicleRow = {
   year: number;
   km: number;
   fuel: string;
+  transmission: string;
   price: number;
+  cash_price: number | null;
+  warranty_months: number;
+  equipment: string[] | null;
   status: VehicleStatus;
   description: string | null;
   vehicle_photos: { id: string; storage_path: string; position: number }[];
 };
+
+function mapVehicleRow(
+  row: VehicleRow,
+  getPublicUrl: (path: string) => string
+): Vehicle {
+  return {
+    id: row.id,
+    brand: row.brand,
+    model: row.model,
+    year: row.year,
+    km: row.km,
+    fuel: row.fuel,
+    transmission: row.transmission,
+    price: Number(row.price),
+    cashPrice: row.cash_price !== null ? Number(row.cash_price) : null,
+    warrantyMonths: row.warranty_months,
+    equipment: row.equipment ?? [],
+    status: row.status,
+    description: row.description,
+    photos: mapPhotos(row.vehicle_photos, getPublicUrl),
+  };
+}
 
 function mapPhotos(
   rows: VehicleRow["vehicle_photos"],
@@ -53,18 +79,7 @@ export async function getVehicles({
     const { data, error } = await query;
     if (error) throw error;
 
-    return (data as VehicleRow[]).map((row) => ({
-      id: row.id,
-      brand: row.brand,
-      model: row.model,
-      year: row.year,
-      km: row.km,
-      fuel: row.fuel,
-      price: Number(row.price),
-      status: row.status,
-      description: row.description,
-      photos: mapPhotos(row.vehicle_photos, getPublicUrl),
-    }));
+    return (data as VehicleRow[]).map((row) => mapVehicleRow(row, getPublicUrl));
   } catch (err) {
     console.error("getVehicles failed", err);
     return [];
@@ -104,17 +119,5 @@ export async function getVehicleById(id: string): Promise<Vehicle | null> {
   if (error) throw error;
   if (!data) return null;
 
-  const row = data as VehicleRow;
-  return {
-    id: row.id,
-    brand: row.brand,
-    model: row.model,
-    year: row.year,
-    km: row.km,
-    fuel: row.fuel,
-    price: Number(row.price),
-    status: row.status,
-    description: row.description,
-    photos: mapPhotos(row.vehicle_photos, getPublicUrl),
-  };
+  return mapVehicleRow(data as VehicleRow, getPublicUrl);
 }

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import type { Vehicle } from "@/app/lib/vehicles";
+import VehicleModal from "@/app/components/VehicleModal";
 
 const priceOptions = [
   { label: "Todos", value: "" },
@@ -21,6 +22,7 @@ function formatKm(n: number) {
 
 export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
   const [maxPrice, setMaxPrice] = useState("");
+  const [selected, setSelected] = useState<Vehicle | null>(null);
 
   const filtered = useMemo(() => {
     if (!maxPrice) return vehicles;
@@ -93,18 +95,21 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
                   <span className="font-heading font-extrabold text-xl text-brand-orange">
                     {formatPrice(v.price)}
                   </span>
-                  <a
-                    href="#"
+                  <button
+                    type="button"
+                    onClick={() => setSelected(v)}
                     className="text-sm font-bold text-brand-ink underline underline-offset-2 hover:text-brand-orange"
                   >
                     Ver ficha
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      {selected && <VehicleModal vehicle={selected} onClose={() => setSelected(null)} />}
     </>
   );
 }

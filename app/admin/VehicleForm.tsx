@@ -1,6 +1,12 @@
 "use client";
 
-import { fuelOptions, statusLabels, type VehicleStatus } from "@/app/lib/vehicles";
+import {
+  equipmentOptions,
+  fuelOptions,
+  statusLabels,
+  transmissionOptions,
+  type VehicleStatus,
+} from "@/app/lib/vehicles";
 
 type Initial = {
   brand: string;
@@ -8,7 +14,11 @@ type Initial = {
   year: number;
   km: number;
   fuel: string;
+  transmission: string;
   price: number;
+  cashPrice: number | null;
+  warrantyMonths: number;
+  equipment: string[];
   status: VehicleStatus;
   description: string | null;
 };
@@ -54,7 +64,7 @@ export default function VehicleForm({
             className={inputClass}
           />
         </Field>
-        <Field label="Precio (€)">
+        <Field label="Precio financiado (€)">
           <input
             type="number"
             name="price"
@@ -62,6 +72,39 @@ export default function VehicleForm({
             defaultValue={initial?.price}
             className={inputClass}
           />
+        </Field>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <Field label="Precio al contado (€, opcional)">
+          <input
+            type="number"
+            name="cash_price"
+            defaultValue={initial?.cashPrice ?? ""}
+            className={inputClass}
+          />
+        </Field>
+        <Field label="Garantía (meses)">
+          <input
+            type="number"
+            name="warranty_months"
+            required
+            defaultValue={initial?.warrantyMonths ?? 12}
+            className={inputClass}
+          />
+        </Field>
+        <Field label="Cambio">
+          <select
+            name="transmission"
+            defaultValue={initial?.transmission ?? transmissionOptions[0]}
+            className={inputClass}
+          >
+            {transmissionOptions.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
         </Field>
       </div>
 
@@ -88,6 +131,24 @@ export default function VehicleForm({
             ))}
           </select>
         </Field>
+      </div>
+
+      <div>
+        <p className="text-sm font-semibold text-warm-50/80">Equipamiento</p>
+        <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2 rounded-lg bg-dark-900 border border-warm-50/10 p-3">
+          {equipmentOptions.map((item) => (
+            <label key={item} className="flex items-center gap-2 text-sm text-warm-50/80">
+              <input
+                type="checkbox"
+                name="equipment"
+                value={item}
+                defaultChecked={initial?.equipment?.includes(item)}
+                className="accent-brand-orange"
+              />
+              {item}
+            </label>
+          ))}
+        </div>
       </div>
 
       <Field label="Descripción (opcional)">
