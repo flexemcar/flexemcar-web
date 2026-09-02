@@ -35,10 +35,12 @@ export default function MiguelPointer() {
       }`}
     >
       <div className="relative">
-        <div className="absolute left-[76px] top-[27px] sm:left-[114px] sm:top-[40px]">
-          <div className="relative -translate-y-1/2 whitespace-nowrap rounded-full bg-white px-3 py-1.5 text-xs font-bold text-brand-ink shadow-[0_6px_18px_rgba(0,0,0,0.28)] sm:px-4 sm:py-2 sm:text-sm">
+        <div className="absolute left-[70px] top-[29px] sm:left-[104px] sm:top-[43px]">
+          <div className="relative -translate-y-1/2 whitespace-nowrap rounded-2xl rounded-bl-md border border-black/5 bg-white px-3.5 py-2 text-xs font-bold text-brand-ink shadow-[0_10px_24px_-4px_rgba(0,0,0,0.35)] sm:px-4 sm:py-2.5 sm:text-sm">
             ¿Hablamos?
-            <span className="absolute right-full top-1/2 h-0 w-0 -translate-y-1/2 border-y-[6px] border-r-[8px] border-y-transparent border-r-white sm:border-y-[7px] sm:border-r-[9px]" />
+            <span className="absolute right-full bottom-0 h-3 w-3 overflow-hidden">
+              <span className="absolute -right-1.5 bottom-0 h-3 w-3 rotate-45 rounded-sm bg-white" />
+            </span>
           </div>
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element */}

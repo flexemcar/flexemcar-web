@@ -84,16 +84,6 @@ export default function Footer() {
                 </a>
               </li>
             ))}
-            <li>
-              <a href="#" className="text-sm text-warm-50/80 hover:text-brand-orange transition">
-                Política de privacidad
-              </a>
-            </li>
-            <li>
-              <a href="#" className="text-sm text-warm-50/80 hover:text-brand-orange transition">
-                Cookies
-              </a>
-            </li>
           </ul>
         </div>
 
@@ -125,8 +115,16 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-warm-50/10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 text-center text-xs text-warm-50/50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-warm-50/50">
           <p>© {new Date().getFullYear()} Flexemcar · Compraventa de furgonetas de ocasión</p>
+          <span className="text-warm-50/25">·</span>
+          <a href="#" className="hover:text-brand-orange transition">
+            Política de privacidad
+          </a>
+          <span className="text-warm-50/25">·</span>
+          <a href="#" className="hover:text-brand-orange transition">
+            Cookies
+          </a>
         </div>
       </div>
     </footer>
