@@ -28,16 +28,16 @@ export default function MiguelPointer() {
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none absolute right-full bottom-1 mr-2 w-32 sm:bottom-1.5 sm:w-48 transition-all duration-500 ${
+      className={`pointer-events-none absolute right-full bottom-[-65px] mr-6 w-32 sm:bottom-[-106px] sm:mr-9 sm:w-48 transition-all duration-500 ${
         visible
           ? "opacity-100 translate-x-0"
           : "opacity-0 translate-x-3"
       }`}
     >
       <div className="relative">
-        <div className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-2xl bg-white px-4 py-2 text-sm font-bold text-brand-ink shadow-lg sm:text-base">
+        <div className="absolute left-full top-4 ml-2 whitespace-nowrap rounded-2xl bg-white px-3 py-1.5 text-xs font-bold text-brand-ink shadow-lg sm:top-5 sm:px-4 sm:py-2 sm:text-sm">
           ¿Hablamos?
-          <span className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-8 border-t-8 border-x-transparent border-t-white" />
+          <span className="absolute right-full top-1/2 h-0 w-0 -translate-y-1/2 border-y-8 border-r-8 border-y-transparent border-r-white" />
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
