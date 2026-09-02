@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 /**
@@ -29,18 +28,17 @@ export default function MiguelPointer() {
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none absolute -top-28 right-0 sm:-top-32 transition-all duration-500 ${
+      className={`pointer-events-none absolute right-full bottom-1 mr-2 w-16 sm:bottom-1.5 sm:w-[75px] transition-all duration-500 ${
         visible
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-3"
+          ? "opacity-100 translate-x-0"
+          : "opacity-0 translate-x-3"
       }`}
     >
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         src="/brand/miguel-whatsapp.png"
         alt=""
-        width={276}
-        height={368}
-        className="h-28 w-auto sm:h-32 drop-shadow-xl"
+        className="w-full h-auto drop-shadow-[0_3px_6px_rgba(0,0,0,0.35)]"
       />
     </div>
   );
