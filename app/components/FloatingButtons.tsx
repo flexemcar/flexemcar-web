@@ -2,6 +2,7 @@
 
 import { links } from "@/app/lib/links";
 import ScrollToTop from "@/app/components/ScrollToTop";
+import MiguelPointer from "@/app/components/MiguelPointer";
 
 function WhatsAppIcon() {
   return (
@@ -24,15 +25,18 @@ export default function FloatingButtons() {
     <div className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-40 flex flex-col-reverse items-center gap-3 sm:gap-4">
       <ScrollToTop />
 
-      <a
-        href={links.whatsapp ? `https://wa.me/${links.whatsapp}` : "#"}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="WhatsApp"
-        className="flex items-center justify-center size-11 sm:size-12 rounded-full bg-whatsapp text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_16px_rgba(37,211,102,0.65)]"
-      >
-        <WhatsAppIcon />
-      </a>
+      <div className="relative">
+        <MiguelPointer />
+        <a
+          href={links.whatsapp ? `https://wa.me/${links.whatsapp}` : "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="WhatsApp"
+          className="flex items-center justify-center size-11 sm:size-12 rounded-full bg-whatsapp text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_16px_rgba(37,211,102,0.65)]"
+        >
+          <WhatsAppIcon />
+        </a>
+      </div>
 
       <a
         href={links.tiktok || "#"}
