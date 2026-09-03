@@ -10,6 +10,7 @@ import CtaBanner from "@/app/components/CtaBanner";
 import TestimonialsSection from "@/app/components/TestimonialsSection";
 import MapSection from "@/app/components/MapSection";
 import Footer from "@/app/components/Footer";
+import WelcomeVideoModal from "@/app/components/WelcomeVideoModal";
 import { getReels } from "@/app/lib/getReels";
 
 export default async function Home() {
@@ -22,6 +23,7 @@ export default async function Home() {
         <Hero />
         <Marquee />
         <ReelsSection reels={reels} />
+        <WelcomeVideoModal />
         <StockSection />
         <UpcomingDeliveriesSection />
         <StatsSection />
