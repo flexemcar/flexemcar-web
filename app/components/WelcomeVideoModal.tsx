@@ -188,9 +188,9 @@ export default function WelcomeVideoModal() {
             <button
               onClick={enableSound}
               aria-label="Activar sonido"
-              className="absolute bottom-[7%] right-[8%] z-20 flex items-center gap-1.5 rounded-full bg-brand-orange px-3 py-2 text-xs font-bold text-white shadow-lg ring-2 ring-white transition-transform hover:scale-105 sm:text-sm"
+              className="absolute bottom-[7%] right-[8%] z-20 flex size-8 items-center justify-center rounded-full bg-brand-ink text-white shadow-lg ring-1 ring-white transition-transform hover:scale-110 sm:size-9"
             >
-              <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden="true">
+              <svg viewBox="0 0 24 24" className="size-3.5 sm:size-4" fill="currentColor" aria-hidden="true">
                 <path d="M4 9v6h4l5 5V4L8 9H4Z" />
                 <path
                   d="M16.5 8.5a4.5 4.5 0 0 1 0 7M19 6a8 8 0 0 1 0 12"
@@ -200,7 +200,6 @@ export default function WelcomeVideoModal() {
                   fill="none"
                 />
               </svg>
-              Activar sonido
             </button>
           )}
         </div>
