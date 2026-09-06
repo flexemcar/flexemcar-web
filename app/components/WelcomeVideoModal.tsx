@@ -8,12 +8,65 @@ import { useEffect, useRef, useState } from "react";
  * usuario llega con el scroll a "Nuestras furgonetas de ocasión" (#stock).
  * Se muestra una única vez por visita (tanto si se cierra a mano como si
  * termina solo).
+ *
+ * El vídeo permanece montado en el DOM desde el principio (oculto hasta
+ * que "open" es true) para poder "desbloquear" el sonido en el primer
+ * clic/tecla que el usuario dé en cualquier parte de la página: los
+ * navegadores solo permiten reproducir con sonido automáticamente si ha
+ * habido una interacción real del usuario en el sitio, y un simple scroll
+ * no cuenta como tal. Haciendo un play()/pause() silencioso (volumen a 0,
+ * pero SIN usar el atributo muted, que es lo que de verdad comprueba el
+ * navegador) en cuanto el usuario interactúa por primera vez, el navegador
+ * registra esa interacción y el play() con sonido real que se dispara más
+ * tarde por el IntersectionObserver (sin gesto directo) ya no lo bloquea.
  */
 export default function WelcomeVideoModal() {
   const [open, setOpen] = useState(false);
   const [needsSoundTap, setNeedsSoundTap] = useState(false);
   const alreadyTriggeredRef = useRef(false);
+  const soundUnlockedRef = useRef(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Desbloqueo silencioso del sonido en la primera interacción real del
+  // usuario con la página (clic, tecla o toque), mucho antes de que el
+  // vídeo llegue a abrirse.
+  useEffect(() => {
+    function unlockSound() {
+      if (soundUnlockedRef.current) return;
+      const video = videoRef.current;
+      if (!video) return;
+      soundUnlockedRef.current = true;
+
+      video.muted = false;
+      video.volume = 0; // el intento es real (no muted) pero inaudible
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            video.pause();
+            video.currentTime = 0;
+            video.volume = 1;
+          })
+          .catch(() => {
+            // El navegador tampoco lo permitió con este gesto; se
+            // reintentará el flujo normal (con su propio fallback) al
+            // abrirse el vídeo de verdad.
+            soundUnlockedRef.current = false;
+            video.volume = 1;
+          });
+      }
+    }
+
+    window.addEventListener("pointerdown", unlockSound, { once: true });
+    window.addEventListener("keydown", unlockSound, { once: true });
+    window.addEventListener("touchstart", unlockSound, { once: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", unlockSound);
+      window.removeEventListener("keydown", unlockSound);
+      window.removeEventListener("touchstart", unlockSound);
+    };
+  }, []);
 
   useEffect(() => {
     const target = document.getElementById("stock");
@@ -56,14 +109,15 @@ export default function WelcomeVideoModal() {
     if (!video) return;
 
     setNeedsSoundTap(false);
+    video.volume = 1;
     video.muted = false;
     const playPromise = video.play();
     if (playPromise !== undefined) {
       playPromise.catch(() => {
-        // El navegador ha bloqueado el autoplay con sonido (política
-        // estándar de Chrome/Safari sin interacción previa del usuario en
-        // el sitio). Se reproduce silenciado y se muestra un botón para
-        // activar el sonido con un toque, en vez de quedarse sin nada.
+        // El navegador ha bloqueado el autoplay con sonido pese al
+        // desbloqueo previo (p. ej. el usuario llegó a "stock" sin haber
+        // interactuado antes con la página). Se reproduce silenciado y se
+        // muestra un botón para activar el sonido con un toque.
         video.muted = true;
         video.play().catch(() => {});
         setNeedsSoundTap(true);
@@ -84,14 +138,15 @@ export default function WelcomeVideoModal() {
     setNeedsSoundTap(false);
   }
 
-  if (!open) return null;
-
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 sm:p-8"
+      className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 sm:p-8 ${
+        open ? "" : "invisible opacity-0 pointer-events-none"
+      }`}
       onClick={close}
       role="dialog"
       aria-modal="true"
+      aria-hidden={!open}
       aria-label="Vídeo de bienvenida de Flexemcar"
     >
       <div
@@ -102,6 +157,7 @@ export default function WelcomeVideoModal() {
         <button
           onClick={close}
           aria-label="Cerrar vídeo"
+          tabIndex={open ? 0 : -1}
           className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 z-20 flex size-9 sm:size-11 items-center justify-center rounded-full bg-brand-ink text-white shadow-lg ring-2 ring-white transition-transform hover:scale-110"
         >
           <svg
@@ -126,12 +182,12 @@ export default function WelcomeVideoModal() {
               src="/video/bienvenida-flexemcar.mp4"
               playsInline
               onEnded={close}
-              className="h-full w-full object-cover object-top"
+              className="h-full w-full object-cover object-[center_25%]"
             />
           </div>
 
           {/* Botón para activar el sonido, solo si el navegador bloqueó el autoplay con sonido */}
-          {needsSoundTap && (
+          {open && needsSoundTap && (
             <button
               onClick={enableSound}
               aria-label="Activar sonido"
