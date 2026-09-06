@@ -6,8 +6,16 @@ import { useEffect, useRef, useState } from "react";
  * Vídeo de bienvenida que aparece centrado en pantalla, dentro de una
  * ventana con un leve toque de parabrisas de furgoneta, cuando el
  * usuario llega con el scroll a "Nuestras furgonetas de ocasión" (#stock).
- * Se muestra una única vez por visita (tanto si se cierra a mano como si
- * termina solo).
+ * Se muestra una única vez por visita. La página sigue siendo scrolleable
+ * mientras el vídeo está abierto (no se bloquea el scroll del body), y el
+ * vídeo solo se cierra pulsando su botón de cerrar ("x") — no al hacer
+ * scroll, ni al pulsar fuera, ni al terminar el vídeo.
+ *
+ * El vídeo es vertical (formato historia/reel) pero la ventana es más
+ * ancha que alta, así que se muestra en dos capas: un fondo con el mismo
+ * vídeo ampliado y desenfocado (rellena todo el marco sin dejar huecos) y,
+ * encima, el vídeo real completo sin recortar (para que se vea a las dos
+ * personas enteras, sin cortarles la cara ni el cuerpo).
  *
  * El vídeo permanece montado en el DOM desde el principio (oculto hasta
  * que "open" es true) para poder "desbloquear" el sonido en el primer
@@ -26,6 +34,7 @@ export default function WelcomeVideoModal() {
   const alreadyTriggeredRef = useRef(false);
   const soundUnlockedRef = useRef(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const bgVideoRef = useRef<HTMLVideoElement>(null);
 
   // Desbloqueo silencioso del sonido en la primera interacción real del
   // usuario con la página (clic, tecla o toque), mucho antes de que el
@@ -88,25 +97,10 @@ export default function WelcomeVideoModal() {
 
   useEffect(() => {
     if (!open) return;
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
-    };
-    document.addEventListener("keydown", onKeyDown);
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [open]);
-
-  useEffect(() => {
-    if (!open) return;
     const video = videoRef.current;
     if (!video) return;
+
+    bgVideoRef.current?.play().catch(() => {});
 
     setNeedsSoundTap(false);
     video.volume = 1;
@@ -127,6 +121,7 @@ export default function WelcomeVideoModal() {
 
   function close() {
     videoRef.current?.pause();
+    bgVideoRef.current?.pause();
     setOpen(false);
   }
 
@@ -143,17 +138,13 @@ export default function WelcomeVideoModal() {
       className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 sm:p-8 ${
         open ? "" : "invisible opacity-0 pointer-events-none"
       }`}
-      onClick={close}
       role="dialog"
       aria-modal="true"
       aria-hidden={!open}
       aria-label="Vídeo de bienvenida de Flexemcar"
     >
-      <div
-        className="relative w-full max-w-2xl animate-welcome-modal-in"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Botón cerrar */}
+      <div className="relative w-full max-w-2xl animate-welcome-modal-in">
+        {/* Botón cerrar: única forma de cerrar el vídeo */}
         <button
           onClick={close}
           aria-label="Cerrar vídeo"
@@ -177,12 +168,24 @@ export default function WelcomeVideoModal() {
           <div className="windshield-clip absolute inset-0 bg-gradient-to-b from-brand-orange via-[#f5821f] to-[#c96410]" />
 
           <div className="windshield-clip absolute inset-[1.6%] overflow-hidden bg-dark-1000">
+            {/* Fondo: el mismo vídeo, ampliado y desenfocado, solo para rellenar el marco */}
+            <video
+              ref={bgVideoRef}
+              src="/video/bienvenida-flexemcar.mp4"
+              muted
+              loop
+              playsInline
+              aria-hidden="true"
+              tabIndex={-1}
+              className="absolute inset-0 h-full w-full scale-125 object-cover object-[center_25%] blur-2xl brightness-[0.45]"
+            />
+            {/* Vídeo real, completo y sin recortar, para que se vea bien a las personas */}
             <video
               ref={videoRef}
               src="/video/bienvenida-flexemcar.mp4"
+              loop
               playsInline
-              onEnded={close}
-              className="h-full w-full object-cover object-[center_25%]"
+              className="relative h-full w-full object-contain"
             />
           </div>
 
