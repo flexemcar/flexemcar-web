@@ -12,12 +12,11 @@ import { useEffect, useRef, useState } from "react";
  * scroll, ni al pulsar fuera, ni al terminar el vídeo.
  *
  * El vídeo es vertical (formato historia/reel) y la ventana es cuadrada
- * (1:1), así que se muestra en dos capas: un fondo con el mismo vídeo
- * ampliado y desenfocado (rellena todo el marco sin dejar huecos) y,
- * encima, el vídeo real completo sin recortar (para que se vea a las dos
- * personas enteras, sin cortarles la cara ni el cuerpo). Se reproduce una
- * única vez (sin loop): al terminar se queda en el último fotograma hasta
- * que se cierra con la "x".
+ * (1:1): con esa proporción, encajar el vídeo a base de recortar (en vez
+ * de dejarlo completo con márgenes) solo recorta arriba/abajo, nunca por
+ * los lados, así que se ve a las dos personas sin cortarles la cara. Se
+ * reproduce una única vez (sin loop): al terminar se queda en el último
+ * fotograma hasta que se cierra con la "x".
  *
  * El vídeo permanece montado en el DOM desde el principio (oculto hasta
  * que "open" es true) para poder "desbloquear" el sonido en el primer
@@ -36,7 +35,6 @@ export default function WelcomeVideoModal() {
   const alreadyTriggeredRef = useRef(false);
   const soundUnlockedRef = useRef(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const bgVideoRef = useRef<HTMLVideoElement>(null);
 
   // Desbloqueo silencioso del sonido en la primera interacción real del
   // usuario con la página (clic, tecla o toque), mucho antes de que el
@@ -102,8 +100,6 @@ export default function WelcomeVideoModal() {
     const video = videoRef.current;
     if (!video) return;
 
-    bgVideoRef.current?.play().catch(() => {});
-
     setNeedsSoundTap(false);
     video.volume = 1;
     video.muted = false;
@@ -123,7 +119,6 @@ export default function WelcomeVideoModal() {
 
   function close() {
     videoRef.current?.pause();
-    bgVideoRef.current?.pause();
     setOpen(false);
   }
 
@@ -145,7 +140,7 @@ export default function WelcomeVideoModal() {
       aria-hidden={!open}
       aria-label="Vídeo de bienvenida de Flexemcar"
     >
-      <div className="relative w-full max-w-2xl animate-welcome-modal-in">
+      <div className="relative w-full max-w-xs sm:max-w-sm animate-welcome-modal-in">
         {/* Botón cerrar: única forma de cerrar el vídeo */}
         <button
           onClick={close}
@@ -170,22 +165,11 @@ export default function WelcomeVideoModal() {
           <div className="windshield-clip absolute inset-0 bg-gradient-to-b from-brand-orange via-[#f5821f] to-[#c96410]" />
 
           <div className="windshield-clip absolute inset-[1.6%] overflow-hidden bg-dark-1000">
-            {/* Fondo: el mismo vídeo, ampliado y desenfocado, solo para rellenar el marco */}
-            <video
-              ref={bgVideoRef}
-              src="/video/bienvenida-flexemcar.mp4"
-              muted
-              playsInline
-              aria-hidden="true"
-              tabIndex={-1}
-              className="absolute inset-0 h-full w-full scale-125 object-cover object-[center_25%] blur-2xl brightness-[0.45]"
-            />
-            {/* Vídeo real, completo y sin recortar, para que se vea bien a las personas */}
             <video
               ref={videoRef}
               src="/video/bienvenida-flexemcar.mp4"
               playsInline
-              className="relative h-full w-full object-contain"
+              className="h-full w-full object-cover object-[center_20%]"
             />
           </div>
 
