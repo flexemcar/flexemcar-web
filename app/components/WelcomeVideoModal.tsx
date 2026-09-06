@@ -146,11 +146,11 @@ export default function WelcomeVideoModal() {
           onClick={close}
           aria-label="Cerrar vídeo"
           tabIndex={open ? 0 : -1}
-          className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 z-20 flex size-9 sm:size-11 items-center justify-center rounded-full bg-brand-ink text-white shadow-lg ring-2 ring-white transition-transform hover:scale-110"
+          className="absolute -top-2 -right-2 z-20 flex size-6 items-center justify-center rounded-full bg-brand-ink text-white shadow-lg ring-1 ring-white transition-transform hover:scale-110"
         >
           <svg
             viewBox="0 0 24 24"
-            className="size-4 sm:size-5"
+            className="size-3"
             fill="none"
             stroke="currentColor"
             strokeWidth={2.5}
@@ -169,8 +169,21 @@ export default function WelcomeVideoModal() {
               ref={videoRef}
               src="/video/bienvenida-flexemcar.mp4"
               playsInline
-              className="h-full w-full object-cover object-[center_20%]"
+              className="h-full w-full object-cover object-[center_38%]"
             />
+
+            {/* Sombreado sutil para que la insignia y el botón de sonido siempre se lean bien */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/45 to-transparent" />
+
+            {/* Insignia de marca integrada como una discreta marca de agua en la esquina */}
+            <div className="pointer-events-none absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded-md bg-brand-orange/90 px-2 py-1 shadow-md backdrop-blur-sm sm:left-4 sm:top-4 sm:px-2.5 sm:py-1.5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand/logo-flexemcar-badge.png"
+                alt="Flexemcar"
+                className="h-2.5 w-auto sm:h-3"
+              />
+            </div>
           </div>
 
           {/* Botón para activar el sonido, solo si el navegador bloqueó el autoplay con sonido */}
@@ -193,16 +206,6 @@ export default function WelcomeVideoModal() {
               Activar sonido
             </button>
           )}
-
-          {/* Insignia de marca flotando bajo el marco */}
-          <div className="pointer-events-none absolute -bottom-5 sm:-bottom-6 left-1/2 z-10 -translate-x-1/2 rounded-xl bg-brand-orange px-3 py-2 shadow-lg sm:rounded-2xl sm:px-4 sm:py-2.5">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/brand/logo-flexemcar-badge.png"
-              alt="Flexemcar"
-              className="h-4 w-auto sm:h-5"
-            />
-          </div>
         </div>
       </div>
     </div>
