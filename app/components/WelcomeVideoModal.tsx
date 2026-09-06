@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
  */
 export default function WelcomeVideoModal() {
   const [open, setOpen] = useState(false);
+  const [needsSoundTap, setNeedsSoundTap] = useState(false);
   const alreadyTriggeredRef = useRef(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -54,15 +55,18 @@ export default function WelcomeVideoModal() {
     const video = videoRef.current;
     if (!video) return;
 
+    setNeedsSoundTap(false);
     video.muted = false;
     const playPromise = video.play();
     if (playPromise !== undefined) {
       playPromise.catch(() => {
-        // Algunos navegadores bloquean el autoplay con sonido si no ha
-        // habido interacción previa del usuario en el sitio; en ese caso
-        // se reproduce silenciado en vez de quedarse congelado sin nada.
+        // El navegador ha bloqueado el autoplay con sonido (política
+        // estándar de Chrome/Safari sin interacción previa del usuario en
+        // el sitio). Se reproduce silenciado y se muestra un botón para
+        // activar el sonido con un toque, en vez de quedarse sin nada.
         video.muted = true;
         video.play().catch(() => {});
+        setNeedsSoundTap(true);
       });
     }
   }, [open]);
@@ -70,6 +74,14 @@ export default function WelcomeVideoModal() {
   function close() {
     videoRef.current?.pause();
     setOpen(false);
+  }
+
+  function enableSound() {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = false;
+    video.play().catch(() => {});
+    setNeedsSoundTap(false);
   }
 
   if (!open) return null;
@@ -114,9 +126,30 @@ export default function WelcomeVideoModal() {
               src="/video/bienvenida-flexemcar.mp4"
               playsInline
               onEnded={close}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover object-top"
             />
           </div>
+
+          {/* Botón para activar el sonido, solo si el navegador bloqueó el autoplay con sonido */}
+          {needsSoundTap && (
+            <button
+              onClick={enableSound}
+              aria-label="Activar sonido"
+              className="absolute bottom-[7%] right-[8%] z-20 flex items-center gap-1.5 rounded-full bg-brand-orange px-3 py-2 text-xs font-bold text-white shadow-lg ring-2 ring-white transition-transform hover:scale-105 sm:text-sm"
+            >
+              <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden="true">
+                <path d="M4 9v6h4l5 5V4L8 9H4Z" />
+                <path
+                  d="M16.5 8.5a4.5 4.5 0 0 1 0 7M19 6a8 8 0 0 1 0 12"
+                  stroke="currentColor"
+                  strokeWidth={1.8}
+                  strokeLinecap="round"
+                  fill="none"
+                />
+              </svg>
+              Activar sonido
+            </button>
+          )}
 
           {/* Insignia de marca flotando sobre el marco */}
           <div className="pointer-events-none absolute -top-5 sm:-top-6 left-1/2 z-10 -translate-x-1/2 rounded-xl bg-brand-orange px-3 py-2 shadow-lg sm:rounded-2xl sm:px-4 sm:py-2.5">
