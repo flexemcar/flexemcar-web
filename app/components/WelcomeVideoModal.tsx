@@ -11,11 +11,13 @@ import { useEffect, useRef, useState } from "react";
  * vídeo solo se cierra pulsando su botón de cerrar ("x") — no al hacer
  * scroll, ni al pulsar fuera, ni al terminar el vídeo.
  *
- * El vídeo es vertical (formato historia/reel) pero la ventana es más
- * ancha que alta, así que se muestra en dos capas: un fondo con el mismo
- * vídeo ampliado y desenfocado (rellena todo el marco sin dejar huecos) y,
+ * El vídeo es vertical (formato historia/reel) y la ventana es cuadrada
+ * (1:1), así que se muestra en dos capas: un fondo con el mismo vídeo
+ * ampliado y desenfocado (rellena todo el marco sin dejar huecos) y,
  * encima, el vídeo real completo sin recortar (para que se vea a las dos
- * personas enteras, sin cortarles la cara ni el cuerpo).
+ * personas enteras, sin cortarles la cara ni el cuerpo). Se reproduce una
+ * única vez (sin loop): al terminar se queda en el último fotograma hasta
+ * que se cierra con la "x".
  *
  * El vídeo permanece montado en el DOM desde el principio (oculto hasta
  * que "open" es true) para poder "desbloquear" el sonido en el primer
@@ -164,7 +166,7 @@ export default function WelcomeVideoModal() {
         </button>
 
         {/* Marco con un leve toque de parabrisas */}
-        <div className="relative aspect-[8/5] w-full drop-shadow-2xl">
+        <div className="relative aspect-square w-full drop-shadow-2xl">
           <div className="windshield-clip absolute inset-0 bg-gradient-to-b from-brand-orange via-[#f5821f] to-[#c96410]" />
 
           <div className="windshield-clip absolute inset-[1.6%] overflow-hidden bg-dark-1000">
@@ -173,7 +175,6 @@ export default function WelcomeVideoModal() {
               ref={bgVideoRef}
               src="/video/bienvenida-flexemcar.mp4"
               muted
-              loop
               playsInline
               aria-hidden="true"
               tabIndex={-1}
@@ -183,7 +184,6 @@ export default function WelcomeVideoModal() {
             <video
               ref={videoRef}
               src="/video/bienvenida-flexemcar.mp4"
-              loop
               playsInline
               className="relative h-full w-full object-contain"
             />
@@ -210,8 +210,8 @@ export default function WelcomeVideoModal() {
             </button>
           )}
 
-          {/* Insignia de marca flotando sobre el marco */}
-          <div className="pointer-events-none absolute -top-5 sm:-top-6 left-1/2 z-10 -translate-x-1/2 rounded-xl bg-brand-orange px-3 py-2 shadow-lg sm:rounded-2xl sm:px-4 sm:py-2.5">
+          {/* Insignia de marca flotando bajo el marco */}
+          <div className="pointer-events-none absolute -bottom-5 sm:-bottom-6 left-1/2 z-10 -translate-x-1/2 rounded-xl bg-brand-orange px-3 py-2 shadow-lg sm:rounded-2xl sm:px-4 sm:py-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/brand/logo-flexemcar-badge.png"
