@@ -171,19 +171,16 @@ export default function WelcomeVideoModal() {
               playsInline
               className="h-full w-full object-cover object-[center_38%]"
             />
+          </div>
 
-            {/* Sombreado sutil para que la insignia y el botón de sonido siempre se lean bien */}
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/45 to-transparent" />
-
-            {/* Insignia de marca integrada como una discreta marca de agua en la esquina */}
-            <div className="pointer-events-none absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded-md bg-brand-orange/90 px-2 py-1 shadow-md backdrop-blur-sm sm:left-4 sm:top-4 sm:px-2.5 sm:py-1.5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/brand/logo-flexemcar-badge.png"
-                alt="Flexemcar"
-                className="h-2.5 w-auto sm:h-3"
-              />
-            </div>
+          {/* Insignia de marca superpuesta y centrada sobre el borde inferior del marco */}
+          <div className="pointer-events-none absolute -bottom-4 left-1/2 z-10 -translate-x-1/2 rounded-xl bg-brand-orange px-3 py-2 shadow-lg sm:-bottom-5 sm:rounded-2xl sm:px-4 sm:py-2.5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/logo-flexemcar-badge.png"
+              alt="Flexemcar"
+              className="h-4 w-auto sm:h-5"
+            />
           </div>
 
           {/* Botón para activar el sonido, solo si el navegador bloqueó el autoplay con sonido */}
