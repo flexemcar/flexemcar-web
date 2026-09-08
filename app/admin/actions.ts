@@ -45,6 +45,7 @@ function readVehicleFields(formData: FormData) {
     body_config: (formData.get("body_config") as string | null)?.trim() || null,
     seats: seatsRaw ? Number(seatsRaw) : null,
     eco_label: (formData.get("eco_label") as string | null)?.trim() || null,
+    vehicle_type: (formData.get("vehicle_type") as string | null)?.trim() || null,
   };
 }
 

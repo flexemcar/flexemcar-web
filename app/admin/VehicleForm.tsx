@@ -1,11 +1,13 @@
 "use client";
 
 import {
+  brandOptions,
   ecoLabelOptions,
   equipmentOptions,
   fuelOptions,
   statusLabels,
   transmissionOptions,
+  vehicleTypeOptions,
   type VehicleStatus,
 } from "@/app/lib/vehicles";
 
@@ -27,6 +29,7 @@ type Initial = {
   bodyConfig: string | null;
   seats: number | null;
   ecoLabel: string | null;
+  vehicleType: string | null;
 };
 
 export default function VehicleForm({
@@ -44,7 +47,18 @@ export default function VehicleForm({
     <form action={action} className="space-y-4 max-w-xl">
       <div className="grid grid-cols-2 gap-4">
         <Field label="Marca">
-          <input name="brand" required defaultValue={initial?.brand} className={inputClass} />
+          <input
+            name="brand"
+            required
+            list="brand-options"
+            defaultValue={initial?.brand}
+            className={inputClass}
+          />
+          <datalist id="brand-options">
+            {brandOptions.map((b) => (
+              <option key={b} value={b} />
+            ))}
+          </datalist>
         </Field>
         <Field label="Modelo">
           <input name="model" required defaultValue={initial?.model} className={inputClass} />
@@ -151,23 +165,20 @@ export default function VehicleForm({
         </Field>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
-        <Field label="Motor (opcional)">
-          <input
-            type="text"
-            name="engine"
-            placeholder="Ej. 2.3 dCi"
-            defaultValue={initial?.engine ?? ""}
+      <div className="grid grid-cols-3 gap-4">
+        <Field label="Tipo de vehículo (opcional)">
+          <select
+            name="vehicle_type"
+            defaultValue={initial?.vehicleType ?? ""}
             className={inputClass}
-          />
-        </Field>
-        <Field label="Potencia CV (opcional)">
-          <input
-            type="number"
-            name="power_cv"
-            defaultValue={initial?.powerCv ?? ""}
-            className={inputClass}
-          />
+          >
+            <option value="">Sin especificar</option>
+            {vehicleTypeOptions.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
         </Field>
         <Field label="Carrocería (opcional)">
           <input
@@ -183,6 +194,26 @@ export default function VehicleForm({
             type="number"
             name="seats"
             defaultValue={initial?.seats ?? ""}
+            className={inputClass}
+          />
+        </Field>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <Field label="Motor (opcional)">
+          <input
+            type="text"
+            name="engine"
+            placeholder="Ej. 2.3 dCi"
+            defaultValue={initial?.engine ?? ""}
+            className={inputClass}
+          />
+        </Field>
+        <Field label="Potencia CV (opcional)">
+          <input
+            type="number"
+            name="power_cv"
+            defaultValue={initial?.powerCv ?? ""}
             className={inputClass}
           />
         </Field>

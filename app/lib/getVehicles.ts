@@ -20,6 +20,7 @@ type VehicleRow = {
   body_config: string | null;
   seats: number | null;
   eco_label: string | null;
+  vehicle_type: string | null;
   vehicle_photos: { id: string; storage_path: string; position: number }[];
 };
 
@@ -46,6 +47,7 @@ function mapVehicleRow(
     bodyConfig: row.body_config,
     seats: row.seats,
     ecoLabel: row.eco_label,
+    vehicleType: row.vehicle_type,
     photos: mapPhotos(row.vehicle_photos, getPublicUrl),
   };
 }

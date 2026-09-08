@@ -26,6 +26,7 @@ export type Vehicle = {
   bodyConfig: string | null;
   seats: number | null;
   ecoLabel: string | null;
+  vehicleType: string | null;
   photos: VehiclePhoto[];
 };
 
@@ -34,6 +35,31 @@ export const fuelOptions = ["Diésel", "Gasolina", "Híbrido", "Eléctrico"];
 export const transmissionOptions = ["Manual", "Automático"];
 
 export const ecoLabelOptions = ["", "0", "ECO", "C", "B"];
+
+// Catalogo de marcas que trabaja la empresa (dado por el cliente). Se usa
+// como sugerencias en el alta del admin (datalist, no bloquea escribir otra
+// marca) y como opciones del filtro de marca en la web publica.
+export const brandOptions = [
+  "Peugeot",
+  "Citroën",
+  "Fiat",
+  "Opel",
+  "Renault",
+  "Nissan",
+  "Ford",
+  "Volkswagen",
+  "Mercedes",
+  "Iveco",
+];
+
+// Tipo/estilo de carroceria, distinto de `bodyConfig` (que es texto libre
+// tipo "L3H2"): esta es una categoria cerrada para poder filtrar por ella.
+export const vehicleTypeOptions = [
+  "Caja abierta",
+  "Carrozado",
+  "Mixto",
+  "Furgón cerrado",
+];
 
 export const equipmentOptions = [
   "Aire acondicionado",

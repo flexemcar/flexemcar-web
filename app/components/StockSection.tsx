@@ -16,8 +16,8 @@ export default async function StockSection() {
             Nuestras furgonetas de ocasión
           </h2>
           <p className="mt-2 text-brand-ink/70">
-            Todas revisadas y con historial verificado. Filtra por precio y
-            encuentra la tuya —{" "}
+            Todas revisadas y con historial verificado. Filtra por marca, tipo,
+            kilómetros, año y precio, y encuentra la tuya —{" "}
             <span className="font-semibold">{vehicles.length} vehículos en stock</span>.
           </p>
         </Reveal>

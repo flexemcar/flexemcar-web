@@ -5,9 +5,8 @@ export const links = {
   googleReviews: "https://share.google/Bg6gIhlUZJYIr2TfQ",
   email: "info@flexemcar.com",
   address: "PD Altabix, 03207 Elche (Alicante)",
-  // Pendientes de confirmar con el cliente: teléfono y WhatsApp.
-  phone: "",
-  whatsapp: "",
+  phone: "+34 722 83 02 77",
+  whatsapp: "34722830277",
   instagram: "https://www.instagram.com/flexemcar/",
   tiktok: "https://www.tiktok.com/@flexemcar",
   facebook: "https://www.facebook.com/flexemcar.es",
