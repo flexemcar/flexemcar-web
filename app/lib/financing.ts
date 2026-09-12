@@ -1,8 +1,8 @@
-// TIN/TAE del boceto original de la agencia de diseño; pendientes de
-// confirmar con Flexemcar (ver memoria del proyecto). Cuando el cliente los
-// confirme, este es el único sitio a tocar.
+// TIN confirmado por Flexemcar: 7,9% fijo. TAE sigue siendo el valor de
+// ejemplo del boceto original de la agencia, pendiente de confirmar con el
+// cliente. Cuando se confirme, este es el único sitio a tocar.
 export const financingConfig = {
-  tin: 7.95,
+  tin: 7.9,
   tae: 8.25,
   minTermMonths: 12,
   maxTermMonths: 96,
