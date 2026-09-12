@@ -26,11 +26,13 @@ export default async function TestimonialsSection() {
   const googleData = await getGoogleReviews();
 
   // Google solo devuelve como máximo 5 reseñas (las que su algoritmo elige
-  // como más relevantes), no "todas las que tiene el negocio". De esas,
-  // aquí nos quedamos solo con las de 5 estrellas, a petición explícita.
+  // como más relevantes), no "todas las que tiene el negocio". De esas, aquí
+  // nos quedamos solo con las de 5 estrellas y que además traigan comentario
+  // escrito (Google permite valorar solo con estrellas, sin texto), a
+  // petición explícita.
   const fiveStarGoogleReviews: ReviewCardData[] =
     googleData?.reviews
-      .filter((r) => r.rating === 5)
+      .filter((r) => r.rating === 5 && r.text.trim().length > 0)
       .map((r) => ({
         id: r.id,
         name: r.authorName,
