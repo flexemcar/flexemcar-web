@@ -59,7 +59,7 @@ export default function VehicleModal({
     "Revisión completa y puesta a punto",
     "ITV recién pasada",
     "Cambio de nombre y gestión",
-    `Garantía de ${vehicle.warrantyMonths} meses`,
+    "Garantía hasta 2 años (contacta con tu comercial para más información)",
   ];
 
   return (
@@ -242,7 +242,7 @@ export default function VehicleModal({
               vehicle.bodyConfig ? ["Carrocería", vehicle.bodyConfig] : null,
               vehicle.seats ? ["Plazas", String(vehicle.seats)] : null,
               vehicle.ecoLabel ? ["Etiqueta medioambiental", vehicle.ecoLabel] : null,
-              ["Garantía", `${vehicle.warrantyMonths} meses`],
+              ["Garantía", "Hasta 2 años"],
             ]
               .filter((row): row is [string, string] => row !== null)
               .map(([label, value]) => (

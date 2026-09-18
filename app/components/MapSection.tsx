@@ -1,5 +1,6 @@
 import { links } from "@/app/lib/links";
 import Reveal from "@/app/components/Reveal";
+import MapCover from "@/app/components/MapCover";
 
 export default function MapSection() {
   return (
@@ -13,17 +14,12 @@ export default function MapSection() {
             Visita nuestra campa en Elche
           </h2>
           <p className="mt-2 text-brand-ink/70">{links.address}</p>
+          <p className="mt-4 font-bold text-brand-ink">
+            Contamos en Elche con un stock de más de 50 furgonetas
+          </p>
         </Reveal>
 
-        <div className="mt-8 overflow-hidden rounded-2xl border border-warm-200">
-          <iframe
-            src={links.mapsEmbed}
-            title="Ubicación de Flexemcar"
-            className="w-full h-[360px] sm:h-[420px]"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
+        <MapCover embedSrc={links.mapsEmbed} />
       </div>
     </section>
   );
