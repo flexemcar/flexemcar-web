@@ -37,14 +37,13 @@ export default function Hero() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-16 pb-16 sm:pt-24 sm:pb-24">
         <h1 className="font-heading uppercase font-extrabold text-[13vw] leading-[0.95] sm:text-6xl md:text-7xl tracking-tight max-w-3xl">
-          <span className="block text-warm-50">Las mejores furgonetas</span>
-          <span className="block text-brand-orange">Al mejor precio</span>
+          <span className="block text-warm-50">Mucho más</span>
+          <span className="block text-brand-orange">que furgos</span>
         </h1>
 
         <p className="mt-6 max-w-lg text-warm-100/90 text-base sm:text-lg">
-          Vehículos industriales revisados, garantizados y listos para
-          trabajar desde el primer día. Encuentra tu furgoneta o camión en
-          Flexemcar.
+          Te ayudamos a encontrar la furgoneta que encaja contigo, tu trabajo
+          y tu presupuesto. Revisadas, garantizadas y listas para empezar.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-4">
