@@ -54,7 +54,7 @@ export default function MapCover({ embedSrc }: { embedSrc: string }) {
               <span className="absolute inline-flex size-full rounded-full bg-brand-orange/60 motion-safe:animate-ping" />
             )}
             <span className="relative flex size-20 items-center justify-center rounded-full bg-brand-orange shadow-[0_0_24px_rgba(245,130,31,0.55)] transition-transform duration-300 group-hover:scale-110">
-              <TwoFingersIcon className="size-12" />
+              <TapIcon className="size-14" />
             </span>
           </span>
           <span className="rounded-full bg-dark-1000/70 px-4 py-1.5 text-sm font-bold text-white backdrop-blur-sm">
@@ -66,24 +66,25 @@ export default function MapCover({ embedSrc }: { embedSrc: string }) {
   );
 }
 
-// Dos dedos pulsando: silueta de mano con dos dedos extendidos y ondas de toque.
-function TwoFingersIcon({ className }: { className?: string }) {
+// Dedo pulsando: contorno de mano con el índice extendido y dos ondas de toque.
+function TapIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <g className="stroke-white" strokeWidth="2.4" strokeLinecap="round" fill="none">
-        <path d="M14 7A14 14 0 0 1 34 7" />
-        <path d="M19 7A8 8 0 0 1 29 7" />
-      </g>
-      <g className="fill-white">
-        <rect x="14" y="13" width="9" height="24" rx="4.5" />
-        <rect x="24.4" y="11" width="9" height="26" rx="4.5" />
-        <rect x="11" y="26" width="30" height="20" rx="9" />
-      </g>
-      <g className="fill-white stroke-brand-orange" strokeWidth="1.4" strokeLinejoin="round">
-        <rect x="34" y="25" width="8" height="15" rx="4" />
-        <rect x="5" y="29" width="9" height="14" rx="4.5" transform="rotate(-20 9.5 36)" />
-      </g>
-      <path d="M23.7 27V33" className="stroke-brand-orange" strokeWidth="1.2" strokeLinecap="round" />
+    <svg
+      viewBox="0 -5 24 29"
+      className={className}
+      fill="none"
+      stroke="white"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M2 1A8 8 0 0 1 14 1" />
+      <path d="M4.5 1A4.5 4.5 0 0 1 11.5 1" />
+      <path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2" />
+      <path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1" />
+      <path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10" />
+      <path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
     </svg>
   );
 }
