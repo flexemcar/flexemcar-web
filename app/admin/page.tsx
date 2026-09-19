@@ -36,7 +36,7 @@ export default async function AdminPage() {
           {vehicles.map((v) => (
             <div
               key={v.id}
-              className="flex items-center gap-4 rounded-xl bg-warm-50/5 border border-warm-50/10 p-3"
+              className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded-xl bg-warm-50/5 border border-warm-50/10 p-3"
             >
               <div className="relative size-16 shrink-0 rounded-lg overflow-hidden bg-dark-900">
                 {v.photos[0] && (
@@ -51,28 +51,35 @@ export default async function AdminPage() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="font-heading uppercase font-extrabold text-warm-50 truncate">
+                <p className="font-heading uppercase font-extrabold text-warm-50 sm:truncate">
                   {v.brand} {v.model}
                 </p>
-                <p className="text-sm text-warm-50/60">
-                  {v.year} · {v.km.toLocaleString("es-ES")} km ·{" "}
-                  {getDisplayPrice(v).amount.toLocaleString("es-ES")} €
+                <p className="text-sm text-warm-50/60 flex flex-wrap gap-x-1">
+                  <span>{v.year}</span>
+                  <span className="whitespace-nowrap">
+                    · {v.km.toLocaleString("es-ES")} km
+                  </span>
+                  <span className="whitespace-nowrap">
+                    · {getDisplayPrice(v).amount.toLocaleString("es-ES")} €
+                  </span>
                 </p>
               </div>
 
-              <span
-                className={`rounded-full px-3 py-1 text-xs font-bold ${statusStyles[v.status]}`}
-              >
-                {statusLabels[v.status]}
-              </span>
+              <div className="flex w-full items-center gap-4 border-t border-warm-50/10 pt-3 sm:w-auto sm:border-0 sm:pt-0">
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-bold ${statusStyles[v.status]}`}
+                >
+                  {statusLabels[v.status]}
+                </span>
 
-              <Link
-                href={`/admin/vehicles/${v.id}`}
-                className="text-sm font-semibold text-warm-50/80 hover:text-brand-orange transition"
-              >
-                Editar
-              </Link>
-              <DeleteVehicleButton id={v.id} label={`${v.brand} ${v.model}`} />
+                <Link
+                  href={`/admin/vehicles/${v.id}`}
+                  className="ml-auto text-sm font-semibold text-warm-50/80 hover:text-brand-orange transition sm:ml-0"
+                >
+                  Editar
+                </Link>
+                <DeleteVehicleButton id={v.id} label={`${v.brand} ${v.model}`} />
+              </div>
             </div>
           ))}
         </div>
