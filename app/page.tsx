@@ -15,10 +15,10 @@ import { getReels } from "@/app/lib/getReels";
 
 // Fotos de fondo del banner "Tu viaje comienza aquí" (public/promo).
 const promoImages = [
-  { src: "/promo/promo-1.jpg", objectPosition: "50% 38%" },
-  { src: "/promo/promo-2.jpg", objectPosition: "50% 30%" },
-  { src: "/promo/promo-3.jpg", objectPosition: "50% 40%" },
-  { src: "/promo/promo-4.jpg", objectPosition: "50% 34%" },
+  { src: "/promo/promo-1.jpg", objectPosition: "50% 48%" },
+  { src: "/promo/promo-2.jpg", objectPosition: "50% 42%" },
+  { src: "/promo/promo-3.jpg", objectPosition: "50% 50%" },
+  { src: "/promo/promo-4.jpg", objectPosition: "50% 46%" },
 ];
 
 export default async function Home() {
