@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
+import { relativeMonthsEs } from "@/app/lib/relativeTime";
 import { useClickSound } from "@/app/lib/useClickSound";
 import GoogleReviewIcon from "@/app/components/GoogleReviewIcon";
 
@@ -13,8 +14,19 @@ export type ReviewCardData = {
   photoUrl?: string | null;
   profileUrl?: string | null;
   relativeTime?: string;
+  // Mes aproximado (AAAA-MM): la etiqueta "hace X meses" se calcula al mostrarla.
+  date?: string;
+  avatarColor?: string;
   city?: string;
 };
+
+const DAY_MS = 86_400_000;
+const subscribeNever = () => () => {};
+const currentDay = () => Math.floor(Date.now() / DAY_MS);
+const serverDay = () => Math.floor(Date.UTC(2026, 8, 19) / DAY_MS);
+
+// Reseñas más largas que esto se recortan con "Leer más".
+const LONG_TEXT = 260;
 
 function Stars({ rating, isGoogle }: { rating: number; isGoogle: boolean }) {
   const full = Math.round(rating);
@@ -38,7 +50,9 @@ function Avatar({ review }: { review: ReviewCardData }) {
       <img
         src={review.photoUrl}
         alt=""
-        className="size-11 rounded-full object-cover"
+        width={44}
+        height={44}
+        className="size-11 shrink-0 rounded-full object-cover"
         referrerPolicy="no-referrer"
       />
     );
@@ -47,8 +61,9 @@ function Avatar({ review }: { review: ReviewCardData }) {
   const initial = review.name.trim().charAt(0).toUpperCase() || "?";
   return (
     <span
-      className={`flex size-11 items-center justify-center rounded-full font-heading font-bold text-white ${
-        review.isGoogle ? "bg-dark-900" : "bg-brand-orange"
+      style={review.avatarColor ? { backgroundColor: review.avatarColor } : undefined}
+      className={`flex size-11 shrink-0 items-center justify-center rounded-full font-heading font-bold text-white ${
+        review.avatarColor ? "" : review.isGoogle ? "bg-dark-900" : "bg-brand-orange"
       }`}
       aria-hidden="true"
     >
@@ -59,6 +74,12 @@ function Avatar({ review }: { review: ReviewCardData }) {
 
 export default function GoogleReviewsCarousel({ reviews }: { reviews: ReviewCardData[] }) {
   const [active, setActive] = useState(0);
+  const [expanded, setExpanded] = useState(false);
+  // Fecha de "hoy" en días. El servidor usa una fija para que servidor y
+  // navegador pinten lo mismo al hidratar, y el navegador pasa enseguida a la
+  // fecha real.
+  const nowDay = useSyncExternalStore(subscribeNever, currentDay, serverDay);
+  const now = new Date(nowDay * DAY_MS);
   const current = reviews[active];
   const playClick = useClickSound("/sounds/nav-blip.wav");
 
@@ -68,6 +89,7 @@ export default function GoogleReviewsCarousel({ reviews }: { reviews: ReviewCard
     const wrapped = ((index % reviews.length) + reviews.length) % reviews.length;
     playClick();
     setActive(wrapped);
+    setExpanded(false);
   }
 
   return (
@@ -98,12 +120,31 @@ export default function GoogleReviewsCarousel({ reviews }: { reviews: ReviewCard
             <span className="flex items-center gap-1 text-xs text-warm-50/50">
               <GoogleReviewIcon className="size-3.5" />
               Reseña de Google
-              {current.relativeTime ? ` · ${current.relativeTime}` : ""}
+              {current.date
+                ? ` · ${relativeMonthsEs(current.date, now)}`
+                : current.relativeTime
+                  ? ` · ${current.relativeTime}`
+                  : ""}
             </span>
           ) : null}
         </div>
 
-        <p className="mt-4 text-lg text-warm-50/90 italic">"{current.text}"</p>
+        <p
+          className={`mt-4 whitespace-pre-line text-base sm:text-lg text-warm-50/90 italic ${
+            !expanded && current.text.length > LONG_TEXT ? "line-clamp-6" : ""
+          }`}
+        >
+          &ldquo;{current.text}&rdquo;
+        </p>
+        {current.text.length > LONG_TEXT ? (
+          <button
+            type="button"
+            onClick={() => setExpanded((e) => !e)}
+            className="mt-2 text-sm font-bold text-brand-orange hover:underline"
+          >
+            {expanded ? "Leer menos" : "Leer más"}
+          </button>
+        ) : null}
       </div>
 
       <div className="mt-6 flex items-center justify-center gap-6">
@@ -118,12 +159,19 @@ export default function GoogleReviewsCarousel({ reviews }: { reviews: ReviewCard
           </svg>
         </button>
 
-        <div className="flex items-center gap-2">
+        <p className="sm:hidden min-w-16 text-center text-sm font-semibold tabular-nums text-warm-50/70">
+          {active + 1} / {reviews.length}
+        </p>
+
+        <div className="hidden sm:flex items-center gap-2">
           {reviews.map((r, i) => (
             <button
               key={r.id}
               type="button"
-              onClick={() => setActive(i)}
+              onClick={() => {
+                setActive(i);
+                setExpanded(false);
+              }}
               aria-label={`Ver opinión de ${r.name}`}
               className={`size-2 rounded-full transition-colors ${
                 i === active ? "bg-brand-orange" : "bg-warm-50/30"

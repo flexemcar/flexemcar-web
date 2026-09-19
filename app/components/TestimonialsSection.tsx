@@ -1,5 +1,5 @@
 import { getGoogleReviews } from "@/app/lib/googleReviews";
-import { testimonials } from "@/app/data/testimonials";
+import { manualReviews } from "@/app/data/reviews";
 import { links } from "@/app/lib/links";
 import Reveal from "@/app/components/Reveal";
 import GoogleReviewIcon from "@/app/components/GoogleReviewIcon";
@@ -7,20 +7,20 @@ import GoogleReviewsCarousel, {
   type ReviewCardData,
 } from "@/app/components/GoogleReviewsCarousel";
 
-// Reseñas de ejemplo (app/data/testimonials.ts) como respaldo: se usan solo
-// si no hay ninguna reseña real de 5 estrellas disponible desde Google, y
-// nunca se les pone la insignia/foto de Google encima, precisamente para no
-// hacerlas pasar por reseñas reales verificadas.
-function fallbackReviews(): ReviewCardData[] {
-  return testimonials.map((t) => ({
-    id: t.id,
-    name: t.name,
-    text: t.quote,
-    rating: 5,
-    isGoogle: false,
-    city: t.city,
-  }));
-}
+// Reseñas reales de Google copiadas a mano (app/data/reviews.ts): todas de 5
+// estrellas y con comentario. Son las que se muestran siempre; las que traiga
+// la API de Google (si algún día se activa) solo se añaden detrás, sin repetir
+// autor.
+const manualCards: ReviewCardData[] = manualReviews.map((r) => ({
+  id: r.id,
+  name: r.name,
+  text: r.text,
+  rating: 5,
+  isGoogle: true,
+  photoUrl: r.photo ?? null,
+  avatarColor: r.avatarColor,
+  date: r.date,
+}));
 
 export default async function TestimonialsSection() {
   const googleData = await getGoogleReviews();
@@ -44,8 +44,11 @@ export default async function TestimonialsSection() {
         relativeTime: r.relativeTime,
       })) ?? [];
 
-  const reviews =
-    fiveStarGoogleReviews.length > 0 ? fiveStarGoogleReviews : fallbackReviews();
+  const known = new Set(manualCards.map((c) => c.name.trim().toLowerCase()));
+  const reviews = [
+    ...manualCards,
+    ...fiveStarGoogleReviews.filter((r) => !known.has(r.name.trim().toLowerCase())),
+  ];
 
   const aggregateRating = googleData?.rating ?? 4.8;
   const totalReviews = googleData?.totalReviews;
