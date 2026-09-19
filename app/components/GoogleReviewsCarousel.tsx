@@ -175,6 +175,8 @@ export default function GoogleReviewsCarousel({ reviews }: { reviews: ReviewCard
 
   if (n === 0) return null;
 
+  // Todo cambio de opinión (flechas, puntos, tarjeta lateral o deslizamiento)
+  // pasa por aquí, así que suena siempre.
   function goTo(index: number) {
     playClick();
     setActive(((index % n) + n) % n);
@@ -282,10 +284,7 @@ export default function GoogleReviewsCarousel({ reviews }: { reviews: ReviewCard
             <button
               key={r.id}
               type="button"
-              onClick={() => {
-                setActive(i);
-                setExpanded(false);
-              }}
+              onClick={() => goTo(i)}
               aria-label={`Ver opinión de ${r.name}`}
               className={`size-2 rounded-full transition-colors ${
                 i === active ? "bg-brand-orange" : "bg-warm-50/30"

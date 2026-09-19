@@ -71,7 +71,10 @@ export default function ReelsSection({ reels }: { reels: Reel[] }) {
 
   if (n === 0) return null;
 
+  // Todo cambio de vídeo (flechas, puntos, tarjeta lateral o deslizamiento)
+  // pasa por aquí, así que suena siempre.
   function goTo(index: number) {
+    playClick();
     setActive(((index % n) + n) % n);
     setPlayingId(null);
   }
@@ -181,7 +184,6 @@ export default function ReelsSection({ reels }: { reels: Reel[] }) {
                       if (isActive) {
                         if (reel.tiktokId) setPlayingId(reel.id);
                       } else {
-                        playClick();
                         goTo(i);
                       }
                     }}
@@ -223,10 +225,7 @@ export default function ReelsSection({ reels }: { reels: Reel[] }) {
         <div className="mt-8 flex items-center justify-center gap-6">
           <button
             type="button"
-            onClick={() => {
-              playClick();
-              goTo(active - 1);
-            }}
+            onClick={() => goTo(active - 1)}
             aria-label="Anterior"
             className="flex items-center justify-center size-12 rounded-full bg-brand-orange text-white shadow-lg hover:brightness-110 transition"
           >
@@ -251,10 +250,7 @@ export default function ReelsSection({ reels }: { reels: Reel[] }) {
 
           <button
             type="button"
-            onClick={() => {
-              playClick();
-              goTo(active + 1);
-            }}
+            onClick={() => goTo(active + 1)}
             aria-label="Siguiente"
             className="flex items-center justify-center size-12 rounded-full bg-brand-orange text-white shadow-lg hover:brightness-110 transition"
           >
