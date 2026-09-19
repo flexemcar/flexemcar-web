@@ -63,7 +63,7 @@ export default function Hero() {
         />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-6 pb-[13rem] sm:pt-28 sm:pb-28">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-6 pb-[13rem] sm:pt-28 sm:pb-28 text-center sm:text-left">
         <p className="mb-4 sm:mb-6 inline-flex items-center gap-2 rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-1.5 text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-orange">
           <span className="size-2 rounded-full bg-brand-orange" aria-hidden="true" />
           Furgonetas de ocasión en Elche
@@ -74,12 +74,12 @@ export default function Hero() {
           <span className="block sm:inline text-brand-orange">que furgos</span>
         </h1>
 
-        <p className="mt-5 sm:mt-7 max-w-2xl text-warm-100/90 text-lg sm:text-xl leading-relaxed [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
+        <p className="mt-5 sm:mt-7 mx-auto sm:mx-0 max-w-2xl text-warm-100/90 text-lg sm:text-xl leading-relaxed [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
           Te ayudamos a encontrar la furgoneta que encaja contigo, tu trabajo
           y tu presupuesto. Revisadas, garantizadas y listas para empezar.
         </p>
 
-        <div className="mt-7 sm:mt-9 flex flex-wrap items-center gap-4">
+        <div className="mt-7 sm:mt-9 flex flex-wrap items-center justify-center sm:justify-start gap-4">
           <a
             href="#stock"
             className="group inline-flex items-center gap-2.5 rounded-full bg-brand-orange px-9 py-[18px] font-bold text-lg text-white shadow-[0_0_20px_rgba(245,130,31,0.4)] transition-all duration-300 hover:-translate-y-1 hover:brightness-110 hover:shadow-[0_0_30px_rgba(245,130,31,0.6)]"
