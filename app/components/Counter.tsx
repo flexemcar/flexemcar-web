@@ -28,7 +28,9 @@ export default function Counter({
           const start = performance.now();
 
           function tick(now: number) {
-            const progress = Math.min((now - start) / duration, 1);
+            // El primer fotograma puede llegar unos milisegundos antes de `start`: sin el
+            // máximo con 0 el progreso sale negativo y se veía "+-5".
+            const progress = Math.min(Math.max((now - start) / duration, 0), 1);
             const eased = 1 - Math.pow(1 - progress, 3);
             setValue(Math.round(eased * target));
             if (progress < 1) requestAnimationFrame(tick);

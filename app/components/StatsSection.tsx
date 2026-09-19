@@ -9,8 +9,16 @@ export default async function StatsSection() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-dark-950 py-16">
-      <div className="absolute inset-0 bg-gradient-to-br from-dark-1000 via-dark-950 to-brand-ink/60" />
+    // Foto de fondo con capa oscura del 88 %. En escritorio queda fija mientras se
+    // desplaza la página (efecto parallax); en móvil se desplaza con la sección
+    // porque los navegadores móviles no lo soportan bien.
+    <section
+      style={{
+        backgroundImage:
+          "linear-gradient(rgba(14,12,10,0.88), rgba(14,12,10,0.88)), url(/stats/stats-bg.jpg)",
+      }}
+      className="relative bg-dark-950 bg-cover bg-center py-16 sm:py-24 md:bg-fixed"
+    >
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
         {stats.map((stat) => (
           <div key={stat.label}>
