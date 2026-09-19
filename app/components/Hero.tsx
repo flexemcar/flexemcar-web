@@ -1,14 +1,20 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { links } from "@/app/lib/links";
 
-// Placeholder de fondo: sustituir por fotos reales (mismo array, una entrada por imagen).
+// Fotos reales de la campa (public/hero). Para cambiarlas o añadir más, editar
+// este array: "objectPosition" decide qué franja de la foto se ve al recortarla.
 const slides = [
-  "from-dark-950 via-dark-900 to-brand-ink",
-  "from-dark-1000 via-dark-900 to-brand-ink",
-  "from-brand-ink via-dark-950 to-dark-900",
+  { src: "/hero/hero-1.jpg", objectPosition: "50% 62%" },
+  { src: "/hero/hero-2.jpg", objectPosition: "50% 50%" },
+  { src: "/hero/hero-3.jpg", objectPosition: "50% 58%" },
+  { src: "/hero/hero-4.jpg", objectPosition: "50% 55%" },
+  { src: "/hero/hero-5.jpg", objectPosition: "50% 62%" },
 ];
+
+const SLIDE_MS = 5000;
 
 export default function Hero() {
   const [active, setActive] = useState(0);
@@ -16,26 +22,36 @@ export default function Hero() {
   useEffect(() => {
     const id = setInterval(() => {
       setActive((i) => (i + 1) % slides.length);
-    }, 3000);
+    }, SLIDE_MS);
     return () => clearInterval(id);
   }, []);
 
   return (
     <section className="relative overflow-hidden bg-dark-950">
       <div className="absolute inset-0">
-        {slides.map((gradient, i) => (
-          <div
-            key={i}
-            aria-hidden="true"
-            className={`absolute inset-0 bg-gradient-to-br ${gradient} transition-opacity duration-1000 ${
-              i === active ? "opacity-100" : "opacity-0"
-            }`}
-          />
-        ))}
-        <div className="absolute inset-0 bg-dark-1000/40" />
+        {/* En pantallas grandes las fotos ocupan la derecha y se funden con el fondo oscuro. */}
+        <div className="absolute inset-y-0 right-0 w-full lg:w-[66%] lg:[mask-image:linear-gradient(to_right,transparent,black_40%)]">
+          {slides.map((slide, i) => (
+            <Image
+              key={slide.src}
+              src={slide.src}
+              alt=""
+              fill
+              priority={i === 0}
+              quality={80}
+              sizes="(min-width: 1024px) 66vw, 100vw"
+              aria-hidden="true"
+              style={{ objectPosition: slide.objectPosition }}
+              className={`object-cover [transition:opacity_1400ms_ease,scale_7000ms_ease-out] motion-reduce:scale-100 ${
+                i === active ? "opacity-100 scale-[1.07]" : "opacity-0 scale-100"
+              }`}
+            />
+          ))}
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-dark-1000/40 via-dark-1000/55 to-dark-1000/80 lg:bg-gradient-to-r lg:from-dark-1000/90 lg:via-dark-1000/40 lg:to-dark-1000/10" />
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(55%_70%_at_88%_15%,rgba(245,130,31,0.22),transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(245,130,31,0.10),transparent_70%)]"
+          className="absolute inset-0 bg-[radial-gradient(55%_70%_at_88%_15%,rgba(245,130,31,0.18),transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(245,130,31,0.10),transparent_70%)]"
         />
       </div>
 
@@ -45,12 +61,12 @@ export default function Hero() {
           Furgonetas de ocasión en Elche
         </p>
 
-        <h1 className="font-heading uppercase font-extrabold text-[20vw] leading-[0.92] tracking-tight sm:text-[clamp(3rem,9.5vw,8.5rem)] sm:whitespace-nowrap">
+        <h1 className="font-heading uppercase font-extrabold text-[20vw] leading-[0.92] tracking-tight sm:text-[clamp(3rem,9.5vw,8.5rem)] sm:whitespace-nowrap [text-shadow:0_2px_24px_rgba(0,0,0,0.45)]">
           <span className="block sm:inline text-warm-50">Mucho más</span>{" "}
           <span className="block sm:inline text-brand-orange">que furgos</span>
         </h1>
 
-        <p className="mt-7 max-w-2xl text-warm-100/90 text-lg sm:text-xl leading-relaxed">
+        <p className="mt-7 max-w-2xl text-warm-100/90 text-lg sm:text-xl leading-relaxed [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
           Te ayudamos a encontrar la furgoneta que encaja contigo, tu trabajo
           y tu presupuesto. Revisadas, garantizadas y listas para empezar.
         </p>
