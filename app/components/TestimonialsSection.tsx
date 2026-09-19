@@ -54,8 +54,8 @@ export default async function TestimonialsSection() {
   const totalReviews = googleData?.totalReviews;
 
   return (
-    <section id="opiniones" className="bg-dark-950 py-16 sm:py-24">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 text-center">
+    <section id="opiniones" className="bg-dark-950 py-16 sm:py-24 overflow-hidden">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center">
         <Reveal>
           <p className="text-xs font-bold uppercase tracking-widest text-brand-orange">
             Tu opinión, lo único que nos falta

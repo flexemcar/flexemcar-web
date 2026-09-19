@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import { relativeMonthsEs } from "@/app/lib/relativeTime";
 import { useClickSound } from "@/app/lib/useClickSound";
 import GoogleReviewIcon from "@/app/components/GoogleReviewIcon";
@@ -27,6 +27,7 @@ const serverDay = () => Math.floor(Date.UTC(2026, 8, 19) / DAY_MS);
 
 // Reseñas más largas que esto se recortan con "Leer más".
 const LONG_TEXT = 260;
+const SWIPE_MIN_PX = 50;
 
 function Stars({ rating, isGoogle }: { rating: number; isGoogle: boolean }) {
   const full = Math.round(rating);
@@ -52,6 +53,7 @@ function Avatar({ review }: { review: ReviewCardData }) {
         alt=""
         width={44}
         height={44}
+        draggable={false}
         className="size-11 shrink-0 rounded-full object-cover"
         referrerPolicy="no-referrer"
       />
@@ -72,7 +74,94 @@ function Avatar({ review }: { review: ReviewCardData }) {
   );
 }
 
+// Contenido de una tarjeta: avatar y nombre, estrellas con la etiqueta de
+// Google y el texto. Es el mismo diseño de siempre, ahora dentro de la tarjeta
+// con trazo naranja de la ruleta.
+function ReviewBody({
+  review,
+  now,
+  isActive,
+  expanded,
+  onToggle,
+}: {
+  review: ReviewCardData;
+  now: Date;
+  isActive: boolean;
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  const isLong = review.text.length > LONG_TEXT;
+  const nameClass = `block truncate font-heading uppercase font-extrabold text-warm-50 ${
+    isActive && review.profileUrl ? "hover:text-brand-orange transition" : ""
+  }`;
+
+  return (
+    <>
+      <div className="flex items-center gap-3">
+        <Avatar review={review} />
+        <div className="min-w-0">
+          {isActive && review.profileUrl ? (
+            <a
+              href={review.profileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={nameClass}
+            >
+              {review.name}
+            </a>
+          ) : (
+            <span className={nameClass}>{review.name}</span>
+          )}
+          {review.city ? <p className="text-sm text-warm-50/60">{review.city}</p> : null}
+        </div>
+      </div>
+
+      <div className="mt-3 flex items-center gap-2">
+        <Stars rating={review.rating} isGoogle={review.isGoogle} />
+        {review.isGoogle ? (
+          <span className="flex items-center gap-1 text-xs text-warm-50/50">
+            <GoogleReviewIcon className="size-3.5" />
+            Reseña de Google
+            {review.date
+              ? ` · ${relativeMonthsEs(review.date, now)}`
+              : review.relativeTime
+                ? ` · ${review.relativeTime}`
+                : ""}
+          </span>
+        ) : null}
+      </div>
+
+      <p
+        className={`mt-4 whitespace-pre-line text-base sm:text-lg text-warm-50/90 italic ${
+          isLong && !(isActive && expanded) ? "line-clamp-6" : ""
+        }`}
+      >
+        &ldquo;{review.text}&rdquo;
+      </p>
+      {isLong && isActive ? (
+        <button
+          type="button"
+          onClick={onToggle}
+          className="mt-2 self-start text-sm font-bold text-brand-orange hover:underline"
+        >
+          {expanded ? "Leer menos" : "Leer más"}
+        </button>
+      ) : null}
+    </>
+  );
+}
+
+// Posición de cada tarjeta según su distancia a la activa: la del centro va
+// al frente y las de los lados asoman por detrás, más pequeñas y tenues.
+// Los desplazamientos son en % del ancho de la tarjeta.
+function depthStyle(distance: number, side: number) {
+  if (distance === 0) return { x: 0, scale: 1, opacity: 1, z: 20 };
+  if (distance === 1) return { x: side * 52, scale: 0.82, opacity: 0.45, z: 10 };
+  return { x: side * 70, scale: 0.7, opacity: 0, z: 0 };
+}
+
 export default function GoogleReviewsCarousel({ reviews }: { reviews: ReviewCardData[] }) {
+  const n = reviews.length;
   const [active, setActive] = useState(0);
   const [expanded, setExpanded] = useState(false);
   // Fecha de "hoy" en días. El servidor usa una fija para que servidor y
@@ -80,74 +169,99 @@ export default function GoogleReviewsCarousel({ reviews }: { reviews: ReviewCard
   // fecha real.
   const nowDay = useSyncExternalStore(subscribeNever, currentDay, serverDay);
   const now = new Date(nowDay * DAY_MS);
-  const current = reviews[active];
   const playClick = useClickSound("/sounds/nav-blip.wav");
+  const dragStartX = useRef<number | null>(null);
+  const swiped = useRef(false);
 
-  if (!current) return null;
+  if (n === 0) return null;
 
   function goTo(index: number) {
-    const wrapped = ((index % reviews.length) + reviews.length) % reviews.length;
     playClick();
-    setActive(wrapped);
+    setActive(((index % n) + n) % n);
     setExpanded(false);
+  }
+
+  function handlePointerDown(e: React.PointerEvent) {
+    dragStartX.current = e.clientX;
+    swiped.current = false;
+  }
+
+  function handlePointerUp(e: React.PointerEvent) {
+    if (dragStartX.current === null) return;
+    const dx = e.clientX - dragStartX.current;
+    dragStartX.current = null;
+    if (Math.abs(dx) >= SWIPE_MIN_PX) {
+      swiped.current = true;
+      goTo(active + (dx < 0 ? 1 : -1));
+    }
   }
 
   return (
     <>
-      <div className="mt-10 rounded-2xl bg-warm-50/5 border border-warm-50/10 px-6 sm:px-10 py-10 text-left">
-        <div className="flex items-center gap-3">
-          <Avatar review={current} />
-          <div className="min-w-0">
-            <a
-              href={current.profileUrl ?? undefined}
-              target={current.profileUrl ? "_blank" : undefined}
-              rel={current.profileUrl ? "noopener noreferrer" : undefined}
-              className={`block truncate font-heading uppercase font-extrabold text-warm-50 ${
-                current.profileUrl ? "hover:text-brand-orange transition" : ""
-              }`}
-            >
-              {current.name}
-            </a>
-            {current.city ? (
-              <p className="text-sm text-warm-50/60">{current.city}</p>
-            ) : null}
-          </div>
-        </div>
+      <div
+        role="region"
+        aria-roledescription="carrusel"
+        aria-label="Opiniones de clientes"
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={() => {
+          dragStartX.current = null;
+        }}
+        className="mt-10 touch-pan-y select-none py-6"
+      >
+        {/* Todas las tarjetas comparten la misma celda: la altura la marca la más alta y no salta al pasar de una a otra. */}
+        <div className="mx-auto grid w-[84%] sm:w-[560px]">
+          {reviews.map((review, i) => {
+            let offset = (((i - active) % n) + n) % n;
+            if (offset > n / 2) offset -= n;
+            const distance = Math.abs(offset);
+            const isActive = distance === 0;
+            const visible = distance <= 1;
+            const d = depthStyle(distance, Math.sign(offset));
 
-        <div className="mt-3 flex items-center gap-2">
-          <Stars rating={current.rating} isGoogle={current.isGoogle} />
-          {current.isGoogle ? (
-            <span className="flex items-center gap-1 text-xs text-warm-50/50">
-              <GoogleReviewIcon className="size-3.5" />
-              Reseña de Google
-              {current.date
-                ? ` · ${relativeMonthsEs(current.date, now)}`
-                : current.relativeTime
-                  ? ` · ${current.relativeTime}`
-                  : ""}
-            </span>
-          ) : null}
+            return (
+              <article
+                key={review.id}
+                aria-hidden={!isActive}
+                style={{
+                  gridArea: "1 / 1",
+                  transform: `translateX(${d.x}%) scale(${d.scale})`,
+                  opacity: d.opacity,
+                  zIndex: d.z,
+                  pointerEvents: visible ? "auto" : "none",
+                }}
+                className={`relative flex flex-col rounded-2xl border border-brand-orange/70 bg-[#211e18] px-6 sm:px-10 py-8 sm:py-10 text-left transition-[transform,opacity] duration-500 ease-out ${
+                  isActive ? "shadow-[0_24px_60px_rgba(0,0,0,0.55)]" : ""
+                }`}
+              >
+                <ReviewBody
+                  review={review}
+                  now={now}
+                  isActive={isActive}
+                  expanded={expanded}
+                  onToggle={() => setExpanded((e) => !e)}
+                />
+                {!isActive && visible ? (
+                  <button
+                    type="button"
+                    aria-label={`Ver opinión de ${review.name}`}
+                    onClick={() => {
+                      if (swiped.current) {
+                        swiped.current = false;
+                        return;
+                      }
+                      goTo(i);
+                    }}
+                    className="absolute inset-0 cursor-pointer rounded-2xl"
+                  />
+                ) : null}
+              </article>
+            );
+          })}
         </div>
-
-        <p
-          className={`mt-4 whitespace-pre-line text-base sm:text-lg text-warm-50/90 italic ${
-            !expanded && current.text.length > LONG_TEXT ? "line-clamp-6" : ""
-          }`}
-        >
-          &ldquo;{current.text}&rdquo;
-        </p>
-        {current.text.length > LONG_TEXT ? (
-          <button
-            type="button"
-            onClick={() => setExpanded((e) => !e)}
-            className="mt-2 text-sm font-bold text-brand-orange hover:underline"
-          >
-            {expanded ? "Leer menos" : "Leer más"}
-          </button>
-        ) : null}
       </div>
 
-      <div className="mt-6 flex items-center justify-center gap-6">
+      <div className="mt-2 flex items-center justify-center gap-6">
         <button
           type="button"
           onClick={() => goTo(active - 1)}
@@ -160,7 +274,7 @@ export default function GoogleReviewsCarousel({ reviews }: { reviews: ReviewCard
         </button>
 
         <p className="sm:hidden min-w-16 text-center text-sm font-semibold tabular-nums text-warm-50/70">
-          {active + 1} / {reviews.length}
+          {active + 1} / {n}
         </p>
 
         <div className="hidden sm:flex items-center gap-2">
