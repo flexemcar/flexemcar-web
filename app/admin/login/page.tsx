@@ -29,8 +29,10 @@ export default function AdminLoginPage() {
     router.refresh();
   }
 
+  // dvh = altura visible real en móvil; el padding inferior sube la tarjeta
+  // para que el teclado no la tape.
   return (
-    <div className="min-h-screen flex items-center justify-center bg-dark-950 px-4">
+    <div className="min-h-dvh flex items-center justify-center bg-dark-950 px-4 pb-[16dvh] sm:pb-0">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-sm rounded-2xl bg-warm-50/5 border border-warm-50/10 p-8"
