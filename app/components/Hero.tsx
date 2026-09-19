@@ -33,29 +33,50 @@ export default function Hero() {
           />
         ))}
         <div className="absolute inset-0 bg-dark-1000/40" />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[radial-gradient(55%_70%_at_88%_15%,rgba(245,130,31,0.22),transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(245,130,31,0.10),transparent_70%)]"
+        />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-16 pb-16 sm:pt-24 sm:pb-24">
-        <h1 className="font-heading uppercase font-extrabold text-[13vw] leading-[0.95] sm:text-6xl md:text-7xl tracking-tight max-w-3xl">
-          <span className="block text-warm-50">Mucho más</span>
-          <span className="block text-brand-orange">que furgos</span>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-16 pb-16 sm:pt-28 sm:pb-28">
+        <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-1.5 text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-orange">
+          <span className="size-2 rounded-full bg-brand-orange" aria-hidden="true" />
+          Furgonetas de ocasión en Elche
+        </p>
+
+        <h1 className="font-heading uppercase font-extrabold text-[20vw] leading-[0.92] tracking-tight sm:text-[clamp(3rem,9.5vw,8.5rem)] sm:whitespace-nowrap">
+          <span className="block sm:inline text-warm-50">Mucho más</span>{" "}
+          <span className="block sm:inline text-brand-orange">que furgos</span>
         </h1>
 
-        <p className="mt-6 max-w-lg text-warm-100/90 text-base sm:text-lg">
+        <p className="mt-7 max-w-2xl text-warm-100/90 text-lg sm:text-xl leading-relaxed">
           Te ayudamos a encontrar la furgoneta que encaja contigo, tu trabajo
           y tu presupuesto. Revisadas, garantizadas y listas para empezar.
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-4">
+        <div className="mt-9 flex flex-wrap items-center gap-4">
           <a
             href="#stock"
-            className="rounded-full bg-brand-orange px-8 py-[15px] font-bold text-[17px] text-white shadow-[0_0_20px_rgba(245,130,31,0.4)] transition-all duration-300 hover:-translate-y-1 hover:brightness-110 hover:shadow-[0_0_30px_rgba(245,130,31,0.6)]"
+            className="group inline-flex items-center gap-2.5 rounded-full bg-brand-orange px-9 py-[18px] font-bold text-lg text-white shadow-[0_0_20px_rgba(245,130,31,0.4)] transition-all duration-300 hover:-translate-y-1 hover:brightness-110 hover:shadow-[0_0_30px_rgba(245,130,31,0.6)]"
           >
             Ver stock disponible
+            <svg
+              viewBox="0 0 24 24"
+              className="size-5 transition-transform duration-300 group-hover:translate-x-1"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
           </a>
           <a
             href="#vende-tu-furgoneta"
-            className="rounded-full border border-warm-100/40 px-8 py-[15px] font-bold text-[17px] text-warm-50 hover:border-brand-orange hover:text-brand-orange transition"
+            className="rounded-full border border-warm-100/40 px-9 py-[18px] font-bold text-lg text-warm-50 hover:border-brand-orange hover:text-brand-orange transition"
           >
             Vendemos tu furgoneta
           </a>
@@ -65,7 +86,7 @@ export default function Hero() {
           href={links.googleReviews}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-10 inline-flex items-center gap-3 rounded-2xl bg-warm-50 pl-4 pr-5 py-3 shadow-lg hover:brightness-95 transition"
+          className="mt-12 inline-flex items-center gap-3 rounded-2xl bg-warm-50 pl-4 pr-5 py-3 shadow-lg hover:brightness-95 transition"
         >
           <svg viewBox="0 0 48 48" className="size-7 shrink-0" aria-hidden="true">
             <path
