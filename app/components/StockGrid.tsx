@@ -43,6 +43,7 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
   const [yearFrom, setYearFrom] = useState("");
   const [yearTo, setYearTo] = useState("");
   const [selected, setSelected] = useState<Vehicle | null>(null);
+  const [open, setOpen] = useState(false);
 
   const filtered = useMemo(() => {
     return vehicles.filter((v) => {
@@ -67,6 +68,13 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
     yearFrom ||
     yearTo;
 
+  const activeCount =
+    (maxPrice ? 1 : 0) +
+    (brands.length > 0 ? 1 : 0) +
+    (types.length > 0 ? 1 : 0) +
+    (kmFrom || kmTo ? 1 : 0) +
+    (yearFrom || yearTo ? 1 : 0);
+
   function clearFilters() {
     setMaxPrice("");
     setBrands([]);
@@ -79,107 +87,155 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
 
   return (
     <>
-      <div className="mt-8 rounded-2xl bg-white border border-warm-200 p-4 sm:p-5 space-y-4">
-        <ChipGroup label="Marca" options={brandOptions} selected={brands} onToggle={(v) => setBrands((prev) => toggle(prev, v))} />
-        <ChipGroup
-          label="Tipo de vehículo"
-          options={vehicleTypeOptions}
-          selected={types}
-          onToggle={(v) => setTypes((prev) => toggle(prev, v))}
-        />
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-wide text-brand-ink/60 mb-1.5">
-              Precio
-            </p>
-            <select
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
-              className={selectClass}
-            >
-              {priceOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <p className="text-xs font-bold uppercase tracking-wide text-brand-ink/60 mb-1.5">
-              Kilómetros
-            </p>
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                inputMode="numeric"
-                placeholder="Desde"
-                min={MIN_KM}
-                max={MAX_KM}
-                step={1000}
-                value={kmFrom}
-                onChange={(e) => setKmFrom(e.target.value)}
-                className={rangeInputClass}
-              />
-              <span className="text-brand-ink/40">–</span>
-              <input
-                type="number"
-                inputMode="numeric"
-                placeholder="Hasta"
-                min={MIN_KM}
-                max={MAX_KM}
-                step={1000}
-                value={kmTo}
-                onChange={(e) => setKmTo(e.target.value)}
-                className={rangeInputClass}
-              />
-            </div>
-          </div>
-
-          <div>
-            <p className="text-xs font-bold uppercase tracking-wide text-brand-ink/60 mb-1.5">
-              Año
-            </p>
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                inputMode="numeric"
-                placeholder="Desde"
-                min={MIN_YEAR}
-                max={MAX_YEAR}
-                value={yearFrom}
-                onChange={(e) => setYearFrom(e.target.value)}
-                className={rangeInputClass}
-              />
-              <span className="text-brand-ink/40">–</span>
-              <input
-                type="number"
-                inputMode="numeric"
-                placeholder="Hasta"
-                min={MIN_YEAR}
-                max={MAX_YEAR}
-                value={yearTo}
-                onChange={(e) => setYearTo(e.target.value)}
-                className={rangeInputClass}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between gap-3 pt-3 border-t border-warm-200">
-          <p className="text-sm text-brand-ink/60">
-            <span className="font-bold text-brand-ink">{filtered.length}</span> de{" "}
-            {vehicles.length} vehículos
-          </p>
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-4">
           <button
             type="button"
-            onClick={clearFilters}
-            disabled={!hasFilters}
-            className="rounded-full bg-brand-orange px-5 py-2 text-sm font-bold text-white hover:brightness-110 transition disabled:opacity-40 disabled:hover:brightness-100"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-controls="stock-filters"
+            className="inline-flex items-center gap-2.5 rounded-full bg-brand-orange py-3 pl-5 pr-4 text-base font-bold text-white shadow-[0_0_20px_rgba(245,130,31,0.35)] transition hover:brightness-110"
           >
-            Limpiar filtros
+            <SlidersIcon className="size-5" />
+            Filtrar vehículos
+            {activeCount > 0 && (
+              <span className="flex size-6 items-center justify-center rounded-full bg-white text-xs font-extrabold text-brand-orange">
+                {activeCount}
+              </span>
+            )}
+            <ChevronIcon
+              className={`size-4 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+            />
           </button>
+          {hasFilters && !open && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="text-sm font-semibold text-brand-ink/70 underline underline-offset-2 hover:text-brand-orange"
+            >
+              Limpiar
+            </button>
+          )}
+        </div>
+        <p className="text-sm text-brand-ink/60">
+          <span className="font-bold text-brand-ink">{filtered.length}</span> de{" "}
+          {vehicles.length} vehículos
+        </p>
+      </div>
+
+      <div
+        id="stock-filters"
+        inert={!open}
+        className={`grid transition-[grid-template-rows] duration-300 ${
+          open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <div className="pt-4">
+            <div className="rounded-2xl bg-white border border-warm-200 p-4 sm:p-5 space-y-4">
+              <ChipGroup label="Marca" options={brandOptions} selected={brands} onToggle={(v) => setBrands((prev) => toggle(prev, v))} />
+              <ChipGroup
+                label="Tipo de vehículo"
+                options={vehicleTypeOptions}
+                selected={types}
+                onToggle={(v) => setTypes((prev) => toggle(prev, v))}
+              />
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wide text-brand-ink/60 mb-1.5">
+                    Precio
+                  </p>
+                  <select
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(e.target.value)}
+                    className={selectClass}
+                  >
+                    {priceOptions.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wide text-brand-ink/60 mb-1.5">
+                    Kilómetros
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      placeholder="Desde"
+                      min={MIN_KM}
+                      max={MAX_KM}
+                      step={1000}
+                      value={kmFrom}
+                      onChange={(e) => setKmFrom(e.target.value)}
+                      className={rangeInputClass}
+                    />
+                    <span className="text-brand-ink/40">–</span>
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      placeholder="Hasta"
+                      min={MIN_KM}
+                      max={MAX_KM}
+                      step={1000}
+                      value={kmTo}
+                      onChange={(e) => setKmTo(e.target.value)}
+                      className={rangeInputClass}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wide text-brand-ink/60 mb-1.5">
+                    Año
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      placeholder="Desde"
+                      min={MIN_YEAR}
+                      max={MAX_YEAR}
+                      value={yearFrom}
+                      onChange={(e) => setYearFrom(e.target.value)}
+                      className={rangeInputClass}
+                    />
+                    <span className="text-brand-ink/40">–</span>
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      placeholder="Hasta"
+                      min={MIN_YEAR}
+                      max={MAX_YEAR}
+                      value={yearTo}
+                      onChange={(e) => setYearTo(e.target.value)}
+                      className={rangeInputClass}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between gap-3 pt-3 border-t border-warm-200">
+                <p className="text-sm text-brand-ink/60">
+                  <span className="font-bold text-brand-ink">{filtered.length}</span> de{" "}
+                  {vehicles.length} vehículos
+                </p>
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  disabled={!hasFilters}
+                  className="rounded-full bg-brand-orange px-5 py-2 text-sm font-bold text-white hover:brightness-110 transition disabled:opacity-40 disabled:hover:brightness-100"
+                >
+                  Limpiar filtros
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -293,5 +349,39 @@ function ChipGroup({
         })}
       </div>
     </div>
+  );
+}
+
+function SlidersIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4" />
+    </svg>
+  );
+}
+
+function ChevronIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
   );
 }
