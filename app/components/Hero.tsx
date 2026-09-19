@@ -1,17 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { links } from "@/app/lib/links";
 
 // Fotos reales de la campa (public/hero). Para cambiarlas o añadir más, editar
-// este array: "objectPosition" decide qué franja de la foto se ve al recortarla.
+// este array. Las fotos son verticales y se recortan: "objectPosition" decide
+// qué franja se ve en pantallas grandes y "mobilePosition" en móvil.
 const slides = [
-  { src: "/hero/hero-1.jpg", objectPosition: "50% 62%" },
-  { src: "/hero/hero-2.jpg", objectPosition: "50% 50%" },
-  { src: "/hero/hero-3.jpg", objectPosition: "50% 58%" },
-  { src: "/hero/hero-4.jpg", objectPosition: "50% 55%" },
-  { src: "/hero/hero-5.jpg", objectPosition: "50% 62%" },
+  { src: "/hero/hero-1.jpg", objectPosition: "50% 62%", mobilePosition: "50% 49%" },
+  { src: "/hero/hero-2.jpg", objectPosition: "50% 50%", mobilePosition: "50% 50%" },
+  { src: "/hero/hero-3.jpg", objectPosition: "50% 58%", mobilePosition: "50% 91%" },
+  { src: "/hero/hero-4.jpg", objectPosition: "50% 55%", mobilePosition: "50% 70%" },
+  { src: "/hero/hero-5.jpg", objectPosition: "50% 62%", mobilePosition: "50% 49%" },
 ];
 
 const SLIDE_MS = 5000;
@@ -43,8 +44,13 @@ export default function Hero() {
               quality={80}
               sizes="(min-width: 1024px) 66vw, 100vw"
               aria-hidden="true"
-              style={{ objectPosition: slide.objectPosition }}
-              className={`object-cover [transition:opacity_1400ms_ease,scale_7000ms_ease-out] motion-reduce:scale-100 ${
+              style={
+                {
+                  "--pos-m": slide.mobilePosition,
+                  "--pos-d": slide.objectPosition,
+                } as CSSProperties
+              }
+              className={`object-cover object-[var(--pos-m)] lg:object-[var(--pos-d)] [transition:opacity_1400ms_ease,scale_7000ms_ease-out] motion-reduce:scale-100 ${
                 i === active ? "opacity-100 scale-[1.07]" : "opacity-0 scale-100"
               }`}
             />
@@ -57,7 +63,7 @@ export default function Hero() {
         />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-6 pb-60 sm:pt-28 sm:pb-28">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-6 pb-[13rem] sm:pt-28 sm:pb-28">
         <p className="mb-4 sm:mb-6 inline-flex items-center gap-2 rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-1.5 text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-orange">
           <span className="size-2 rounded-full bg-brand-orange" aria-hidden="true" />
           Furgonetas de ocasión en Elche
