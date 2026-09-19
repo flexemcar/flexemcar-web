@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Barlow, Barlow_Condensed } from "next/font/google";
 import FloatingButtons from "@/app/components/FloatingButtons";
+import CookieConsent from "@/app/components/CookieConsent";
 import "./globals.css";
 
 const barlow = Barlow({
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         {children}
         <FloatingButtons />
+        <CookieConsent />
       </body>
     </html>
   );

@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import CookieSettingsLink from "@/app/components/CookieSettingsLink";
 import { links, navItems } from "@/app/lib/links";
 
 const footerNavItems = navItems.filter((item) => item.label !== "Opiniones");
@@ -118,13 +120,15 @@ export default function Footer() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-warm-50/50">
           <p>© {new Date().getFullYear()} Flexemcar · Compraventa de furgonetas de ocasión</p>
           <span className="text-warm-50/25">·</span>
-          <a href="#" className="hover:text-brand-orange transition">
+          <Link href="/privacidad" className="hover:text-brand-orange transition">
             Política de privacidad
-          </a>
+          </Link>
           <span className="text-warm-50/25">·</span>
-          <a href="#" className="hover:text-brand-orange transition">
-            Cookies
-          </a>
+          <Link href="/cookies" className="hover:text-brand-orange transition">
+            Política de cookies
+          </Link>
+          <span className="text-warm-50/25">·</span>
+          <CookieSettingsLink />
         </div>
       </div>
     </footer>
