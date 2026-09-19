@@ -13,6 +13,14 @@ import Footer from "@/app/components/Footer";
 import WelcomeVideoModal from "@/app/components/WelcomeVideoModal";
 import { getReels } from "@/app/lib/getReels";
 
+// Fotos de fondo del banner "Tu viaje comienza aquí" (public/promo).
+const promoImages = [
+  { src: "/promo/promo-1.jpg", objectPosition: "50% 38%" },
+  { src: "/promo/promo-2.jpg", objectPosition: "50% 30%" },
+  { src: "/promo/promo-3.jpg", objectPosition: "50% 40%" },
+  { src: "/promo/promo-4.jpg", objectPosition: "50% 34%" },
+];
+
 export default async function Home() {
   const reels = await getReels();
 
@@ -35,6 +43,7 @@ export default async function Home() {
           buttonText="Descubre el stock"
           buttonHref="#stock"
           rounded
+          images={promoImages}
         />
         <TestimonialsSection />
         <CtaBanner
