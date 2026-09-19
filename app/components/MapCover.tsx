@@ -54,7 +54,7 @@ export default function MapCover({ embedSrc }: { embedSrc: string }) {
               <span className="absolute inline-flex size-full rounded-full bg-brand-orange/60 motion-safe:animate-ping" />
             )}
             <span className="relative flex size-20 items-center justify-center rounded-full bg-brand-orange shadow-[0_0_24px_rgba(245,130,31,0.55)] transition-transform duration-300 group-hover:scale-110">
-              <TapIcon className="size-14" />
+              <TapIcon className="size-16" />
             </span>
           </span>
           <span className="rounded-full bg-dark-1000/70 px-4 py-1.5 text-sm font-bold text-white backdrop-blur-sm">
@@ -70,7 +70,7 @@ export default function MapCover({ embedSrc }: { embedSrc: string }) {
 function TapIcon({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 -5 24 29"
+      viewBox="0 -8 24 32"
       className={className}
       fill="none"
       stroke="white"
@@ -79,8 +79,8 @@ function TapIcon({ className }: { className?: string }) {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <path d="M2 1A8 8 0 0 1 14 1" />
-      <path d="M4.5 1A4.5 4.5 0 0 1 11.5 1" />
+      <path d="M1 -3A8.5 8.5 0 0 1 15 -3" opacity="0.55" />
+      <path d="M4.3 -0.6A4.5 4.5 0 0 1 11.7 -0.6" />
       <path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2" />
       <path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1" />
       <path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10" />
