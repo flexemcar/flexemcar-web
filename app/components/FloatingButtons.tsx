@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { links } from "@/app/lib/links";
 import ScrollToTop from "@/app/components/ScrollToTop";
 import MiguelPointer from "@/app/components/MiguelPointer";
@@ -21,10 +22,17 @@ function TikTokIcon() {
 }
 
 export default function FloatingButtons() {
+  const pathname = usePathname();
+  // En el panel de administración solo queda el botón de volver arriba:
+  // ni Miguel, ni WhatsApp, ni redes sociales.
+  const isAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
+
   return (
     <div className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-40 flex flex-col-reverse items-center gap-3 sm:gap-4">
       <ScrollToTop />
 
+      {!isAdmin && (
+      <>
       <div className="relative">
         <MiguelPointer />
         <a
@@ -47,6 +55,8 @@ export default function FloatingButtons() {
       >
         <TikTokIcon />
       </a>
+      </>
+      )}
     </div>
   );
 }
