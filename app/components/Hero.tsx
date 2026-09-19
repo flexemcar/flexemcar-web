@@ -29,8 +29,10 @@ export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-dark-950">
       <div className="absolute inset-0">
-        {/* En pantallas grandes las fotos ocupan la derecha y se funden con el fondo oscuro. */}
-        <div className="absolute inset-y-0 right-0 w-full lg:w-[66%] lg:[mask-image:linear-gradient(to_right,transparent,black_40%)]">
+        {/* Móvil: las fotos van en una franja a todo el ancho en la parte de abajo, bajo el texto,
+            fundidas con el fondo por arriba. Pantallas grandes: ocupan la derecha y se funden
+            con el fondo oscuro por la izquierda. */}
+        <div className="absolute inset-x-0 bottom-0 h-[20rem] [mask-image:linear-gradient(to_bottom,transparent,black_35%)] lg:inset-y-0 lg:left-auto lg:right-0 lg:h-auto lg:w-[66%] lg:[mask-image:linear-gradient(to_right,transparent,black_40%)]">
           {slides.map((slide, i) => (
             <Image
               key={slide.src}
@@ -48,15 +50,15 @@ export default function Hero() {
             />
           ))}
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-dark-1000/40 via-dark-1000/55 to-dark-1000/80 lg:bg-gradient-to-r lg:from-dark-1000/90 lg:via-dark-1000/40 lg:to-dark-1000/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-dark-1000/60 via-dark-1000/25 to-dark-1000/5 lg:from-dark-1000/90 lg:via-dark-1000/40 lg:to-dark-1000/10" />
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-[radial-gradient(55%_70%_at_88%_15%,rgba(245,130,31,0.18),transparent_70%),radial-gradient(40%_50%_at_0%_100%,rgba(245,130,31,0.10),transparent_70%)]"
         />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-16 pb-16 sm:pt-28 sm:pb-28">
-        <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-1.5 text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-orange">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-6 pb-60 sm:pt-28 sm:pb-28">
+        <p className="mb-4 sm:mb-6 inline-flex items-center gap-2 rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-1.5 text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-orange">
           <span className="size-2 rounded-full bg-brand-orange" aria-hidden="true" />
           Furgonetas de ocasión en Elche
         </p>
@@ -66,12 +68,12 @@ export default function Hero() {
           <span className="block sm:inline text-brand-orange">que furgos</span>
         </h1>
 
-        <p className="mt-7 max-w-2xl text-warm-100/90 text-lg sm:text-xl leading-relaxed [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
+        <p className="mt-5 sm:mt-7 max-w-2xl text-warm-100/90 text-lg sm:text-xl leading-relaxed [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
           Te ayudamos a encontrar la furgoneta que encaja contigo, tu trabajo
           y tu presupuesto. Revisadas, garantizadas y listas para empezar.
         </p>
 
-        <div className="mt-9 flex flex-wrap items-center gap-4">
+        <div className="mt-7 sm:mt-9 flex flex-wrap items-center gap-4">
           <a
             href="#stock"
             className="group inline-flex items-center gap-2.5 rounded-full bg-brand-orange px-9 py-[18px] font-bold text-lg text-white shadow-[0_0_20px_rgba(245,130,31,0.4)] transition-all duration-300 hover:-translate-y-1 hover:brightness-110 hover:shadow-[0_0_30px_rgba(245,130,31,0.6)]"
@@ -102,7 +104,7 @@ export default function Hero() {
           href={links.googleReviews}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-12 inline-flex items-center gap-3 rounded-2xl bg-warm-50 pl-4 pr-5 py-3 shadow-lg hover:brightness-95 transition"
+          className="mt-8 sm:mt-12 inline-flex items-center gap-3 rounded-2xl bg-warm-50 pl-4 pr-5 py-3 shadow-lg hover:brightness-95 transition"
         >
           <svg viewBox="0 0 48 48" className="size-7 shrink-0" aria-hidden="true">
             <path
