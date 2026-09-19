@@ -13,12 +13,14 @@ import Footer from "@/app/components/Footer";
 import WelcomeVideoModal from "@/app/components/WelcomeVideoModal";
 import { getReels } from "@/app/lib/getReels";
 
-// Fotos de fondo del banner "Tu viaje comienza aquí" (public/promo).
+// Fotos de fondo del banner "Tu viaje comienza aquí" (public/promo). El banner
+// enseña solo una franja de cada foto vertical: objectPosition la centra en el
+// morro (faros, parrilla y marca) de cada vehículo.
 const promoImages = [
-  { src: "/promo/promo-1.jpg", objectPosition: "50% 48%" },
-  { src: "/promo/promo-2.jpg", objectPosition: "50% 42%" },
-  { src: "/promo/promo-3.jpg", objectPosition: "50% 50%" },
-  { src: "/promo/promo-4.jpg", objectPosition: "50% 46%" },
+  { src: "/promo/promo-1.jpg", objectPosition: "50% 80%" },
+  { src: "/promo/promo-2.jpg", objectPosition: "50% 67%" },
+  { src: "/promo/promo-3.jpg", objectPosition: "50% 71%" },
+  { src: "/promo/promo-4.jpg", objectPosition: "50% 66%" },
 ];
 
 export default async function Home() {

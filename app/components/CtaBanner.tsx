@@ -9,8 +9,8 @@ type CtaBannerProps = {
   buttonText: string;
   buttonHref: string;
   rounded?: boolean;
-  // Fotos que se cruzan. Con fotos, el texto va a la izquierda: en escritorio
-  // la foto entera queda centrada en el banner y en móvil va encima del texto.
+  // Fotos de fondo que se cruzan bajo un degradado naranja. Con fotos, el
+  // texto va alineado a la izquierda.
   images?: BannerSlide[];
 };
 
@@ -36,33 +36,23 @@ export default function CtaBanner({
         }
       >
         <div
-          className={`relative isolate overflow-hidden bg-brand-orange ${
+          className={`relative isolate overflow-hidden bg-brand-orange px-6 sm:px-16 py-14 sm:py-20 ${
             hasImages
-              ? "flex flex-col text-left shadow-[0_24px_60px_rgba(28,28,34,0.25)] sm:min-h-[30rem] sm:justify-center"
-              : "px-6 sm:px-16 py-14 sm:py-20 text-center"
+              ? "flex flex-col justify-center text-left shadow-[0_24px_60px_rgba(28,28,34,0.25)] sm:min-h-[26rem]"
+              : "text-center"
           } ${rounded ? "rounded-3xl" : ""}`}
         >
           {hasImages && (
             <>
-              <div className="relative h-72 shrink-0 sm:absolute sm:inset-0 sm:h-auto">
-                <BannerSlides slides={images} />
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-x-0 -bottom-px h-[calc(4rem+1px)] bg-gradient-to-b from-transparent to-brand-orange sm:hidden"
-                />
-              </div>
+              <BannerSlides slides={images} />
               <div
                 aria-hidden="true"
-                className="hidden sm:block absolute inset-0 bg-[linear-gradient(95deg,rgba(214,102,6,0.95)_0%,rgba(245,130,31,0.88)_28%,rgba(245,130,31,0)_44%)]"
+                className="absolute inset-0 bg-[linear-gradient(180deg,rgba(214,102,6,0.9),rgba(245,130,31,0.72))] sm:bg-[linear-gradient(95deg,rgba(214,102,6,0.95)_15%,rgba(245,130,31,0.82)_45%,rgba(245,130,31,0.15))]"
               />
             </>
           )}
 
-          <div
-            className={`relative ${
-              hasImages ? "px-6 sm:px-16 pb-10 pt-2 sm:py-20 sm:max-w-sm" : ""
-            }`}
-          >
+          <div className="relative">
             <Reveal>
               {eyebrow && (
                 <p className="text-xs font-bold uppercase tracking-widest text-white/80">
