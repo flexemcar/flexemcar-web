@@ -7,6 +7,7 @@ import UpcomingDeliveriesSection from "@/app/components/UpcomingDeliveriesSectio
 import StatsSection from "@/app/components/StatsSection";
 import AdvantagesSection from "@/app/components/AdvantagesSection";
 import CtaBanner from "@/app/components/CtaBanner";
+import TasacionForm from "@/app/components/TasacionForm";
 import TestimonialsSection from "@/app/components/TestimonialsSection";
 import MapSection from "@/app/components/MapSection";
 import Footer from "@/app/components/Footer";
@@ -52,7 +53,7 @@ export default async function Home() {
           id="vende-tu-furgoneta"
           title="¿Quieres vender tu furgoneta?"
           buttonText="Pide tu tasación gratis"
-          buttonHref="#"
+          action={<TasacionForm buttonText="Pide tu tasación gratis" />}
         />
         <MapSection />
       </main>

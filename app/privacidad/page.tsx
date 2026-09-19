@@ -37,9 +37,10 @@ export default function PrivacyPage() {
       <UL>
         <li>
           <strong className={strong}>Consultas y contacto.</strong> Si nos
-          escribes por WhatsApp, teléfono o correo, tratamos los datos que nos
-          facilites (nombre, teléfono, correo, tu mensaje y, si quieres
-          vendernos o financiar un vehículo, los datos de ese vehículo). La
+          escribes por WhatsApp, teléfono o correo, o rellenas el formulario de
+          tasación, tratamos los datos que nos facilites (nombre, teléfono,
+          correo, tu mensaje y, si quieres vendernos o financiar un vehículo,
+          los datos de ese vehículo: marca, modelo, año y kilómetros). La
           finalidad es atender tu consulta. Base legal: tu consentimiento y, si
           pides información previa a una compra o venta, la aplicación de
           medidas precontractuales a petición tuya.
@@ -131,6 +132,10 @@ export default function PrivacyPage() {
         <li>
           Proveedores de alojamiento y tecnología de la web (Vercel y
           Supabase), que actúan como encargados del tratamiento.
+        </li>
+        <li>
+          Resend, el proveedor que envía a Flexemcar por correo electrónico los
+          datos del formulario de tasación, como encargado del tratamiento.
         </li>
         <li>
           Meta, en el caso del píxel (solo si lo aceptas) y de WhatsApp cuando

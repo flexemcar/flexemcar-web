@@ -1,5 +1,6 @@
 import Reveal from "@/app/components/Reveal";
 import BannerSlides, { type BannerSlide } from "@/app/components/BannerSlides";
+import { CtaArrow, CtaShine, ctaButtonClass } from "@/app/components/ctaButton";
 
 type CtaBannerProps = {
   id?: string;
@@ -7,7 +8,9 @@ type CtaBannerProps = {
   title: string;
   subtitle?: string;
   buttonText: string;
-  buttonHref: string;
+  buttonHref?: string;
+  // Sustituye al botón-enlace (por ejemplo, un botón que despliega un formulario).
+  action?: React.ReactNode;
   rounded?: boolean;
   // Fotos de fondo que se cruzan bajo un degradado naranja. Con fotos, el
   // texto va alineado a la izquierda.
@@ -20,7 +23,8 @@ export default function CtaBanner({
   title,
   subtitle,
   buttonText,
-  buttonHref,
+  buttonHref = "#",
+  action,
   rounded = false,
   images,
 }: CtaBannerProps) {
@@ -68,12 +72,13 @@ export default function CtaBanner({
                 {subtitle}
               </p>
             )}
-            <a
-              href={buttonHref}
-              className="mt-8 inline-block rounded-full bg-white px-8 py-[15px] font-bold text-[17px] text-brand-orange hover:brightness-95 transition"
-            >
-              {buttonText}
-            </a>
+            {action ?? (
+              <a href={buttonHref} className={ctaButtonClass}>
+                <CtaShine />
+                <span className="relative">{buttonText}</span>
+                <CtaArrow />
+              </a>
+            )}
           </div>
         </div>
       </div>
