@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { relativeMonthsEs } from "@/app/lib/relativeTime";
 import { useClickSound } from "@/app/lib/useClickSound";
 import GoogleReviewIcon from "@/app/components/GoogleReviewIcon";
@@ -25,8 +25,6 @@ const subscribeNever = () => () => {};
 const currentDay = () => Math.floor(Date.now() / DAY_MS);
 const serverDay = () => Math.floor(Date.UTC(2026, 8, 19) / DAY_MS);
 
-// Reseñas más largas que esto se recortan con "Leer más".
-const LONG_TEXT = 260;
 const SWIPE_MIN_PX = 50;
 
 // Estilo visual compartido por la tarjeta real y por el "medidor" invisible
@@ -96,7 +94,22 @@ function ReviewBody({
   expanded: boolean;
   onToggle: () => void;
 }) {
-  const isLong = review.text.length > LONG_TEXT;
+  // El recorte a 6 líneas se aplica siempre salvo en la tarjeta activa ya
+  // expandida — así todas las tarjetas reservan la misma altura de texto.
+  const clamped = !(isActive && expanded);
+  const textRef = useRef<HTMLParagraphElement>(null);
+  // "Larga" se decide midiendo si el texto realmente desborda esas 6 líneas,
+  // no por nº de caracteres: una reseña corta con muchos saltos de línea
+  // puede desbordar igual que una reseña larga de un solo párrafo.
+  const [isLong, setIsLong] = useState(false);
+
+  useEffect(() => {
+    if (!clamped) return;
+    const el = textRef.current;
+    if (!el) return;
+    setIsLong(el.scrollHeight - el.clientHeight > 1);
+  }, [clamped, review.text]);
+
   const nameClass = `block truncate font-heading uppercase font-extrabold text-warm-50 ${
     isActive && review.profileUrl ? "hover:text-brand-orange transition" : ""
   }`;
@@ -137,9 +150,14 @@ function ReviewBody({
         ) : null}
       </div>
 
+      {/* min-h-[9em] = 6 líneas * ~1,5 de interlineado, en "em" para que
+          escale con el tamaño de letra (text-base en móvil, text-lg en
+          escritorio). Debe ir a la par con line-clamp-6: reserva el mismo
+          hueco tanto si el texto llena las 6 líneas como si es más corto. */}
       <p
-        className={`mt-4 whitespace-pre-line text-base sm:text-lg text-warm-50/90 italic ${
-          isLong && !(isActive && expanded) ? "line-clamp-6" : ""
+        ref={textRef}
+        className={`mt-4 min-h-[9em] whitespace-pre-line text-base sm:text-lg text-warm-50/90 italic ${
+          clamped ? "line-clamp-6" : ""
         }`}
       >
         &ldquo;{review.text}&rdquo;
@@ -220,8 +238,10 @@ export default function GoogleReviewsCarousel({ reviews }: { reviews: ReviewCard
         {/* La tarjeta activa se ve siempre en posición absoluta (para que la
             ruleta se anime con transform sin saltos), así que la altura real
             del carrusel la marca este "medidor" invisible con el mismo
-            contenido en flujo normal: el espacio de abajo queda igual que
-            el de arriba, y solo crece cuando se pulsa "Leer más". */}
+            contenido en flujo normal. Como el texto siempre se recorta a las
+            mismas 6 líneas (ver ReviewBody), todas las tarjetas miden igual
+            por defecto, y solo crece la que está activa al pulsar
+            "Leer más". */}
         <div className="relative mx-auto w-[84%] sm:w-[560px]">
           <div aria-hidden="true" className={`invisible ${CARD_CLASSES}`}>
             <ReviewBody
