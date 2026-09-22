@@ -13,7 +13,7 @@ import Footer from "@/app/components/Footer";
 import WelcomeVideoModal from "@/app/components/WelcomeVideoModal";
 import { getReels } from "@/app/lib/getReels";
 
-// Fotos de fondo del banner "Tu viaje comienza aquí" (public/promo). El banner
+// Fotos de fondo del banner "Tú decisión comienza aquí" (public/promo). El banner
 // enseña solo una franja de cada foto vertical: objectPosition la centra en el
 // morro (faros, parrilla y marca) de cada vehículo.
 const promoImages = [
@@ -38,9 +38,9 @@ export default async function Home() {
         <UpcomingDeliveriesSection />
         <StatsSection />
         <CtaBanner
-          eyebrow="Flexemcar"
-          title="Tu viaje comienza aquí"
-          subtitle="Furgonetas y camiones de ocasión revisados, garantizados y listos para trabajar desde el primer día."
+          eyebrow="Compañero"
+          title="Tú decisión comienza aquí"
+          subtitle="Furgonetas, carrozados y cajas abiertas de todos los tamaños y modelos."
           buttonText="Descubre el stock"
           buttonHref="#stock"
           rounded
