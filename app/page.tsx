@@ -5,7 +5,6 @@ import ReelsSection from "@/app/components/ReelsSection";
 import StockSection from "@/app/components/StockSection";
 import UpcomingDeliveriesSection from "@/app/components/UpcomingDeliveriesSection";
 import StatsSection from "@/app/components/StatsSection";
-import AdvantagesSection from "@/app/components/AdvantagesSection";
 import CtaBanner from "@/app/components/CtaBanner";
 import TasacionForm from "@/app/components/TasacionForm";
 import TestimonialsSection from "@/app/components/TestimonialsSection";
@@ -38,7 +37,6 @@ export default async function Home() {
         <StockSection />
         <UpcomingDeliveriesSection />
         <StatsSection />
-        <AdvantagesSection />
         <CtaBanner
           eyebrow="Flexemcar"
           title="Tu viaje comienza aquí"
