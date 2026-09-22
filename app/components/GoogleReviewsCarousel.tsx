@@ -29,6 +29,12 @@ const serverDay = () => Math.floor(Date.UTC(2026, 8, 19) / DAY_MS);
 const LONG_TEXT = 260;
 const SWIPE_MIN_PX = 50;
 
+// Estilo visual compartido por la tarjeta real y por el "medidor" invisible
+// que fija la altura del carrusel (mismo padding/borde en los dos para que
+// midan exactamente igual).
+const CARD_CLASSES =
+  "flex flex-col rounded-2xl border border-brand-orange/70 bg-[#211e18] px-6 sm:px-10 py-8 sm:py-10";
+
 function Stars({ rating, isGoogle }: { rating: number; isGoogle: boolean }) {
   const full = Math.round(rating);
   return (
@@ -211,8 +217,22 @@ export default function GoogleReviewsCarousel({ reviews }: { reviews: ReviewCard
         }}
         className="mt-10 touch-pan-y select-none py-6"
       >
-        {/* Todas las tarjetas comparten la misma celda: la altura la marca la más alta y no salta al pasar de una a otra. */}
-        <div className="mx-auto grid w-[84%] sm:w-[560px]">
+        {/* La tarjeta activa se ve siempre en posición absoluta (para que la
+            ruleta se anime con transform sin saltos), así que la altura real
+            del carrusel la marca este "medidor" invisible con el mismo
+            contenido en flujo normal: el espacio de abajo queda igual que
+            el de arriba, y solo crece cuando se pulsa "Leer más". */}
+        <div className="relative mx-auto w-[84%] sm:w-[560px]">
+          <div aria-hidden="true" className={`invisible ${CARD_CLASSES}`}>
+            <ReviewBody
+              review={reviews[active]}
+              now={now}
+              isActive
+              expanded={expanded}
+              onToggle={() => {}}
+            />
+          </div>
+
           {reviews.map((review, i) => {
             let offset = (((i - active) % n) + n) % n;
             if (offset > n / 2) offset -= n;
@@ -226,13 +246,12 @@ export default function GoogleReviewsCarousel({ reviews }: { reviews: ReviewCard
                 key={review.id}
                 aria-hidden={!isActive}
                 style={{
-                  gridArea: "1 / 1",
                   transform: `translateX(${d.x}%) scale(${d.scale})`,
                   opacity: d.opacity,
                   zIndex: d.z,
                   pointerEvents: visible ? "auto" : "none",
                 }}
-                className={`relative flex flex-col rounded-2xl border border-brand-orange/70 bg-[#211e18] px-6 sm:px-10 py-8 sm:py-10 text-left transition-[transform,opacity] duration-500 ease-out ${
+                className={`absolute inset-0 text-left transition-[transform,opacity] duration-500 ease-out ${CARD_CLASSES} ${
                   isActive ? "shadow-[0_24px_60px_rgba(0,0,0,0.55)]" : ""
                 }`}
               >
