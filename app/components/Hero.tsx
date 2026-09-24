@@ -81,7 +81,7 @@ export default function Hero() {
 
         <div className="mt-7 sm:mt-9 flex flex-wrap items-center justify-center sm:justify-start gap-4">
           <a
-            href="#stock"
+            href="#stock-disponible"
             className="group inline-flex items-center gap-2.5 rounded-full bg-brand-orange px-9 py-[18px] font-bold text-lg text-white shadow-[0_0_20px_rgba(245,130,31,0.4)] transition-all duration-300 hover:-translate-y-1 hover:brightness-110 hover:shadow-[0_0_30px_rgba(245,130,31,0.6)]"
           >
             Ver stock disponible
