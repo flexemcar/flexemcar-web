@@ -42,7 +42,7 @@ export default async function Home() {
           title="Tú decisión comienza aquí"
           subtitle="Furgonetas, carrozados y cajas abiertas de todos los tamaños y modelos."
           buttonText="Descubre el stock"
-          buttonHref="#stock"
+          buttonHref="#stock-disponible"
           rounded
           images={promoImages}
         />

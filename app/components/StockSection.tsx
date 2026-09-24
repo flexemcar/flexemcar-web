@@ -32,7 +32,7 @@ export default async function StockSection() {
             </div>
           </div>
 
-          <p className="text-xs font-bold uppercase tracking-widest text-brand-orange">
+          <p id="stock-disponible" className="text-xs font-bold uppercase tracking-widest text-brand-orange">
             Stock disponible
           </p>
           <h2 className="mt-2 font-heading uppercase font-extrabold text-3xl sm:text-4xl text-brand-ink">
