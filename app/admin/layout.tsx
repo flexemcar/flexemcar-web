@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/app/lib/supabase/server";
 import { signOutAction } from "@/app/admin/actions";
+import { isAdminUser } from "@/app/lib/admin";
 
 export const metadata: Metadata = {
   title: "Panel Flexemcar",
@@ -20,7 +21,7 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-dark-950">
-      {user && (
+      {isAdminUser(user) && (
         <header className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-warm-50/10">
           <Link
             href="/admin"

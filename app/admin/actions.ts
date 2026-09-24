@@ -2,6 +2,7 @@
 
 import { randomUUID } from "crypto";
 import { redirect } from "next/navigation";
+import { isAdminUser } from "@/app/lib/admin";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/app/lib/supabase/server";
 import type { VehicleStatus } from "@/app/lib/vehicles";
@@ -13,7 +14,7 @@ async function requireAdmin() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/admin/login");
+  if (!isAdminUser(user)) redirect("/admin/login");
   return supabase;
 }
 

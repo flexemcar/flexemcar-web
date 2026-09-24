@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isAdminUser } from "@/app/lib/admin";
 
 // Refresca la sesion de Supabase en cada peticion y protege /admin: sin
 // sesion valida, redirige a /admin/login. Se llama desde middleware.ts.
@@ -33,14 +34,15 @@ export async function updateSession(request: NextRequest) {
 
   const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
   const isLoginRoute = request.nextUrl.pathname === "/admin/login";
+  const isAdmin = isAdminUser(user);
 
-  if (isAdminRoute && !isLoginRoute && !user) {
+  if (isAdminRoute && !isLoginRoute && !isAdmin) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/admin/login";
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isLoginRoute && user) {
+  if (isLoginRoute && isAdmin) {
     const adminUrl = request.nextUrl.clone();
     adminUrl.pathname = "/admin";
     return NextResponse.redirect(adminUrl);
