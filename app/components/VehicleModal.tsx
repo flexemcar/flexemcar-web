@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { calculateMonthlyPayment, financingConfig } from "@/app/lib/financing";
 import { links } from "@/app/lib/links";
 import { getDisplayPrice, sizeAndPower, statusLabels, type Vehicle } from "@/app/lib/vehicles";
@@ -9,6 +9,9 @@ import { getDisplayPrice, sizeAndPower, statusLabels, type Vehicle } from "@/app
 function formatPrice(n: number) {
   return Math.round(n).toLocaleString("es-ES") + " €";
 }
+
+// Distancia minima (px) para que un deslizamiento cambie de foto.
+const SWIPE_MIN_PX = 50;
 
 function formatKm(n: number) {
   return n.toLocaleString("es-ES") + " km";
@@ -22,6 +25,53 @@ export default function VehicleModal({
   onClose: () => void;
 }) {
   const [activePhoto, setActivePhoto] = useState(0);
+  const photoCount = vehicle.photos.length;
+  // Deslizar la foto: sigue al dedo/raton mientras se arrastra y al soltar
+  // pasa a la siguiente o la anterior (en bucle).
+  const [dragX, setDragX] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const dragStartX = useRef<number | null>(null);
+  const thumbRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  // Paso relativo (+1 / -1) a partir de la foto actual, en bucle. Con updater
+  // para que varios clics seguidos sumen bien.
+  function stepPhoto(delta: number) {
+    if (photoCount === 0) return;
+    setActivePhoto((a) => (((a + delta) % photoCount) + photoCount) % photoCount);
+  }
+
+  function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    if (photoCount < 2 || (e.target as HTMLElement).closest("button")) return;
+    dragStartX.current = e.clientX;
+    setDragging(true);
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }
+
+  function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    if (dragStartX.current === null) return;
+    setDragX(e.clientX - dragStartX.current);
+  }
+
+  function handlePointerEnd() {
+    if (dragStartX.current === null) return;
+    dragStartX.current = null;
+    setDragging(false);
+    if (dragX <= -SWIPE_MIN_PX) stepPhoto(1);
+    else if (dragX >= SWIPE_MIN_PX) stepPhoto(-1);
+    setDragX(0);
+  }
+
+  useEffect(() => {
+    // Solo desplaza la fila de miniaturas en horizontal (scrollIntoView
+    // moveria tambien la ficha en vertical).
+    const thumb = thumbRefs.current[activePhoto];
+    const strip = thumb?.parentElement;
+    if (!thumb || !strip) return;
+    strip.scrollTo({
+      left: thumb.offsetLeft - strip.clientWidth / 2 + thumb.clientWidth / 2,
+      behavior: "smooth",
+    });
+  }, [activePhoto]);
 
   const displayPrice = getDisplayPrice(vehicle);
   const basePrice = vehicle.cashPrice ?? vehicle.price ?? 0;
@@ -32,6 +82,9 @@ export default function VehicleModal({
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
+      if (photoCount > 1 && e.key === "ArrowRight") setActivePhoto((x) => (x + 1) % photoCount);
+      if (photoCount > 1 && e.key === "ArrowLeft")
+        setActivePhoto((x) => (x - 1 + photoCount) % photoCount);
     }
     document.addEventListener("keydown", handleKey);
     document.body.style.overflow = "hidden";
@@ -39,7 +92,7 @@ export default function VehicleModal({
       document.removeEventListener("keydown", handleKey);
       document.body.style.overflow = "";
     };
-  }, [onClose]);
+  }, [onClose, photoCount]);
 
   const amountToFinance = Math.max(basePrice - entrada, 0);
   const monthly = useMemo(
@@ -82,15 +135,56 @@ export default function VehicleModal({
 
         <div className="grid grid-cols-1 sm:grid-cols-2">
           <div className="flex flex-col bg-warm-100">
-            <div className="relative aspect-[4/3] min-h-[240px] shrink-0 bg-gradient-to-br from-warm-200 to-brand-ink/20 sm:aspect-auto sm:min-h-0 sm:flex-1">
-              {vehicle.photos[activePhoto] && (
-                <Image
-                  src={vehicle.photos[activePhoto].url}
-                  alt={`${vehicle.brand} ${vehicle.model}`}
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 640px) 50vw, 100vw"
-                />
+            <div
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerEnd}
+              onPointerCancel={handlePointerEnd}
+              className={`relative aspect-[4/3] min-h-[240px] shrink-0 overflow-hidden bg-gradient-to-br from-warm-200 to-brand-ink/20 sm:aspect-auto sm:min-h-0 sm:flex-1 touch-pan-y select-none ${
+                photoCount > 1 ? (dragging ? "cursor-grabbing" : "cursor-grab") : ""
+              }`}
+            >
+              <div
+                className={`absolute inset-0 flex ${dragging ? "" : "transition-transform duration-300 ease-out"}`}
+                style={{ transform: `translateX(calc(${-activePhoto * 100}% + ${dragX}px))` }}
+              >
+                {vehicle.photos.map((photo, i) => (
+                  <div key={photo.id} className="relative h-full w-full shrink-0">
+                    <Image
+                      src={photo.url}
+                      alt={`${vehicle.brand} ${vehicle.model} · foto ${i + 1}`}
+                      fill
+                      draggable={false}
+                      priority={i === 0}
+                      className="object-cover"
+                      sizes="(min-width: 640px) 50vw, 100vw"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {photoCount > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => stepPhoto(-1)}
+                    aria-label="Foto anterior"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 flex size-9 items-center justify-center rounded-full bg-black/40 text-xl text-white transition hover:bg-black/60"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => stepPhoto(1)}
+                    aria-label="Foto siguiente"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 flex size-9 items-center justify-center rounded-full bg-black/40 text-xl text-white transition hover:bg-black/60"
+                  >
+                    ›
+                  </button>
+                  <span className="absolute bottom-3 right-3 rounded-full bg-black/50 px-2.5 py-1 text-xs font-bold text-white">
+                    {activePhoto + 1} / {photoCount}
+                  </span>
+                </>
               )}
               <span
                 className={`absolute top-4 left-4 rounded-full px-3 py-1 text-xs font-bold text-white ${
@@ -103,10 +197,13 @@ export default function VehicleModal({
               </span>
             </div>
             {vehicle.photos.length > 1 && (
-              <div className="flex shrink-0 gap-2 overflow-x-auto p-3">
+              <div className="relative flex shrink-0 gap-2 overflow-x-auto p-3">
                 {vehicle.photos.map((photo, i) => (
                   <button
                     key={photo.id}
+                    ref={(el) => {
+                      thumbRefs.current[i] = el;
+                    }}
                     type="button"
                     onClick={() => setActivePhoto(i)}
                     aria-label={`Foto ${i + 1}`}
