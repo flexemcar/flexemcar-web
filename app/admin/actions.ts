@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { isAdminUser } from "@/app/lib/admin";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/app/lib/supabase/server";
-import type { VehicleStatus } from "@/app/lib/vehicles";
+import { formatEta, type VehicleStatus } from "@/app/lib/vehicles";
 
 const BUCKET = "vehicle-photos";
 
@@ -47,6 +47,11 @@ function readVehicleFields(formData: FormData) {
     seats: seatsRaw ? Number(seatsRaw) : null,
     eco_label: (formData.get("eco_label") as string | null)?.trim() || null,
     vehicle_type: (formData.get("vehicle_type") as string | null)?.trim() || null,
+    upcoming: formData.get("upcoming") === "on",
+    eta:
+      formData.get("upcoming") === "on"
+        ? formatEta(Number(formData.get("eta_amount")), String(formData.get("eta_unit") ?? ""))
+        : null,
   };
 }
 

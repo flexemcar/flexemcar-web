@@ -4,7 +4,7 @@ import StockGrid from "@/app/components/StockGrid";
 import TallerVideoBlock from "@/app/components/TallerVideoBlock";
 
 export default async function StockSection() {
-  const vehicles = await getVehicles({ includeSold: false });
+  const vehicles = await getVehicles({ includeSold: false, upcoming: false });
 
   return (
     <section id="stock" className="bg-warm-50 py-16 sm:py-24">

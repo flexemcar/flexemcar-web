@@ -1,10 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import {
   brandOptions,
   ecoLabelOptions,
   equipmentOptions,
+  etaUnits,
+  formatEta,
   fuelOptions,
+  parseEta,
   statusLabels,
   transmissionOptions,
   vehicleTypeOptions,
@@ -30,6 +34,8 @@ type Initial = {
   seats: number | null;
   ecoLabel: string | null;
   vehicleType: string | null;
+  upcoming: boolean;
+  eta: string | null;
 };
 
 export default function VehicleForm({
@@ -43,8 +49,84 @@ export default function VehicleForm({
   submitLabel: string;
   photosLabel: string;
 }) {
+  const [upcoming, setUpcoming] = useState(initial?.upcoming ?? false);
+  const initialEta = parseEta(initial?.eta ?? null);
+  const [etaAmount, setEtaAmount] = useState(String(initialEta?.amount ?? 2));
+  const [etaUnit, setEtaUnit] = useState<string>(initialEta?.unit ?? "semanas");
+
   return (
     <form action={action} className="space-y-4 max-w-xl">
+      <div className="rounded-xl bg-dark-900 border border-warm-50/10 p-3">
+        <p className="text-sm font-semibold text-warm-50/80">¿Dónde sale en la web?</p>
+        <div className="mt-2 flex flex-wrap items-stretch gap-2">
+          <div role="radiogroup" className="grid flex-1 grid-cols-2 gap-2 min-w-[240px]">
+            {[
+              { value: false, label: "En stock", hint: "Ya está en la campa" },
+              { value: true, label: "Próxima entrega", hint: "Aún no ha llegado" },
+            ].map((tab) => {
+              const active = upcoming === tab.value;
+              return (
+                <label
+                  key={tab.label}
+                  className={`cursor-pointer rounded-lg border px-3 py-2 text-center transition ${
+                    active
+                      ? "border-brand-orange bg-brand-orange text-white"
+                      : "border-warm-50/10 text-warm-50/70 hover:border-brand-orange/50"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="upcoming"
+                    value={tab.value ? "on" : ""}
+                    checked={active}
+                    onChange={() => setUpcoming(tab.value)}
+                    className="sr-only"
+                  />
+                  <span className="block text-sm font-bold">{tab.label}</span>
+                  <span className="block text-xs opacity-80">{tab.hint}</span>
+                </label>
+              );
+            })}
+          </div>
+
+          {upcoming && (
+            <div className="flex items-center gap-2 rounded-lg border border-brand-orange/50 px-3 py-2 text-sm font-semibold text-warm-50/80">
+              <span className="whitespace-nowrap">Llega en</span>
+              <input
+                type="number"
+                name="eta_amount"
+                min={1}
+                max={99}
+                required
+                value={etaAmount}
+                onChange={(e) => setEtaAmount(e.target.value)}
+                aria-label="Cantidad"
+                className="w-14 rounded-md bg-dark-950 border border-warm-50/10 px-2 py-1 text-warm-50 outline-none focus:border-brand-orange"
+              />
+              <select
+                name="eta_unit"
+                value={etaUnit}
+                onChange={(e) => setEtaUnit(e.target.value)}
+                aria-label="Unidad"
+                className="rounded-md bg-dark-950 border border-warm-50/10 px-2 py-1 text-warm-50 outline-none focus:border-brand-orange"
+              >
+                {etaUnits.map((u) => (
+                  <option key={u.value} value={u.value}>
+                    {Number(etaAmount) === 1 ? u.singular : u.plural}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
+        {upcoming && (
+          <p className="mt-2 text-xs text-warm-50/60">
+            En la web saldrá «{formatEta(Number(etaAmount), etaUnit) ?? "…"}» dentro de
+            «Próximas entregas», no en el stock. Cuando llegue, cámbialo a «En stock».
+          </p>
+        )}
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
         <Field label="Marca">
           <input

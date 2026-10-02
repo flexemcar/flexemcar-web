@@ -50,7 +50,7 @@ export default function VehicleModal({
 
   const whatsappMessage = `Hola, me interesa la ${vehicle.brand} ${vehicle.model} (${vehicle.year}, ${formatKm(
     vehicle.km
-  )}) por ${formatPrice(displayPrice.amount)}.`;
+  )}) por ${formatPrice(displayPrice.amount)}${vehicle.upcoming ? ", que está en camino" : ""}.`;
   const whatsappHref = links.whatsapp
     ? `https://wa.me/${links.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`
     : "#";
@@ -97,7 +97,9 @@ export default function VehicleModal({
                   vehicle.status === "reserved" ? "bg-brand-ink" : "bg-brand-orange"
                 }`}
               >
-                {statusLabels[vehicle.status]}
+                {vehicle.upcoming && vehicle.status === "available"
+                  ? "Próximamente"
+                  : statusLabels[vehicle.status]}
               </span>
             </div>
             {vehicle.photos.length > 1 && (
@@ -126,6 +128,11 @@ export default function VehicleModal({
             <h2 className="mt-1 font-heading text-2xl font-extrabold uppercase text-brand-ink sm:text-3xl">
               {vehicle.brand} {vehicle.model}
             </h2>
+            {vehicle.upcoming && (
+              <p className="mt-1 text-sm font-semibold text-brand-orange">
+                En camino{vehicle.eta ? ` · ${vehicle.eta}` : ""}
+              </p>
+            )}
 
             <div className="mt-3 flex flex-wrap gap-2">
               {[String(vehicle.year), formatKm(vehicle.km), vehicle.fuel, vehicle.transmission].map(

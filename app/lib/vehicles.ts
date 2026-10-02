@@ -27,6 +27,9 @@ export type Vehicle = {
   seats: number | null;
   ecoLabel: string | null;
   vehicleType: string | null;
+  // Proxima entrega: aun no ha llegado. Sale en "Proximas entregas", no en el stock.
+  upcoming: boolean;
+  eta: string | null;
   photos: VehiclePhoto[];
 };
 
@@ -103,3 +106,25 @@ export const statusLabels: Record<VehicleStatus, string> = {
   reserved: "Reservado",
   sold: "Vendido",
 };
+
+// Llegada prevista de una proxima entrega: el panel elige numero + unidad y se
+// guarda ya como texto ("Llega en 2 semanas") en `eta`.
+export const etaUnits = [
+  { value: "dias", singular: "día", plural: "días" },
+  { value: "semanas", singular: "semana", plural: "semanas" },
+  { value: "meses", singular: "mes", plural: "meses" },
+] as const;
+
+export function formatEta(amount: number, unit: string): string | null {
+  const u = etaUnits.find((x) => x.value === unit);
+  if (!u || !Number.isInteger(amount) || amount < 1) return null;
+  return `Llega en ${amount} ${amount === 1 ? u.singular : u.plural}`;
+}
+
+// Inverso de formatEta, para rellenar el panel al editar.
+export function parseEta(eta: string | null): { amount: number; unit: string } | null {
+  const m = eta?.match(/^Llega en (\d+) (\S+)$/);
+  if (!m) return null;
+  const u = etaUnits.find((x) => x.singular === m[2] || x.plural === m[2]);
+  return u ? { amount: Number(m[1]), unit: u.value } : null;
+}

@@ -21,6 +21,8 @@ type VehicleRow = {
   seats: number | null;
   eco_label: string | null;
   vehicle_type: string | null;
+  upcoming: boolean | null;
+  eta: string | null;
   vehicle_photos: { id: string; storage_path: string; position: number }[];
 };
 
@@ -48,6 +50,8 @@ function mapVehicleRow(
     seats: row.seats,
     ecoLabel: row.eco_label,
     vehicleType: row.vehicle_type,
+    upcoming: row.upcoming === true,
+    eta: row.eta,
     photos: mapPhotos(row.vehicle_photos, getPublicUrl),
   };
 }
@@ -69,11 +73,14 @@ function mapPhotos(
 // Trae todos los vehiculos con sus fotos, ordenados por mas recientes.
 // `includeSold` controla si se incluyen los ya vendidos (el admin los ve
 // todos; la web publica solo disponibles/reservados).
+// `upcoming`: true solo proximas entregas, false solo los que ya estan en la
+// campa, sin indicar trae ambos (el admin).
 // Si Supabase falla (mal configurado o caido) devuelve lista vacia en vez de
 // tumbar la home publica: el admin sí necesita ver el error, ver getVehicleById.
 export async function getVehicles({
   includeSold = true,
-}: { includeSold?: boolean } = {}): Promise<Vehicle[]> {
+  upcoming,
+}: { includeSold?: boolean; upcoming?: boolean } = {}): Promise<Vehicle[]> {
   try {
     const supabase = await createClient();
     const getPublicUrl = (path: string) =>
@@ -87,6 +94,9 @@ export async function getVehicles({
     if (!includeSold) {
       query = query.neq("status", "sold");
     }
+    if (upcoming !== undefined) {
+      query = query.eq("upcoming", upcoming);
+    }
 
     const { data, error } = await query;
     if (error) throw error;
@@ -98,13 +108,17 @@ export async function getVehicles({
   }
 }
 
-// Cuenta rapida sin traer fotos, para las estadisticas de la home.
+// Cuenta rapida sin traer fotos, para las estadisticas de la home. No cuenta
+// las proximas entregas: todavia no estan en stock.
 export async function getVehicleCount({
   includeSold = false,
 }: { includeSold?: boolean } = {}): Promise<number> {
   try {
     const supabase = await createClient();
-    let query = supabase.from("vehicles").select("*", { count: "exact", head: true });
+    let query = supabase
+      .from("vehicles")
+      .select("*", { count: "exact", head: true })
+      .eq("upcoming", false);
     if (!includeSold) {
       query = query.neq("status", "sold");
     }

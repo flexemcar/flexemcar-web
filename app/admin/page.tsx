@@ -66,6 +66,11 @@ export default async function AdminPage() {
               </div>
 
               <div className="flex w-full items-center gap-4 border-t border-warm-50/10 pt-3 sm:w-auto sm:border-0 sm:pt-0">
+                {v.upcoming && (
+                  <span className="rounded-full bg-sky-500/20 px-3 py-1 text-xs font-bold text-sky-300">
+                    Próxima entrega
+                  </span>
+                )}
                 <span
                   className={`rounded-full px-3 py-1 text-xs font-bold ${statusStyles[v.status]}`}
                 >
