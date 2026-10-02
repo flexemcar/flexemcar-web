@@ -7,11 +7,9 @@ export type Reel = {
   tiktokId: string | null;
 };
 
-// Solo TikTok por ahora (Instagram descartado). Basta con pegar la URL real
-// del vídeo en videoUrl — la miniatura y el texto se traen en vivo desde
-// TikTok (ver app/lib/tiktokOembed.ts) y se mantienen actualizados solos.
-// coverImage/caption aquí son solo el placeholder por si el fetch fallara.
-export const reels: Reel[] = [
+// Los videos se gestionan desde el panel (/admin/videos, tabla `reels`).
+// Esta lista es solo el respaldo por si la base de datos no responde.
+export const fallbackReelUrls = [
   "https://www.tiktok.com/@flexemcar/video/7679028117096254753",
   "https://www.tiktok.com/@flexemcar/video/7678741195236986145",
   "https://www.tiktok.com/@flexemcar/video/7678660953638030624",
@@ -22,11 +20,16 @@ export const reels: Reel[] = [
   "https://www.tiktok.com/@flexemcar/video/7673896192169807137",
   "https://www.tiktok.com/@flexemcar/video/7673192556695538976",
   "https://www.tiktok.com/@flexemcar/video/7673164693531266337",
-].map((videoUrl, i) => ({
-  id: `reel-${i + 1}`,
-  platform: "tiktok" as const,
-  videoUrl,
-  coverImage: null,
-  caption: "Flexemcar en TikTok",
-  tiktokId: videoUrl.match(/\/video\/(\d+)/)?.[1] ?? null,
-}));
+];
+
+// coverImage/caption son el placeholder por si el oEmbed de TikTok fallara.
+export function toReel(videoUrl: string, id: string): Reel {
+  return {
+    id,
+    platform: "tiktok",
+    videoUrl,
+    coverImage: null,
+    caption: "Flexemcar en TikTok",
+    tiktokId: videoUrl.match(/\/video\/(\d+)/)?.[1] ?? null,
+  };
+}

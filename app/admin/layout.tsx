@@ -22,14 +22,20 @@ export default async function AdminLayout({
   return (
     <div className="min-h-screen bg-dark-950">
       {isAdminUser(user) && (
-        <header className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-warm-50/10">
+        <header className="flex flex-wrap items-center justify-between gap-y-2 px-4 sm:px-6 py-4 border-b border-warm-50/10">
           <Link
             href="/admin"
             className="font-heading uppercase font-extrabold text-warm-50"
           >
             Panel Flexemcar
           </Link>
-          <div className="flex items-center gap-4 text-sm">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+            <Link href="/admin" className="text-warm-50/70 hover:text-brand-orange transition">
+              Vehículos
+            </Link>
+            <Link href="/admin/videos" className="text-warm-50/70 hover:text-brand-orange transition">
+              Vídeos
+            </Link>
             <Link href="/" className="text-warm-50/70 hover:text-brand-orange transition">
               Ver web
             </Link>
