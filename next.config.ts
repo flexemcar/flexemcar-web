@@ -16,6 +16,11 @@ const nextConfig: NextConfig = {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
   images: {
+    // Las fotos de Supabase llegan con "Cache-Control: no-cache", asi que con
+    // el valor por defecto (4 h) cada foto optimizada caducaba enseguida y se
+    // volvia a transformar, gastando el cupo mensual de Vercel. Cada foto se
+    // guarda con un nombre unico (uuid) y nunca se sobrescribe: 31 dias es seguro.
+    minimumCacheTTL: 2678400,
     remotePatterns: [
       {
         protocol: "https",
