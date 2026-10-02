@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { calculateMonthlyPayment, financingConfig } from "@/app/lib/financing";
+import { useEffect, useRef, useState } from "react";
 import { links } from "@/app/lib/links";
 import { getDisplayPrice, sizeAndPower, statusLabels, type Vehicle } from "@/app/lib/vehicles";
 
@@ -74,10 +73,6 @@ export default function VehicleModal({
   }, [activePhoto]);
 
   const displayPrice = getDisplayPrice(vehicle);
-  const basePrice = vehicle.cashPrice ?? vehicle.price ?? 0;
-  const maxEntrada = Math.max(Math.round(Math.min(basePrice, 15000) / 100) * 100, 500);
-  const [entrada, setEntrada] = useState(Math.round(maxEntrada * 0.2 / 100) * 100);
-  const [plazo, setPlazo] = useState(48);
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -93,13 +88,6 @@ export default function VehicleModal({
       document.body.style.overflow = "";
     };
   }, [onClose, photoCount]);
-
-  const amountToFinance = Math.max(basePrice - entrada, 0);
-  const monthly = useMemo(
-    () => calculateMonthlyPayment(amountToFinance, plazo, financingConfig.tin),
-    [amountToFinance, plazo]
-  );
-  const totalToRepay = entrada + monthly * plazo;
 
   const whatsappMessage = `Hola, me interesa la ${vehicle.brand} ${vehicle.model} (${vehicle.year}, ${formatKm(
     vehicle.km
@@ -140,7 +128,7 @@ export default function VehicleModal({
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerEnd}
               onPointerCancel={handlePointerEnd}
-              className={`relative aspect-[4/3] min-h-[240px] shrink-0 overflow-hidden bg-gradient-to-br from-warm-200 to-brand-ink/20 sm:aspect-auto sm:min-h-0 sm:flex-1 touch-pan-y select-none ${
+              className={`relative aspect-[4/3] min-h-[240px] shrink-0 overflow-hidden bg-gradient-to-br from-warm-200 to-brand-ink/20 touch-pan-y select-none ${
                 photoCount > 1 ? (dragging ? "cursor-grabbing" : "cursor-grab") : ""
               }`}
             >
@@ -271,62 +259,6 @@ export default function VehicleModal({
                   </p>
                 </div>
               )}
-            </div>
-
-            <div className="mt-4 rounded-2xl border border-warm-200 bg-warm-50 p-4">
-              <div className="flex items-center justify-between">
-                <p className="text-xs font-bold uppercase text-brand-ink">Calcula tu cuota</p>
-                <p className="text-[11px] text-brand-ink/50">
-                  TIN {financingConfig.tin}% · TAE {financingConfig.tae}%
-                </p>
-              </div>
-
-              <div className="mt-3">
-                <div className="flex items-center justify-between text-xs font-semibold text-brand-ink/70">
-                  <span>Entrada</span>
-                  <span>{formatPrice(entrada)}</span>
-                </div>
-                <input
-                  type="range"
-                  min={0}
-                  max={maxEntrada}
-                  step={100}
-                  value={entrada}
-                  onChange={(e) => setEntrada(Number(e.target.value))}
-                  className="mt-1 w-full accent-brand-orange"
-                />
-              </div>
-
-              <div className="mt-3">
-                <div className="flex items-center justify-between text-xs font-semibold text-brand-ink/70">
-                  <span>Plazo</span>
-                  <span>{plazo} meses</span>
-                </div>
-                <input
-                  type="range"
-                  min={financingConfig.minTermMonths}
-                  max={financingConfig.maxTermMonths}
-                  step={financingConfig.termStepMonths}
-                  value={plazo}
-                  onChange={(e) => setPlazo(Number(e.target.value))}
-                  className="mt-1 w-full accent-brand-orange"
-                />
-              </div>
-
-              <div className="mt-4 flex items-end justify-between border-t border-warm-200 pt-3">
-                <div>
-                  <p className="text-xs font-semibold uppercase text-brand-ink/50">
-                    Cuota mensual
-                  </p>
-                  <p className="font-heading text-2xl font-extrabold text-brand-orange">
-                    {formatPrice(monthly)}/mes
-                  </p>
-                </div>
-                <div className="text-right text-[11px] text-brand-ink/50">
-                  <p>Importe a financiar {formatPrice(amountToFinance)}</p>
-                  <p>Total a devolver {formatPrice(totalToRepay)}</p>
-                </div>
-              </div>
             </div>
 
             <a
