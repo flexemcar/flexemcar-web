@@ -146,11 +146,11 @@ export default function WelcomeVideoModal() {
           onClick={close}
           aria-label="Cerrar vídeo"
           tabIndex={open ? 0 : -1}
-          className="absolute -top-2 -right-2 z-20 flex size-6 items-center justify-center rounded-full bg-brand-ink text-white shadow-lg ring-1 ring-white transition-transform hover:scale-110"
+          className="absolute -top-4 -right-4 z-20 flex size-10 items-center justify-center rounded-full bg-brand-ink text-white shadow-lg ring-2 ring-white transition-transform hover:scale-110"
         >
           <svg
             viewBox="0 0 24 24"
-            className="size-3"
+            className="size-5"
             fill="none"
             stroke="currentColor"
             strokeWidth={2.5}
