@@ -234,6 +234,18 @@ export default function VehicleModal({
         </div>
 
         <div className="border-t border-warm-200 p-6 sm:p-8">
+          {vehicle.description && (
+            <>
+              <h3 className="text-xs font-bold uppercase tracking-wide text-brand-ink/50">
+                Descripción
+              </h3>
+              {/* pre-line respeta los saltos de parrafo que se escriben en el panel */}
+              <p className="mt-3 mb-8 max-w-3xl whitespace-pre-line text-sm leading-relaxed text-brand-ink/80">
+                {vehicle.description}
+              </p>
+            </>
+          )}
+
           <h3 className="text-xs font-bold uppercase tracking-wide text-brand-ink/50">
             Ficha técnica
           </h3>
