@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/app/lib/supabase/server";
 import { signOutAction } from "@/app/admin/actions";
 import { isAdminUser } from "@/app/lib/admin";
+import AdminNav from "@/app/admin/AdminNav";
 
 export const metadata: Metadata = {
   title: "Panel Flexemcar",
@@ -30,12 +31,6 @@ export default async function AdminLayout({
             Panel Flexemcar
           </Link>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-            <Link href="/admin" className="text-warm-50/70 hover:text-brand-orange transition">
-              Vehículos
-            </Link>
-            <Link href="/admin/videos" className="text-warm-50/70 hover:text-brand-orange transition">
-              Vídeos
-            </Link>
             <Link href="/" className="text-warm-50/70 hover:text-brand-orange transition">
               Ver web
             </Link>
@@ -50,6 +45,7 @@ export default async function AdminLayout({
           </div>
         </header>
       )}
+      {isAdminUser(user) && <AdminNav />}
       {children}
     </div>
   );
