@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useFormStatus } from "react-dom";
+import { compressImage, formatMb, MAX_PHOTOS_BYTES } from "@/app/admin/compressImage";
 import {
   brandOptions,
   ecoLabelOptions,
@@ -53,9 +55,54 @@ export default function VehicleForm({
   const initialEta = parseEta(initial?.eta ?? null);
   const [etaAmount, setEtaAmount] = useState(String(initialEta?.amount ?? 2));
   const [etaUnit, setEtaUnit] = useState<string>(initialEta?.unit ?? "semanas");
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [preparingPhotos, setPreparingPhotos] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const photosBytes = photos.reduce((sum, f) => sum + f.size, 0);
+  const photosTooBig = photosBytes > MAX_PHOTOS_BYTES;
+
+  async function handlePhotosChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    setError(null);
+    setPreparingPhotos(true);
+    try {
+      setPhotos(await Promise.all(files.map((f) => compressImage(f))));
+    } finally {
+      setPreparingPhotos(false);
+    }
+  }
+
+  // Validacion en onSubmit (antes de la accion) para que, si algo falta, no se
+  // envie nada y no se borre lo que ya esta escrito en el formulario.
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    const data = new FormData(e.currentTarget);
+    const price = String(data.get("price") ?? "").trim();
+    const cashPrice = String(data.get("cash_price") ?? "").trim();
+    let message: string | null = null;
+    if (!price && !cashPrice) {
+      message = "Indica al menos un precio (financiado o al contado).";
+    } else if (preparingPhotos) {
+      message = "Espera un momento: las fotos aún se están preparando.";
+    } else if (photosTooBig) {
+      message = `Las fotos pesan ${formatMb(photosBytes)} y el máximo por guardado es ${formatMb(MAX_PHOTOS_BYTES)}. Elige menos fotos ahora y añade el resto después desde «Editar».`;
+    }
+    if (message) {
+      e.preventDefault();
+      setError(message);
+    } else {
+      setError(null);
+    }
+  }
+
+  // Se envian las fotos ya comprimidas en lugar de las originales del input.
+  async function submitAction(formData: FormData) {
+    formData.delete("photos");
+    photos.forEach((f) => formData.append("photos", f));
+    await action(formData);
+  }
 
   return (
-    <form action={action} className="space-y-4 max-w-xl">
+    <form action={submitAction} onSubmit={handleSubmit} className="space-y-4 max-w-xl">
       <div className="rounded-xl bg-dark-900 border border-warm-50/10 p-3">
         <p className="text-sm font-semibold text-warm-50/80">¿Dónde sale en la web?</p>
         <div className="mt-2 flex flex-wrap items-stretch gap-2">
@@ -334,17 +381,41 @@ export default function VehicleForm({
           name="photos"
           multiple
           accept="image/*"
+          onChange={handlePhotosChange}
           className="block w-full text-sm text-warm-50/80 file:mr-3 file:rounded-full file:border-0 file:bg-brand-orange file:px-4 file:py-2 file:text-sm file:font-bold file:text-white"
         />
       </Field>
+      {preparingPhotos && <p className="text-sm text-warm-50/70">Preparando fotos…</p>}
+      {!preparingPhotos && photos.length > 0 && (
+        <p className={`text-sm ${photosTooBig ? "font-semibold text-red-400" : "text-warm-50/70"}`}>
+          {photos.length} {photos.length === 1 ? "foto lista" : "fotos listas"} ·{" "}
+          {formatMb(photosBytes)}
+          {photosTooBig &&
+            ` · Demasiado para un solo guardado (máximo ${formatMb(MAX_PHOTOS_BYTES)}): elige menos y añade el resto después desde «Editar».`}
+        </p>
+      )}
 
-      <button
-        type="submit"
-        className="rounded-full bg-brand-orange px-6 py-2.5 font-bold text-white hover:brightness-110 transition"
-      >
-        {submitLabel}
-      </button>
+      {error && (
+        <p role="alert" className="rounded-lg border border-red-400/40 bg-red-500/10 px-3 py-2 text-sm font-semibold text-red-300">
+          {error}
+        </p>
+      )}
+
+      <SubmitButton label={submitLabel} />
     </form>
+  );
+}
+
+function SubmitButton({ label }: { label: string }) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="rounded-full bg-brand-orange px-6 py-2.5 font-bold text-white hover:brightness-110 transition disabled:opacity-60 disabled:hover:brightness-100"
+    >
+      {pending ? "Guardando… (no cierres la página)" : label}
+    </button>
   );
 }
 
