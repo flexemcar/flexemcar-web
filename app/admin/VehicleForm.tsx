@@ -309,7 +309,7 @@ export default function VehicleForm({
             ))}
           </select>
         </Field>
-        <Field label="Carrocería (opcional)">
+        <Field label="Tamaño / carrocería (opcional)">
           <input
             type="text"
             name="body_config"

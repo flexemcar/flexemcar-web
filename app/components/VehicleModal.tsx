@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { calculateMonthlyPayment, financingConfig } from "@/app/lib/financing";
 import { links } from "@/app/lib/links";
-import { getDisplayPrice, statusLabels, type Vehicle } from "@/app/lib/vehicles";
+import { getDisplayPrice, sizeAndPower, statusLabels, type Vehicle } from "@/app/lib/vehicles";
 
 function formatPrice(n: number) {
   return Math.round(n).toLocaleString("es-ES") + " €";
@@ -135,7 +135,13 @@ export default function VehicleModal({
             )}
 
             <div className="mt-3 flex flex-wrap gap-2">
-              {[String(vehicle.year), formatKm(vehicle.km), vehicle.fuel, vehicle.transmission].map(
+              {[
+                String(vehicle.year),
+                formatKm(vehicle.km),
+                vehicle.fuel,
+                vehicle.transmission,
+                ...sizeAndPower(vehicle),
+              ].map(
                 (chip) => (
                   <span
                     key={chip}
@@ -258,7 +264,7 @@ export default function VehicleModal({
               ["Cambio", vehicle.transmission],
               vehicle.engine ? ["Motor", vehicle.engine] : null,
               vehicle.powerCv ? ["Potencia", `${vehicle.powerCv} CV`] : null,
-              vehicle.bodyConfig ? ["Carrocería", vehicle.bodyConfig] : null,
+              vehicle.bodyConfig ? ["Tamaño", vehicle.bodyConfig] : null,
               vehicle.seats ? ["Plazas", String(vehicle.seats)] : null,
               vehicle.ecoLabel ? ["Etiqueta medioambiental", vehicle.ecoLabel] : null,
               ["Garantía", "Hasta 2 años"],

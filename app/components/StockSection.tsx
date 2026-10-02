@@ -39,7 +39,7 @@ export default async function StockSection() {
             Furgos disponibles
           </h2>
           <p className="mt-2 text-brand-ink/70">
-            Todas revisadas y con historial verificado. Filtra por marca, tipo,
+            Todas revisadas y con historial verificado. Filtra por marca, tipo, tamaño, potencia,
             kilómetros, año y precio, y encuentra la tuya —{" "}
             <span className="font-semibold">{vehicles.length} vehículos en stock</span>.
           </p>

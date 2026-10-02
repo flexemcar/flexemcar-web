@@ -128,3 +128,27 @@ export function parseEta(eta: string | null): { amount: number; unit: string } |
   const u = etaUnits.find((x) => x.singular === m[2] || x.plural === m[2]);
   return u ? { amount: Number(m[1]), unit: u.value } : null;
 }
+
+// Tamaño de la furgoneta: largo (L1-L4) y alto (H1-H3), sacados del campo
+// libre de carroceria ("L3H2", "L3H2 Mixta"...). null si no aparece.
+export const lengthOptions = ["L1", "L2", "L3", "L4"];
+export const heightOptions = ["H1", "H2", "H3"];
+
+export function parseSize(bodyConfig: string | null): {
+  length: string | null;
+  height: string | null;
+} {
+  const text = (bodyConfig ?? "").toUpperCase();
+  return {
+    length: text.match(/L([1-4])/)?.[0] ?? null,
+    height: text.match(/H([1-3])/)?.[0] ?? null,
+  };
+}
+
+// Tamaño y potencia en una linea corta para tarjetas y cabecera de la ficha.
+export function sizeAndPower(v: Pick<Vehicle, "bodyConfig" | "powerCv">): string[] {
+  const parts: string[] = [];
+  if (v.bodyConfig) parts.push(v.bodyConfig);
+  if (v.powerCv) parts.push(`${v.powerCv} CV`);
+  return parts;
+}

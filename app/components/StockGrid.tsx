@@ -5,6 +5,10 @@ import { useMemo, useState } from "react";
 import {
   brandOptions,
   getDisplayPrice,
+  heightOptions,
+  lengthOptions,
+  parseSize,
+  sizeAndPower,
   vehicleTypeOptions,
   type Vehicle,
 } from "@/app/lib/vehicles";
@@ -42,6 +46,10 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
   const [kmTo, setKmTo] = useState("");
   const [yearFrom, setYearFrom] = useState("");
   const [yearTo, setYearTo] = useState("");
+  const [lengths, setLengths] = useState<string[]>([]);
+  const [heights, setHeights] = useState<string[]>([]);
+  const [cvFrom, setCvFrom] = useState("");
+  const [cvTo, setCvTo] = useState("");
   const [selected, setSelected] = useState<Vehicle | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -55,9 +63,15 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
       if (kmTo && v.km > Number(kmTo)) return false;
       if (yearFrom && v.year < Number(yearFrom)) return false;
       if (yearTo && v.year > Number(yearTo)) return false;
+      const size = parseSize(v.bodyConfig);
+      if (lengths.length > 0 && (!size.length || !lengths.includes(size.length))) return false;
+      if (heights.length > 0 && (!size.height || !heights.includes(size.height))) return false;
+      if ((cvFrom || cvTo) && !v.powerCv) return false;
+      if (cvFrom && v.powerCv! < Number(cvFrom)) return false;
+      if (cvTo && v.powerCv! > Number(cvTo)) return false;
       return true;
     });
-  }, [vehicles, maxPrice, brands, types, kmFrom, kmTo, yearFrom, yearTo]);
+  }, [vehicles, maxPrice, brands, types, kmFrom, kmTo, yearFrom, yearTo, lengths, heights, cvFrom, cvTo]);
 
   const hasFilters =
     maxPrice ||
@@ -66,14 +80,20 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
     kmFrom ||
     kmTo ||
     yearFrom ||
-    yearTo;
+    yearTo ||
+    lengths.length > 0 ||
+    heights.length > 0 ||
+    cvFrom ||
+    cvTo;
 
   const activeCount =
     (maxPrice ? 1 : 0) +
     (brands.length > 0 ? 1 : 0) +
     (types.length > 0 ? 1 : 0) +
     (kmFrom || kmTo ? 1 : 0) +
-    (yearFrom || yearTo ? 1 : 0);
+    (yearFrom || yearTo ? 1 : 0) +
+    (lengths.length > 0 || heights.length > 0 ? 1 : 0) +
+    (cvFrom || cvTo ? 1 : 0);
 
   function clearFilters() {
     setMaxPrice("");
@@ -83,6 +103,10 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
     setKmTo("");
     setYearFrom("");
     setYearTo("");
+    setLengths([]);
+    setHeights([]);
+    setCvFrom("");
+    setCvTo("");
   }
 
   return (
@@ -140,8 +164,22 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
                 selected={types}
                 onToggle={(v) => setTypes((prev) => toggle(prev, v))}
               />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <ChipGroup
+                  label="Tamaño · Largo"
+                  options={lengthOptions}
+                  selected={lengths}
+                  onToggle={(v) => setLengths((prev) => toggle(prev, v))}
+                />
+                <ChipGroup
+                  label="Tamaño · Alto"
+                  options={heightOptions}
+                  selected={heights}
+                  onToggle={(v) => setHeights((prev) => toggle(prev, v))}
+                />
+              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-wide text-brand-ink/60 mb-1.5">
                     Precio
@@ -218,6 +256,35 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
                     />
                   </div>
                 </div>
+
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wide text-brand-ink/60 mb-1.5">
+                    Potencia (CV)
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      placeholder="Desde"
+                      min={0}
+                      step={10}
+                      value={cvFrom}
+                      onChange={(e) => setCvFrom(e.target.value)}
+                      className={rangeInputClass}
+                    />
+                    <span className="text-brand-ink/40">–</span>
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      placeholder="Hasta"
+                      min={0}
+                      step={10}
+                      value={cvTo}
+                      onChange={(e) => setCvTo(e.target.value)}
+                      className={rangeInputClass}
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="flex items-center justify-between gap-3 pt-3 border-t border-warm-200">
@@ -287,6 +354,11 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
                 <p className="mt-1 text-sm text-brand-ink/60">
                   {v.year} · {formatKm(v.km)} · {v.fuel}
                 </p>
+                {sizeAndPower(v).length > 0 && (
+                  <p className="mt-0.5 text-sm font-semibold text-brand-ink/80">
+                    {sizeAndPower(v).join(" · ")}
+                  </p>
+                )}
                 <div className="mt-3 flex items-center justify-between">
                   <span className="font-heading font-extrabold text-xl text-brand-orange">
                     {formatPrice(getDisplayPrice(v).amount)}

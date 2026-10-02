@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { links } from "@/app/lib/links";
-import { getDisplayPrice, type Vehicle } from "@/app/lib/vehicles";
+import { getDisplayPrice, sizeAndPower, type Vehicle } from "@/app/lib/vehicles";
 import VehicleModal from "@/app/components/VehicleModal";
 
 function notifyHref(v: Vehicle) {
@@ -61,6 +61,9 @@ export default function UpcomingGrid({ vehicles }: { vehicles: Vehicle[] }) {
               <p className="mt-1 text-sm text-brand-ink/60">
                 {v.year} · {v.km.toLocaleString("es-ES")} km · {v.fuel}
               </p>
+              {sizeAndPower(v).length > 0 && (
+                <p className="mt-0.5 text-sm font-semibold text-brand-ink/80">{sizeAndPower(v).join(" · ")}</p>
+              )}
               <div className="mt-3 flex items-center justify-between gap-3">
                 <span className="font-heading font-extrabold text-xl text-brand-orange">
                   {getDisplayPrice(v).amount.toLocaleString("es-ES")} €
