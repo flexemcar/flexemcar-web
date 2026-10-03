@@ -16,6 +16,10 @@ import { getReels } from "@/app/lib/getReels";
 // Fotos de fondo del banner "Tú decisión comienza aquí" (public/promo). El banner
 // enseña solo una franja de cada foto vertical: objectPosition la centra en el
 // morro (faros, parrilla y marca) de cada vehículo.
+// Vídeo de bienvenida (WelcomeVideoModal, vídeo en public/video). Oculto a petición
+// del cliente el 2026-10-03. Para volver a mostrarlo, poner esto a true.
+const SHOW_WELCOME_VIDEO = false;
+
 const promoImages = [
   { src: "/promo/promo-1.jpg", objectPosition: "50% 80%" },
   { src: "/promo/promo-2.jpg", objectPosition: "50% 67%" },
@@ -33,7 +37,7 @@ export default async function Home() {
         <Hero />
         <Marquee />
         <ReelsSection reels={reels} />
-        <WelcomeVideoModal />
+        {SHOW_WELCOME_VIDEO && <WelcomeVideoModal />}
         <StockSection />
         <UpcomingDeliveriesSection />
         <StatsSection />
