@@ -129,9 +129,9 @@ export function parseEta(eta: string | null): { amount: number; unit: string } |
   return u ? { amount: Number(m[1]), unit: u.value } : null;
 }
 
-// Tamaño de la furgoneta: largo (L1-L4) y alto (H1-H3), sacados del campo
+// Tamaño de la furgoneta: largo (L1-L5) y alto (H1-H3), sacados del campo
 // libre de carroceria ("L3H2", "L3H2 Mixta"...). null si no aparece.
-export const lengthOptions = ["L1", "L2", "L3", "L4"];
+export const lengthOptions = ["L1", "L2", "L3", "L4", "L5"];
 export const heightOptions = ["H1", "H2", "H3"];
 
 export function parseSize(bodyConfig: string | null): {
@@ -140,7 +140,7 @@ export function parseSize(bodyConfig: string | null): {
 } {
   const text = (bodyConfig ?? "").toUpperCase();
   return {
-    length: text.match(/L([1-4])/)?.[0] ?? null,
+    length: text.match(/L([1-5])/)?.[0] ?? null,
     height: text.match(/H([1-3])/)?.[0] ?? null,
   };
 }
