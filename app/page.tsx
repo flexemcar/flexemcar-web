@@ -11,6 +11,7 @@ import TestimonialsSection from "@/app/components/TestimonialsSection";
 import MapSection from "@/app/components/MapSection";
 import Footer from "@/app/components/Footer";
 import WelcomeVideoModal from "@/app/components/WelcomeVideoModal";
+import BuenaGenteSection from "@/app/components/BuenaGenteSection";
 import { getReels } from "@/app/lib/getReels";
 
 // Fotos de fondo del banner "Tú decisión comienza aquí" (public/promo). El banner
@@ -50,6 +51,7 @@ export default async function Home() {
           rounded
           images={promoImages}
         />
+        <BuenaGenteSection />
         <TestimonialsSection />
         <CtaBanner
           id="vende-tu-furgoneta"
