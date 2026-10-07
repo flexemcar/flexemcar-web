@@ -37,7 +37,7 @@ export default function BuenaGenteSection() {
           </div>
         </Reveal>
 
-        <Reveal className="mx-auto w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[360px]">
+        <Reveal className="mx-auto w-full max-w-[280px] sm:max-w-[320px] md:max-w-none md:w-[min(340px,calc((100svh-10rem)*0.5625))]">
           <BuenaGenteVideo />
         </Reveal>
       </div>
