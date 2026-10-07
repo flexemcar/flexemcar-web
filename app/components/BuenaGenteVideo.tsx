@@ -59,7 +59,6 @@ export default function BuenaGenteVideo() {
             </span>
           </span>
           <span className="text-sm font-bold uppercase tracking-widest">Dale al play</span>
-          <span className="mt-1 text-xs text-white/70">Con sonido · 0:42</span>
         </button>
       )}
     </div>
