@@ -96,6 +96,13 @@ export default function VehicleModal({
     ? `https://wa.me/${links.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`
     : "#";
 
+  const financingMessage = `Hola, me gustaría consultar las condiciones de financiación de la ${vehicle.brand} ${vehicle.model} (${vehicle.year}, ${formatKm(
+    vehicle.km
+  )}).`;
+  const financingHref = links.whatsapp
+    ? `https://wa.me/${links.whatsapp}?text=${encodeURIComponent(financingMessage)}`
+    : "#";
+
   const includedInPrice = [
     "Revisión completa y puesta a punto",
     "ITV recién pasada",
@@ -259,6 +266,33 @@ export default function VehicleModal({
                   </p>
                 </div>
               )}
+            </div>
+
+            <div className="mt-4 flex items-center gap-3 rounded-2xl bg-brand-orange/10 px-4 py-3">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-6 w-6 shrink-0 text-brand-orange"
+              >
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <path d="M2 10h20M6 15h4" />
+              </svg>
+              <p className="text-sm leading-snug text-brand-ink">
+                <span className="font-bold">Podemos financiarte.</span>{" "}
+                <a
+                  href={financingHref}
+                  target={links.whatsapp ? "_blank" : undefined}
+                  rel={links.whatsapp ? "noopener noreferrer" : undefined}
+                  className="font-semibold text-brand-orange underline underline-offset-2 hover:brightness-110"
+                >
+                  Consulta condiciones
+                </a>
+              </p>
             </div>
 
             <a
