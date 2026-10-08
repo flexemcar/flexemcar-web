@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
 import { links } from "@/app/lib/links";
 
@@ -11,13 +12,16 @@ import { links } from "@/app/lib/links";
 const RESEND_URL = "https://api.resend.com/emails";
 const DEFAULT_FROM = "Flexemcar Web <onboarding@resend.dev>";
 
-// Límite sencillo por IP. En Vercel cada instancia tiene su propia memoria,
-// así que frena abusos básicos pero no es un límite estricto.
+// Límite por IP: 5 solicitudes válidas cada 10 minutos. El límite de verdad
+// está en Supabase (migración 0009, función tasacion_rate_ok), que se comparte
+// entre todos los servidores de Vercel y no se pierde al reiniciarse. Si
+// Supabase no responde o la migración aún no se ha ejecutado, se usa este
+// límite en memoria como respaldo (cada instancia tiene el suyo).
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_PER_WINDOW = 5;
 const hits = new Map<string, number[]>();
 
-function tooManyRequests(ip: string) {
+function tooManyRequestsInMemory(ip: string) {
   const now = Date.now();
   const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
   recent.push(now);
@@ -28,6 +32,27 @@ function tooManyRequests(ip: string) {
     }
   }
   return recent.length > MAX_PER_WINDOW;
+}
+
+async function tooManyRequests(ip: string) {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (url && key) {
+    try {
+      const response = await fetch(`${url}/rest/v1/rpc/tasacion_rate_ok`, {
+        method: "POST",
+        headers: { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ p_ip_hash: createHash("sha256").update(ip).digest("hex") }),
+        cache: "no-store",
+        signal: AbortSignal.timeout(3000),
+      });
+      if (response.ok) return (await response.json()) !== true;
+      console.error("[tasacion] Límite en Supabase no disponible:", response.status);
+    } catch (error) {
+      console.error("[tasacion] Límite en Supabase no disponible:", error);
+    }
+  }
+  return tooManyRequestsInMemory(ip);
 }
 
 function text(value: unknown, max: number) {
@@ -82,7 +107,7 @@ export async function POST(request: Request) {
   // El límite solo cuenta solicitudes válidas: equivocarse al rellenar el
   // formulario no debe bloquear a nadie.
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  if (tooManyRequests(ip)) {
+  if (await tooManyRequests(ip)) {
     return fail("Has enviado varias solicitudes seguidas. Inténtalo de nuevo en unos minutos.", 429);
   }
 

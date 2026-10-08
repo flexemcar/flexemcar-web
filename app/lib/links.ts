@@ -14,7 +14,7 @@ export const links = {
 
 export const navItems = [
   { label: "Empresa", href: "#dia-a-dia" },
-  { label: "Comprar", href: "#stock" },
+  { label: "Comprar", href: "#stock-disponible" },
   { label: "Vender", href: "#vende-tu-furgoneta" },
   { label: "Opiniones", href: "#opiniones" },
   { label: "Contacto", href: "#contacto" },
