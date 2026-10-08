@@ -3,6 +3,7 @@ import { Barlow, Barlow_Condensed } from "next/font/google";
 import FloatingButtons from "@/app/components/FloatingButtons";
 import CookieConsent from "@/app/components/CookieConsent";
 import "./globals.css";
+import { siteUrl } from "@/app/lib/links";
 
 const barlow = Barlow({
   variable: "--font-barlow",
@@ -17,6 +18,7 @@ const barlowCondensed = Barlow_Condensed({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Flexemcar | Furgonetas de ocasión en Elche",
   description:
     "Compra y venta de furgonetas y camiones de ocasión revisados y garantizados en Flexemcar, Elche (Alicante).",

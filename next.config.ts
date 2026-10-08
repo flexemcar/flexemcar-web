@@ -11,7 +11,31 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
 ];
 
+// Direcciones de la web antigua (WordPress en flexemcar.com.es) que Google
+// tiene indexadas. Al pasar el dominio a esta web, llevan a la sección
+// equivalente en vez de dar error 404. Permanentes (308) para conservar el SEO.
+const stock = "/#stock-disponible";
+const oldSiteRedirects = [
+  { source: "/comprar", destination: stock },
+  { source: "/listados", destination: stock },
+  { source: "/ficha", destination: stock },
+  { source: "/listing-preview", destination: stock },
+  { source: "/listing-preview2", destination: stock },
+  { source: "/listing-preview3", destination: stock },
+  { source: "/listpreview222", destination: stock },
+  { source: "/wdk-listing/:slug*", destination: stock },
+  { source: "/vender", destination: "/#vende-tu-furgoneta" },
+  { source: "/contacto", destination: "/#contacto" },
+  { source: "/empresa", destination: "/#dia-a-dia" },
+  { source: "/politica-privacidad", destination: "/privacidad" },
+  { source: "/politica-de-cookies", destination: "/cookies" },
+  { source: "/mas-informacion-sobre-las-cookies", destination: "/cookies" },
+].map((r) => ({ ...r, permanent: true }));
+
 const nextConfig: NextConfig = {
+  async redirects() {
+    return oldSiteRedirects;
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

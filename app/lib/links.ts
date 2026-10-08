@@ -1,3 +1,7 @@
+// Dominio principal de la web. Se usa para el sitemap, robots y las URL
+// absolutas de las previsualizaciones al compartir enlaces.
+export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://flexemcar.com.es").replace(/\/$/, "");
+
 export const links = {
   mapsLocation: "https://www.google.com/maps?q=38.2822366,-0.68294&z=17&hl=es",
   mapsEmbed:
