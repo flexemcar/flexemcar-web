@@ -268,6 +268,15 @@ export default function VehicleModal({
               )}
             </div>
 
+            <a
+              href={whatsappHref}
+              target={links.whatsapp ? "_blank" : undefined}
+              rel={links.whatsapp ? "noopener noreferrer" : undefined}
+              className="mt-4 block rounded-full bg-brand-orange py-3 text-center font-bold text-white transition hover:brightness-110"
+            >
+              Me interesa · WhatsApp
+            </a>
+
             <div className="mt-4 flex items-center gap-3 rounded-2xl bg-brand-orange/10 px-4 py-3">
               <svg
                 aria-hidden="true"
@@ -294,15 +303,6 @@ export default function VehicleModal({
                 </a>
               </p>
             </div>
-
-            <a
-              href={whatsappHref}
-              target={links.whatsapp ? "_blank" : undefined}
-              rel={links.whatsapp ? "noopener noreferrer" : undefined}
-              className="mt-4 block rounded-full bg-brand-orange py-3 text-center font-bold text-white transition hover:brightness-110"
-            >
-              Me interesa · WhatsApp
-            </a>
           </div>
         </div>
 
