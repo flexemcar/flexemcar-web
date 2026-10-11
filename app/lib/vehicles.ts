@@ -64,7 +64,17 @@ export const vehicleTypeOptions = [
   "Furgón cerrado",
 ];
 
+// Caracteristicas por las que se puede filtrar en la web (pedidas por el
+// cliente). Se guardan dentro de `equipment` con este texto exacto.
+export const featureFilterOptions = [
+  "Sin AdBlue",
+  "IVA deducible",
+  "Isotermo",
+  "Equipo de frío",
+];
+
 export const equipmentOptions = [
+  ...featureFilterOptions,
   "Aire acondicionado",
   "Climatizador",
   "Bluetooth",

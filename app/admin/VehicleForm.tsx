@@ -351,7 +351,12 @@ export default function VehicleForm({
       <div>
         <p className="text-sm font-semibold text-warm-50/80">Equipamiento</p>
         <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2 rounded-lg bg-dark-900 border border-warm-50/10 p-3">
-          {equipmentOptions.map((item) => (
+          {[
+            ...equipmentOptions,
+            // Extras escritos a mano en el alta: se muestran marcados para
+            // que no se pierdan al guardar.
+            ...(initial?.equipment ?? []).filter((e) => !equipmentOptions.includes(e)),
+          ].map((item) => (
             <label key={item} className="flex items-center gap-2 text-sm text-warm-50/80">
               <input
                 type="checkbox"

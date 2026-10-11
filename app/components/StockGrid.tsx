@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import {
   brandOptions,
+  featureFilterOptions,
   getDisplayPrice,
   heightOptions,
   lengthOptions,
@@ -42,6 +43,7 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
   const [maxPrice, setMaxPrice] = useState("");
   const [brands, setBrands] = useState<string[]>([]);
   const [types, setTypes] = useState<string[]>([]);
+  const [features, setFeatures] = useState<string[]>([]);
   const [kmFrom, setKmFrom] = useState("");
   const [kmTo, setKmTo] = useState("");
   const [yearFrom, setYearFrom] = useState("");
@@ -59,6 +61,7 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
       if (brands.length > 0 && !brands.includes(v.brand)) return false;
       if (types.length > 0 && (!v.vehicleType || !types.includes(v.vehicleType)))
         return false;
+      if (features.some((f) => !v.equipment.includes(f))) return false;
       if (kmFrom && v.km < Number(kmFrom)) return false;
       if (kmTo && v.km > Number(kmTo)) return false;
       if (yearFrom && v.year < Number(yearFrom)) return false;
@@ -71,12 +74,13 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
       if (cvTo && v.powerCv! > Number(cvTo)) return false;
       return true;
     });
-  }, [vehicles, maxPrice, brands, types, kmFrom, kmTo, yearFrom, yearTo, lengths, heights, cvFrom, cvTo]);
+  }, [vehicles, maxPrice, brands, types, features, kmFrom, kmTo, yearFrom, yearTo, lengths, heights, cvFrom, cvTo]);
 
   const hasFilters =
     maxPrice ||
     brands.length > 0 ||
     types.length > 0 ||
+    features.length > 0 ||
     kmFrom ||
     kmTo ||
     yearFrom ||
@@ -90,6 +94,7 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
     (maxPrice ? 1 : 0) +
     (brands.length > 0 ? 1 : 0) +
     (types.length > 0 ? 1 : 0) +
+    (features.length > 0 ? 1 : 0) +
     (kmFrom || kmTo ? 1 : 0) +
     (yearFrom || yearTo ? 1 : 0) +
     (lengths.length > 0 || heights.length > 0 ? 1 : 0) +
@@ -99,6 +104,7 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
     setMaxPrice("");
     setBrands([]);
     setTypes([]);
+    setFeatures([]);
     setKmFrom("");
     setKmTo("");
     setYearFrom("");
@@ -163,6 +169,12 @@ export default function StockGrid({ vehicles }: { vehicles: Vehicle[] }) {
                 options={vehicleTypeOptions}
                 selected={types}
                 onToggle={(v) => setTypes((prev) => toggle(prev, v))}
+              />
+              <ChipGroup
+                label="Características"
+                options={featureFilterOptions}
+                selected={features}
+                onToggle={(v) => setFeatures((prev) => toggle(prev, v))}
               />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <ChipGroup
