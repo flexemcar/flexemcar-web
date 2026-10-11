@@ -20,7 +20,6 @@ export default async function StockSection() {
                   Detrás de cámaras
                 </span>
                 <h3 className="mt-4 font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-extrabold text-white leading-tight md:leading-[1.05]">
-                  Miguel,{" "}
                   <span className="md:block">¿sabías que teníamos</span>{" "}
                   <span className="md:block md:text-brand-orange">taller propio?</span>
                 </h3>
