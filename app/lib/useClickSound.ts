@@ -58,7 +58,9 @@ export function useClickSound(src: string) {
       const source = ctx.createBufferSource();
       source.buffer = buffer;
       const gain = ctx.createGain();
-      gain.gain.value = 0.5;
+      // El archivo tiene el pico en 0,51: 1,8 lo deja en ~0,92, casi al
+      // máximo sin distorsionar (antes 0,5).
+      gain.gain.value = 1.8;
       source.connect(gain).connect(ctx.destination);
       source.start(0);
     };
