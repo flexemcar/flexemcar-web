@@ -1,0 +1,103 @@
+# Copia de seguridad semanal de Flexemcar.
+# Guarda los datos de la web (vehículos, fotos y vídeos) y las migraciones SQL
+# como un archivo descargable en la pestaña Actions de GitHub, durante 60 días
+# (unas 8 copias). Usa la clave pública de Supabase, la misma que lleva la web:
+# solo lee lo que ya es público y no puede cambiar nada.
+# Si falla, GitHub manda un correo a la cuenta que editó este archivo por última vez.
+# Para lanzarla a mano: Actions > Copia de seguridad semanal > Run workflow.
+name: Copia de seguridad semanal
+
+on:
+  schedule:
+    - cron: "0 3 * * 1" # lunes a las 03:00 UTC (05:00 en verano, 04:00 en invierno)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write # para reactivar la tarea programada (ver último paso)
+
+jobs:
+  copia:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      SUPABASE_URL: https://xtbhbrvimtxnjlzlwtgx.supabase.co
+      SUPABASE_KEY: sb_publishable_twqC4enyg-YmoYSOVLG23g_hY8vr3ml
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Descargar datos y fotos
+        run: |
+          mkdir -p copia/esquema-sql
+          cp supabase/migrations/*.sql copia/esquema-sql/
+          node --input-type=module <<'JS'
+          import { mkdirSync, writeFileSync } from "node:fs";
+          import { dirname } from "node:path";
+          const U = process.env.SUPABASE_URL, K = process.env.SUPABASE_KEY;
+          const h = { apikey: K, Authorization: `Bearer ${K}` };
+          const out = "copia";
+          const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+          async function get(t) {
+            const r = await fetch(`${U}/rest/v1/${t}?select=*`, { headers: h });
+            if (!r.ok) throw new Error(`Tabla ${t}: HTTP ${r.status}`);
+            return r.json();
+          }
+          const vehicles = await get("vehicles");
+          const photos = await get("vehicle_photos");
+          const reels = await get("reels");
+          if (vehicles.length === 0) throw new Error("La tabla de vehículos ha llegado vacía");
+          writeFileSync(`${out}/vehicles.json`, JSON.stringify(vehicles, null, 2));
+          writeFileSync(`${out}/vehicle_photos.json`, JSON.stringify(photos, null, 2));
+          writeFileSync(`${out}/reels.json`, JSON.stringify(reels, null, 2));
+          let bytes = 0;
+          const fails = [];
+          for (const p of photos) {
+            let ok = false;
+            for (let a = 0; a < 6 && !ok; a++) {
+              try {
+                const r = await fetch(`${U}/storage/v1/object/public/vehicle-photos/${p.storage_path}`);
+                if (r.ok) {
+                  const b = Buffer.from(await r.arrayBuffer());
+                  const f = `${out}/fotos/${p.storage_path}`;
+                  mkdirSync(dirname(f), { recursive: true });
+                  writeFileSync(f, b);
+                  bytes += b.length;
+                  ok = true;
+                } else await wait(1500 * (a + 1));
+              } catch { await wait(1500 * (a + 1)); }
+            }
+            if (!ok) fails.push(p.storage_path);
+          }
+          const resumen = `Copia del ${new Date().toISOString().slice(0, 10)}: ${vehicles.length} vehículos, ${photos.length} fotos (${(bytes / 1048576).toFixed(0)} MB), ${reels.length} vídeos.`;
+          console.log(resumen);
+          writeFileSync(`${out}/LEEME.txt`, [
+            "COPIA DE SEGURIDAD FLEXEMCAR", resumen, "",
+            "- vehicles.json, vehicle_photos.json, reels.json: tablas completas de Supabase.",
+            "- fotos/<id-vehiculo>/: archivos del bucket vehicle-photos, con la ruta de storage_path.",
+            "- esquema-sql/: migraciones para recrear las tablas en un Supabase nuevo.", "",
+            "Restaurar: ejecutar esquema-sql/ en orden en el SQL Editor, subir fotos/ al bucket",
+            "vehicle-photos e importar vehicles.json, vehicle_photos.json y reels.json en ese orden.",
+            "El código de la web está en el propio repositorio de GitHub.",
+          ].join("\n"));
+          if (fails.length) throw new Error(`No se pudieron descargar ${fails.length} fotos: ${fails.slice(0, 5).join(", ")}`);
+          JS
+
+      - name: Guardar la copia (60 días)
+        uses: actions/upload-artifact@v4
+        with:
+          name: copia-flexemcar-${{ github.run_number }}
+          path: copia
+          retention-days: 60
+          compression-level: 0 # las fotos ya van comprimidas
+
+      # GitHub apaga las tareas programadas si el repositorio pasa 60 días sin
+      # cambios. Reactivarla en cada ejecución evita que la copia se pare sola.
+      - name: Mantener activa la tarea programada
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/copia-seguridad.yml/enable"
