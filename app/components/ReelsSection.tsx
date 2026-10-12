@@ -222,19 +222,19 @@ export default function ReelsSection({ reels }: { reels: Reel[] }) {
           })}
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-6">
+        <div className="mt-8 flex items-center justify-center gap-3 px-4 sm:gap-6">
           <button
             type="button"
             onClick={() => goTo(active - 1)}
             aria-label="Anterior"
-            className="flex items-center justify-center size-12 rounded-full bg-brand-orange text-white shadow-lg hover:brightness-110 transition"
+            className="flex shrink-0 items-center justify-center size-12 rounded-full bg-brand-orange text-white shadow-lg hover:brightness-110 transition"
           >
             <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
               <path d="M15 6l-6 6 6 6" />
             </svg>
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex min-w-0 flex-wrap items-center justify-center gap-2">
             {reels.map((reel, i) => (
               <button
                 key={reel.id}
@@ -252,7 +252,7 @@ export default function ReelsSection({ reels }: { reels: Reel[] }) {
             type="button"
             onClick={() => goTo(active + 1)}
             aria-label="Siguiente"
-            className="flex items-center justify-center size-12 rounded-full bg-brand-orange text-white shadow-lg hover:brightness-110 transition"
+            className="flex shrink-0 items-center justify-center size-12 rounded-full bg-brand-orange text-white shadow-lg hover:brightness-110 transition"
           >
             <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
               <path d="M9 6l6 6-6 6" />
