@@ -36,7 +36,7 @@ export default function BuenaGenteVideo() {
       <video
         ref={videoRef}
         src="/video/buena-gente-flexemcar.mp4"
-        poster="/video/buena-gente-poster.jpg"
+        poster="/video/buena-gente-portada.jpg"
         preload="none"
         playsInline
         controls={started}
