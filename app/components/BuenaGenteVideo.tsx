@@ -53,7 +53,7 @@ export default function BuenaGenteVideo() {
           <span className="absolute left-1/2 top-1/2 flex size-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:size-24">
             <span className="absolute inset-0 rounded-full bg-brand-orange/40 motion-safe:animate-ping" />
             <span className="relative flex size-full items-center justify-center rounded-full bg-brand-orange shadow-lg transition duration-300 group-hover:scale-110 motion-reduce:transition-none">
-              <svg aria-hidden="true" viewBox="0 0 24 24" className="ml-1 size-8 sm:size-10" fill="currentColor">
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="size-8 sm:size-10" fill="currentColor">
                 <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
               </svg>
             </span>
